@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db:
+    container_name: mysql_db
+    image: mysql:latest
+    env_file:
+      - ./.env.local
+    ports:
+      - "3645:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    restart: always
+
+  pma:
+    container_name: pma
+    image: phpmyadmin:latest
+    ports:
+      - "8896:80"
+    links:
+      - db
+    restart: always
