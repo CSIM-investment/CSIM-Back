@@ -1,0 +1,64 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
+  phone: String!
+  username: String!
+}
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  confirmEmail(emailCode: String!): LoginResponse!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  refreshTokens(refreshToken: String!): LoginResponse!
+  register(createUserInput: CreateUserInput!): User!
+  updateAccount(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  account: User!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  password: String
+  phone: String
+  username: String
+}
+
+type User {
+  email: String!
+  firstName: String!
+  id: ID!
+  lastName: String!
+  role: UserRoles!
+  status: UserStatus!
+}
+
+enum UserRoles {
+  admin
+  user
+  validator
+  visitor
+}
+
+enum UserStatus {
+  isActive
+  isPending
+}
