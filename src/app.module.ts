@@ -22,12 +22,6 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql'
       persistedQueries: {
         ttl: 900,
       },
-      formatError: (error: GraphQLError) => {
-        const graphQLFormattedError: GraphQLFormattedError = {
-          message: error?.message,
-        }
-        return graphQLFormattedError
-      },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as any,
