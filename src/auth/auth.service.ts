@@ -19,12 +19,14 @@ export class AuthService {
     private jwtService: JwtService,
     private emailService: EmailService,
   ) {}
+  private emailCodeSize: number
 
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findOneByOrFail({ email })
 
     const hasCorrectPassword = await bcrypt.compare(password, user?.password)
-    if (!hasCorrectPassword) throw new UnauthorizedException()
+    if (!hasCorrectPassword || !this.userService.isActive(user))
+      throw new UnauthorizedException()
 
     return user
   }
@@ -110,7 +112,7 @@ export class AuthService {
     return user
   }
 
-  async confirmEmail(emailCode: string): Promise<LoginResponse> {
+  async confirmEmail(emailCode: number): Promise<LoginResponse> {
     const user = await this.userRepository.findOneByOrFail({ emailCode })
     const [loginResponse] = await Promise.all([
       this.login(user),
@@ -121,5 +123,9 @@ export class AuthService {
       }),
     ])
     return loginResponse
+  }
+
+  public generateEmailCode(): number {
+    return Math.floor(Math.random() * (this.emailCodeSize + 1))
   }
 }

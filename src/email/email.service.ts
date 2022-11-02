@@ -11,15 +11,13 @@ export class EmailService {
   ) {}
 
   async sendRegisterConfirmation(user: User): Promise<void> {
-    const url = `${process.env.CORS_ORIGIN}/authentication/validate-email/${user.emailCode}`
-
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Welcome to CSIM! Confirm your Email',
       template: './emailConfirmation',
       context: {
         name: this.userService.getFullName(user),
-        url,
+        code: user.emailCode,
       },
     })
   }

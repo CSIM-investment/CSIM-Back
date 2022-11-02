@@ -27,7 +27,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => LoginResponse)
-  confirmEmail(@Args('emailCode') emailCode: string) {
+  confirmEmail(@Args('emailCode') emailCode: number) {
     return this.authService.confirmEmail(emailCode)
   }
 

@@ -23,7 +23,7 @@ input LoginUserInput {
 }
 
 type Mutation {
-  confirmEmail(emailCode: String!): LoginResponse!
+  confirmEmail(emailCode: Float!): LoginResponse!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!

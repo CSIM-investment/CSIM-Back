@@ -4,6 +4,7 @@ import { CreateUserInput } from './dto/create-user.input'
 import { UserRoles } from './enums/user-roles.enum'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './entities/user.entity'
+import { UserStatus } from './enums/user-status.enum'
 
 @Injectable()
 export class UserService {
@@ -30,5 +31,9 @@ export class UserService {
 
   getFullName(user: User): string {
     return `${user.firstName} ${user.lastName}`
+  }
+
+  isActive(user: User): boolean {
+    return user.status === UserStatus.isActive
   }
 }
