@@ -3,13 +3,14 @@ import {
   EntitySubscriberInterface,
   EventSubscriber,
   InsertEvent,
+  UpdateEvent,
 } from 'typeorm'
-import { User } from './entities/user.entity'
-import * as bcrypt from 'bcrypt'
+import { User } from './methods/user.methods'
+import { AuthService } from 'src/auth/auth.service'
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<User> {
-  constructor(dataSource: DataSource) {
+  constructor(dataSource: DataSource, private authService: AuthService) {
     dataSource.subscribers.push(this)
   }
 
@@ -18,11 +19,19 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   }
 
   async beforeInsert(event: InsertEvent<User>) {
-    event.entity.emailCode = this.generateEmailCode()
-    event.entity.password = await bcrypt.hash(event.entity.password, 10)
+    event.entity.emailCode = this.authService.createSixDigitsCode()
+    event.entity.password = await this.authService.hashPassword(
+      event.entity.password,
+    )
   }
 
-  generateEmailCode(): number {
-    return Math.floor(100000 + Math.random() * 900000)
+  async beforeUpdate(event: UpdateEvent<User>) {
+    const isUpdatingPassword = event.entity.password !== undefined
+    if (!isUpdatingPassword || this.authService.isHashed(event.entity.password))
+      return
+
+    event.entity.password = await this.authService.hashPassword(
+      event.entity.password,
+    )
   }
 }
