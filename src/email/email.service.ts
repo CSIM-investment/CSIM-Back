@@ -22,7 +22,7 @@ export class EmailService {
   async sendForgotPasswordCode(user: User): Promise<SentMessageInfo> {
     await this.mailerService.sendMail({
       to: user.email,
-      subject: 'Les instructions pour change votre mot de passe CSIM',
+      subject: 'Les instructions pour changer votre mot de passe CSIM',
       template: './resetPassword',
       context: {
         name: user.getFullName(),
