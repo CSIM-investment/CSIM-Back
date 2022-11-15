@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { ExtractJwt, Strategy } from 'passport-jwt'
-import { User } from '../../user/entities/user.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserStatus } from 'src/user/enums/user-status.enum'
+import { User } from 'src/user/methods/user.methods'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,6 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async validate(payload: any): Promise<User> {
     const id = payload.sub
     const user = await this.userRepository.findOneByOrFail({
