@@ -1,11 +1,10 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, PrimaryGeneratedColumn } from 'typeorm'
 import { UserRoles } from '../enums/user-roles.enum'
 import { UserStatus } from '../enums/user-status.enum'
 
-@Entity({ name: 'user' })
 @ObjectType()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
   id: number
@@ -18,7 +17,7 @@ export class User {
   @Field()
   firstName: string
 
-  @Column({ unique: false })
+  @Column({ unique: true })
   @Field()
   email: string
 
