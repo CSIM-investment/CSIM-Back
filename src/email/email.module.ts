@@ -3,13 +3,11 @@ import { Module } from '@nestjs/common'
 import { join } from 'path'
 import { EmailService } from './email.service'
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
-import { UserModule } from 'src/user/user.module'
 import { ConfigModule } from '@nestjs/config'
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    UserModule,
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
