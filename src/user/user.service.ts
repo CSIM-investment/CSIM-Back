@@ -1,10 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { Repository } from 'typeorm/repository/Repository'
 import { CreateUserInput } from './dto/create-user.input'
-import { UserRoles } from './enums/user-roles.enum'
 import { InjectRepository } from '@nestjs/typeorm'
-import { User } from './entities/user.entity'
-import { UserStatus } from './enums/user-status.enum'
+import { User } from './methods/user.methods'
+import { UserEntity } from './entities/user.entity'
 
 @Injectable()
 export class UserService {
@@ -13,27 +12,22 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async updateOne(id: number, payload: Partial<User>): Promise<User> {
-    await this.userRepository.findOneByOrFail({ id })
-    return await this.userRepository.save({ id, ...payload })
+  async update(
+    user: Partial<UserEntity> | number,
+    payload: Partial<User>,
+  ): Promise<void> {
+    await this.userRepository.update(user, { ...payload })
   }
 
-  async create(createUserInput: CreateUserInput) {
-    const { email } = createUserInput
-    const user = await this.userRepository.findOneBy({ email })
-    if (user) throw new UnauthorizedException()
-    return await this.userRepository.save(createUserInput)
+  async insertOneAndGet(createUserInput: CreateUserInput): Promise<User> {
+    const user = await this.userRepository.insert(createUserInput)
+    return await this.userRepository.findOneBy({
+      id: user.identifiers[0].id,
+    })
   }
 
-  checkIfValidator(role: UserRoles): void {
-    if (role !== UserRoles.validator) throw new UnauthorizedException()
-  }
-
-  getFullName(user: User): string {
-    return `${user.firstName} ${user.lastName}`
-  }
-
-  isActive(user: User): boolean {
-    return user.status === UserStatus.isActive
+  async updateAndGet(id: number, payload: Partial<User>): Promise<User> {
+    await this.userRepository.update({ id }, { ...payload })
+    return await this.userRepository.findOneBy({ id })
   }
 }
