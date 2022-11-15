@@ -7,7 +7,6 @@ import { AuthModule } from './auth/auth.module'
 import { ConfigModule } from '@nestjs/config/dist/config.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { EmailModule } from './email/email.module'
-import { GraphQLError, GraphQLFormattedError } from 'graphql'
 
 @Module({
   imports: [
@@ -24,7 +23,7 @@ import { GraphQLError, GraphQLFormattedError } from 'graphql'
       },
     }),
     TypeOrmModule.forRoot({
-      type: process.env.DATABASE_TYPE as any,
+      type: 'mysql',
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USERNAME,
