@@ -44,6 +44,12 @@ export class AuthService {
     return user
   }
 
+  async sendRegisterConfirmation(email: string): Promise<User> {
+    const user = await this.userRepository.findOneByOrFail({ email })
+    await this.emailService.sendRegisterConfirmation(user)
+    return user
+  }
+
   async confirmEmail(emailCode: number, email: string): Promise<LoginResponse> {
     const user = await this.userRepository.findOneByOrFail({ emailCode, email })
     const [loginResponse] = await Promise.all([

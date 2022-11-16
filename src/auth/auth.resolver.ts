@@ -21,6 +21,11 @@ export class AuthResolver {
     return this.authService.register(createUserInput)
   }
 
+  @Mutation(() => User)
+  sendRegisterConfirmation(@Args('email') email: string) {
+    return this.authService.sendRegisterConfirmation(email)
+  }
+
   @Mutation(() => LoginResponse)
   confirmEmail(
     @Args('emailCode') emailCode: number,
