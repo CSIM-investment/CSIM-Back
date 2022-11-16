@@ -28,6 +28,7 @@ type Mutation {
   refreshTokens(refreshToken: String!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!
   resetPassword(email: String!, emailCode: Float!, newPassword: String!): LoginResponse!
+  sendRegisterConfirmation(email: String!): User!
   sendResetPasswordCode(email: String!): String!
   updateAccount(updateUserInput: UpdateUserInput!): User!
 }
