@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config/dist/config.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { EmailModule } from './email/email.module'
 
+type DatabaseType = 'mysql' | 'postgres'
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -23,7 +25,7 @@ import { EmailModule } from './email/email.module'
       },
     }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: process.env.DATABASE_TYPE as DatabaseType,
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USERNAME,
