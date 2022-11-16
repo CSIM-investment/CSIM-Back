@@ -7,7 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from 'src/user/methods/user.methods'
 import { TokenService } from './token.service'
-import * as bcrypt from 'bcrypt'
+import { getRounds, hash } from 'bcrypt'
+import { randomInt } from 'node:crypto'
 
 @Injectable()
 export class AuthService {
@@ -67,16 +68,16 @@ export class AuthService {
   }
 
   createSixDigitsCode(): number {
-    return Math.floor(100000 + Math.random() * 900000)
+    return randomInt(100000, 999999)
   }
 
   async hashPassword(password: string): Promise<string> {
-    return await bcrypt.hash(password, 10)
+    return await hash(password, 10)
   }
 
   isHashed(hash: string): boolean {
     try {
-      return bcrypt.getRounds(hash) === 10
+      return getRounds(hash) === 10
     } catch {
       return false
     }
