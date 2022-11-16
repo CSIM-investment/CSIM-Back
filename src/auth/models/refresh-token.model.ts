@@ -26,9 +26,9 @@ export class RefreshToken extends Token {
     }
   }
 
-  public async resolve(id: number, refreshToken: string): Promise<User> {
+  public async resolve(refreshToken: string): Promise<User> {
     const [user] = await Promise.all([
-      this.userRepository.findOneByOrFail({ refreshToken, id }),
+      this.userRepository.findOneByOrFail({ refreshToken }),
       this.verify(refreshToken),
     ])
     return user

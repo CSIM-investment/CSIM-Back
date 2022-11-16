@@ -17,9 +17,9 @@ export class TokenService {
     private userRepository: Repository<User>,
   ) {}
 
-  async refresh(id: number, tokenToVerify: string): Promise<LoginResponse> {
+  async refresh(tokenToVerify: string): Promise<LoginResponse> {
     const refreshToken = new RefreshToken(this.jwtService, this.userRepository)
-    const user = await refreshToken.resolve(id, tokenToVerify)
+    const user = await refreshToken.resolve(tokenToVerify)
     const tokens = await this.signs(user)
     return { ...tokens, user }
   }

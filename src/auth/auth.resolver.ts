@@ -6,7 +6,6 @@ import { AuthService } from './auth.service'
 import { LoginResponse } from './dto/login-response'
 import { LoginUserInput } from './dto/login-user.input'
 import { GqlAuthGuard } from './guards/gql-auth-guard'
-import { JwtAuthGuard } from './guards/jwt-auth.guard'
 import { TokenService } from './token.service'
 
 @Resolver()
@@ -43,13 +42,9 @@ export class AuthResolver {
     return this.authService.login(context.user)
   }
 
-  @UseGuards(JwtAuthGuard)
   @Mutation(() => LoginResponse)
-  refreshTokens(
-    @Args('refreshToken') refreshToken: string,
-    @Context() context,
-  ) {
-    return this.tokenService.refresh(context.req.user.id, refreshToken)
+  refreshTokens(@Args('refreshToken') refreshToken: string) {
+    return this.tokenService.refresh(refreshToken)
   }
 
   @Mutation(() => String)
