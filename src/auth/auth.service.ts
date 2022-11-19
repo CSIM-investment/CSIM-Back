@@ -1,14 +1,14 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
 import { UserService } from '../user/user.service'
-import * as bcrypt from 'bcrypt'
 import { CreateUserInput } from 'src/user/dto/create-user.input'
 import { LoginResponse } from './dto/login-response'
 import { EmailService } from '../email/email.service'
-import { User } from 'src/user/entities/user.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { UserStatus } from 'src/user/enums/user-status.enum'
+import { User } from 'src/user/methods/user.methods'
+import { TokenService } from './token.service'
+import { getRounds, hash } from 'bcrypt'
+import { randomInt } from 'node:crypto'
 
 @Injectable()
 export class AuthService {
@@ -16,25 +16,22 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private userService: UserService,
-    private jwtService: JwtService,
     private emailService: EmailService,
+    private tokenService: TokenService,
   ) {}
-  private emailCodeSize: number
 
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findOneByOrFail({ email })
 
-    const hasCorrectPassword = await bcrypt.compare(password, user?.password)
-    if (!hasCorrectPassword || !this.userService.isActive(user))
+    if (!(await user.hasValidPassword(password)) || !user.isActive())
       throw new UnauthorizedException()
 
     return user
   }
 
   async login(user: User): Promise<LoginResponse> {
-    const { accessToken, refreshToken } = await this.signTokens(user)
+    const { accessToken, refreshToken } = await this.tokenService.signs(user)
     await this.userRepository.update(user.id, { refreshToken })
-
     return {
       refreshToken,
       accessToken,
@@ -43,89 +40,59 @@ export class AuthService {
   }
 
   async register(createUserInput: CreateUserInput): Promise<User> {
-    const user = await this.userService.create(createUserInput)
+    const user = await this.userService.insertOneAndGet(createUserInput)
     await this.emailService.sendRegisterConfirmation(user)
     return user
   }
 
-  async refreshTokens(
-    refreshToken: string,
-    id: number,
-  ): Promise<LoginResponse> {
-    const user = await this.resolveRefreshToken(refreshToken, id)
-    const tokens = await this.signTokens(user)
-    return { ...tokens, user }
-  }
-
-  private async signTokens(user: User): Promise<{
-    refreshToken: string
-    accessToken: string
-  }> {
-    const [accessToken, refreshToken] = await Promise.all([
-      this.signToken(user),
-      this.signRefreshToken(user),
-    ])
-    await this.userService.updateOne(user.id, { refreshToken })
-    return { accessToken, refreshToken }
-  }
-
-  private async signToken(user: User): Promise<string> {
-    const payload = {
-      email: user.email,
-      sub: user.id,
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME,
-    }
-    const token = this.jwtService.sign(payload)
-    return token
-  }
-
-  private async signRefreshToken(user: User): Promise<string> {
-    const payload = {
-      email: user.email,
-      sub: user.id,
-      expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME,
-    }
-    const token = this.jwtService.sign(payload, {
-      secret: process.env.REFRESH_TOKEN_SECRET,
-    })
-    return token
-  }
-
-  private async verifyRefreshToken(refreshToken: string): Promise<void> {
-    try {
-      await this.jwtService.verifyAsync(refreshToken, {
-        secret: process.env.REFRESH_TOKEN_SECRET,
-      })
-    } catch (err) {
-      throw new UnauthorizedException('Refresh token not valid')
-    }
-  }
-
-  private async resolveRefreshToken(
-    refreshToken: string,
-    id: number,
-  ): Promise<User> {
-    const [user] = await Promise.all([
-      this.userRepository.findOneByOrFail({ refreshToken, id }),
-      this.verifyRefreshToken(refreshToken),
-    ])
+  async sendRegisterConfirmation(email: string): Promise<User> {
+    const user = await this.userRepository.findOneByOrFail({ email })
+    await this.emailService.sendRegisterConfirmation(user)
     return user
   }
 
-  async confirmEmail(emailCode: number): Promise<LoginResponse> {
-    const user = await this.userRepository.findOneByOrFail({ emailCode })
+  async confirmEmail(emailCode: number, email: string): Promise<LoginResponse> {
+    const user = await this.userRepository.findOneByOrFail({ emailCode, email })
     const [loginResponse] = await Promise.all([
       this.login(user),
-      this.userRepository.save({
-        ...user,
-        emailCode: null,
-        status: UserStatus.isActive,
-      }),
+      this.userRepository.save(user.activateAccount()),
     ])
     return loginResponse
   }
 
-  public generateEmailCode(): number {
-    return Math.floor(Math.random() * (this.emailCodeSize + 1))
+  async sendForgotPasswordCode(email: string): Promise<string> {
+    let user = await this.userRepository.findOneByOrFail({ email })
+    user = await this.userRepository.save(user.addForgotPasswordCode(this))
+    await this.emailService.sendForgotPasswordCode(user)
+    return 'un email a été envoyé pour mettre à jour votre mot de passe'
+  }
+
+  createSixDigitsCode(): number {
+    return randomInt(100000, 999999)
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    return await hash(password, 10)
+  }
+
+  isHashed(hash: string): boolean {
+    try {
+      return getRounds(hash) === 10
+    } catch {
+      return false
+    }
+  }
+
+  async resetPassword(
+    email: string,
+    emailCode: number,
+    password: string,
+  ): Promise<LoginResponse> {
+    const user = await this.userRepository.findOneByOrFail({ email, emailCode })
+    const [loginResponse] = await Promise.all([
+      this.login(user),
+      this.userRepository.update({ id: user.id }, user.resetPassword(password)),
+    ])
+    return loginResponse
   }
 }

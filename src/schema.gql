@@ -23,10 +23,13 @@ input LoginUserInput {
 }
 
 type Mutation {
-  confirmEmail(emailCode: Float!): LoginResponse!
+  confirmEmail(email: String!, emailCode: Float!): LoginResponse!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!
+  resetPassword(email: String!, emailCode: Float!, newPassword: String!): LoginResponse!
+  sendRegisterConfirmation(email: String!): User!
+  sendResetPasswordCode(email: String!): String!
   updateAccount(updateUserInput: UpdateUserInput!): User!
 }
 

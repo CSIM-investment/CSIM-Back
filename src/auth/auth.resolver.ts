@@ -1,16 +1,37 @@
 import { UseGuards } from '@nestjs/common'
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql'
-import { User } from 'src/user/entities/user.entity'
+import { User } from 'src/user/methods/user.methods'
 import { CreateUserInput } from '../user/dto/create-user.input'
 import { AuthService } from './auth.service'
 import { LoginResponse } from './dto/login-response'
 import { LoginUserInput } from './dto/login-user.input'
 import { GqlAuthGuard } from './guards/gql-auth-guard'
-import { JwtAuthGuard } from './guards/jwt-auth.guard'
+import { TokenService } from './token.service'
 
 @Resolver()
 export class AuthResolver {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+  ) {}
+
+  @Mutation(() => User)
+  register(@Args('createUserInput') createUserInput: CreateUserInput) {
+    return this.authService.register(createUserInput)
+  }
+
+  @Mutation(() => User)
+  sendRegisterConfirmation(@Args('email') email: string) {
+    return this.authService.sendRegisterConfirmation(email)
+  }
+
+  @Mutation(() => LoginResponse)
+  confirmEmail(
+    @Args('emailCode') emailCode: number,
+    @Args('email') email: string,
+  ) {
+    return this.authService.confirmEmail(emailCode, email)
+  }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => LoginResponse)
@@ -21,22 +42,22 @@ export class AuthResolver {
     return this.authService.login(context.user)
   }
 
-  @Mutation(() => User)
-  register(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.authService.register(createUserInput)
+  @Mutation(() => LoginResponse)
+  refreshTokens(@Args('refreshToken') refreshToken: string) {
+    return this.tokenService.refresh(refreshToken)
+  }
+
+  @Mutation(() => String)
+  sendResetPasswordCode(@Args('email') email: string) {
+    return this.authService.sendForgotPasswordCode(email)
   }
 
   @Mutation(() => LoginResponse)
-  confirmEmail(@Args('emailCode') emailCode: number) {
-    return this.authService.confirmEmail(emailCode)
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Mutation(() => LoginResponse)
-  refreshTokens(
-    @Args('refreshToken') refreshToken: string,
-    @Context() context,
+  resetPassword(
+    @Args('email') email: string,
+    @Args('emailCode') code: number,
+    @Args('newPassword') password: string,
   ) {
-    return this.authService.refreshTokens(refreshToken, context.req.user.id)
+    return this.authService.resetPassword(email, code, password)
   }
 }
