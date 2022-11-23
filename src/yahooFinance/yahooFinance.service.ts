@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common'
 import * as moment from 'moment'
-const yahooFinance = require('yahoo-finance')
+import * as yahooFinance from 'yahoo-finance'
 
 @Injectable()
 export class YahooFinanceService{
