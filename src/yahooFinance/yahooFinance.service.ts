@@ -20,6 +20,8 @@ export class YahooFinanceService{
     }
 
     async getHistory(beginDate?: moment.Moment, endDate?: moment.Moment){
+        await this.checkCurrency()
+
         if(beginDate === undefined && endDate === undefined){
             endDate = moment();
         }
