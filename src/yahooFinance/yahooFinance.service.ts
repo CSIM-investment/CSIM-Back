@@ -1,21 +1,21 @@
-import {Injectable} from "@nestjs/common";
-import * as moment from 'moment';
-const yahooFinance = require('yahoo-finance');
+import {Injectable} from '@nestjs/common'
+import * as moment from 'moment'
+const yahooFinance = require('yahoo-finance')
 
 @Injectable()
 export class YahooFinanceService{
-    private readonly yahooFinanceCurrencyName: string;
+    private readonly yahooFinanceCurrencyName: string
 
     constructor(
         private stockOrCryptoName: string,
-        private currency: string = "EUR"
+        private currency: string = 'EUR'
     ) {
-        this.yahooFinanceCurrencyName = stockOrCryptoName + '-' + currency;
+        this.yahooFinanceCurrencyName = stockOrCryptoName + '-' + currency
     }
 
     async checkCurrency(){
         if (!['USD', 'EUR'].includes(this.currency)) {
-            throw Error("")
+            throw Error('Currency must be USD or EUR !')
         }
     }
 
@@ -23,7 +23,7 @@ export class YahooFinanceService{
         await this.checkCurrency()
 
         if(beginDate === undefined && endDate === undefined){
-            endDate = moment();
+            endDate = moment()
         }
 
         if(beginDate === undefined){
@@ -35,10 +35,10 @@ export class YahooFinanceService{
             beginDate = endDate.add(1, 'day')
         }
 
-        let data = [];
+        let data = []
 
-        let beginDateString = moment(beginDate).format("YYYY-MM-DD");
-        let endDateString = moment(beginDate).format("YYYY-MM-DD");
+        let beginDateString = moment(beginDate).format('YYYY-MM-DD')
+        let endDateString = moment(beginDate).format('YYYY-MM-DD')
 
         await yahooFinance.historical({
             symbol: this.yahooFinanceCurrencyName,
@@ -46,12 +46,12 @@ export class YahooFinanceService{
             to: endDateString,
         }, async function(err, quotes){
             if(err){
-                throw Error(err);
+                throw Error(err)
             }
 
             data = quotes
         })
 
-        return data;
+        return data
     }
 }
