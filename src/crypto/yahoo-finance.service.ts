@@ -35,21 +35,17 @@ export class YahooFinanceService{
             beginDate = endDate.add(1, 'day')
         }
 
-        let data = []
-
         let beginDateString = moment(beginDate).format('YYYY-MM-DD')
         let endDateString = moment(beginDate).format('YYYY-MM-DD')
 
-        await yahooFinance.historical({
+        const data = await yahooFinance.historical({
             symbol: this.yahooFinanceCurrencyName,
             from: beginDateString,
             to: endDateString,
         }, async function(err, quotes){
-            if(err){
-                throw Error(err)
-            }
+            if(err) throw Error(err)
 
-            data = quotes
+            return quotes
         })
 
         return data
