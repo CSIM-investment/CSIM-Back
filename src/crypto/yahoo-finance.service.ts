@@ -32,11 +32,11 @@ export class YahooFinanceService {
     }
 
     if (endDate === undefined) {
-      beginDate = endDate.add(1, 'day')
+      endDate = beginDate.add(1, 'day')
     }
 
     const beginDateString = dayjs(beginDate).format('YYYY-MM-DD')
-    const endDateString = dayjs(beginDate).format('YYYY-MM-DD')
+    const endDateString = dayjs(endDate).format('YYYY-MM-DD')
 
     return await yahooFinance.historical(
       {
