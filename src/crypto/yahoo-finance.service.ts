@@ -20,19 +20,11 @@ export class YahooFinanceService {
 
   async getHistory(beginDate?: dayjs.Dayjs, endDate?: dayjs.Dayjs) {
     await this.checkCurrency()
+    endDate = beginDate && endDate ? endDate : dayjs()
 
-    if (beginDate === undefined && endDate === undefined) {
-      endDate = dayjs()
-    }
+    beginDate = beginDate ? beginDate : endDate.subtract(1, 'day')
 
-    if (beginDate === undefined) {
-      beginDate = endDate
-      beginDate = endDate.subtract(1, 'day')
-    }
-
-    if (endDate === undefined) {
-      endDate = beginDate.add(1, 'day')
-    }
+    endDate = endDate ? endDate : beginDate.add(1, 'day')
 
     const from = dayjs(beginDate).format('YYYY-MM-DD')
     const to = dayjs(endDate).format('YYYY-MM-DD')
