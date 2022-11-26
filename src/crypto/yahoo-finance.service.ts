@@ -14,9 +14,8 @@ export class YahooFinanceService {
   }
 
   async checkCurrency() {
-    if (!['USD', 'EUR'].includes(this.currency)) {
+    if (!['USD', 'EUR'].includes(this.currency))
       throw Error('Currency must be USD or EUR !')
-    }
   }
 
   async getHistory(beginDate?: dayjs.Dayjs, endDate?: dayjs.Dayjs) {
