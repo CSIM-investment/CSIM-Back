@@ -32,8 +32,8 @@ export class YahooFinanceService {
     return await yahooFinance.historical(
       {
         symbol: this.yahooFinanceCurrencyName,
-        from: from,
-        to: to,
+        from,
+        to,
       },
       async function (err, quotes) {
         if (err) throw Error(err)
