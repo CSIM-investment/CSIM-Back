@@ -10,7 +10,7 @@ export class YahooFinanceService {
     private stockOrCryptoName: string,
     private currency: string = 'EUR',
   ) {
-    this.yahooFinanceCurrencyName = stockOrCryptoName + '-' + currency
+    this.yahooFinanceCurrencyName = `${stockOrCryptoName}-${currency}`
   }
 
   async checkCurrency() {
