@@ -4,13 +4,13 @@ import * as yahooFinance from 'yahoo-finance'
 
 @Injectable()
 export class YahooFinanceService {
-  private readonly yahooFinanceCurrencyName: string
+  private readonly currencyName: string
 
   constructor(
     private stockOrCryptoName: string,
     private currency: string = 'EUR',
   ) {
-    this.yahooFinanceCurrencyName = `${stockOrCryptoName}-${currency}`
+    this.currencyName = `${stockOrCryptoName}-${currency}`
   }
 
   async checkCurrency() {
@@ -31,7 +31,7 @@ export class YahooFinanceService {
 
     return await yahooFinance.historical(
       {
-        symbol: this.yahooFinanceCurrencyName,
+        symbol: this.currencyName,
         from,
         to,
       },
