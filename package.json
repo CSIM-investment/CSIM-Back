@@ -11,7 +11,7 @@
     "mod:production": "cp .env.production .env&& pnpm install",
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \\\\\\\\\\\\\\\"src/**/*.ts\\\\\\\\\\\\\\\" \\\\\\\\\\\\\\\"src/test/**/*.ts\\\\\\\\\\\\\\\"",
     "start": "pnpm mod:local&& nest start",
     "dev": "pnpm mod:local&& nest start --watch",
     "debug": "pnpm mod:local&& nest start --debug --watch",
@@ -21,7 +21,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config src/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.8.1",
@@ -40,19 +40,21 @@
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
+    "dayjs": "^1.11.6",
     "graphql": "^16.6.0",
     "graphql-tools": "^8.3.6",
     "handlebars": "^4.7.7",
-    "mysql2": "^2.3.3",
     "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.10",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "yahoo-finance": "^0.3.7"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
@@ -89,7 +91,11 @@
       "ts"
     ],
     "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testMatch": [
+      "<rootDir>/**/*.(test).{js,jsx,ts,tsx}",
+      "<rootDir>/**/?(*.)(spec|test).{js,jsx,ts,tsx}",
+      "<rootDir>/**/*.(spec|test).{js,jsx,ts,tsx}"
+    ],
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
