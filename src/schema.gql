@@ -2,6 +2,37 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Article {
+  author: String
+  description: String!
+  id: ID!
+  publishedDate: DateTime!
+  source: String
+  symbol: String
+  title: String!
+  url: String!
+}
+
+input ArticleFilterInput {
+  pagination: PaginationInput
+  search: String
+  symbol: String
+}
+
+enum ArticleOrderBy {
+  publishedDate
+}
+
+input ArticleOrderInput {
+  direction: OrderDirection!
+  name: ArticleOrderBy!
+}
+
+input ArticlesInput {
+  filterBy: ArticleFilterInput = {}
+  orderBy: ArticleOrderInput = {}
+}
+
 input CreateUserInput {
   email: String!
   firstName: String!
@@ -10,6 +41,11 @@ input CreateUserInput {
   phone: String!
   username: String!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type LoginResponse {
   accessToken: String!
@@ -31,10 +67,22 @@ type Mutation {
   sendRegisterConfirmation(email: String!): User!
   sendResetPasswordCode(email: String!): String!
   updateAccount(updateUserInput: UpdateUserInput!): User!
+  updateArticles: String!
+}
+
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+input PaginationInput {
+  end: Int!
+  start: Int!
 }
 
 type Query {
   account: User!
+  articles(options: ArticlesInput!): [Article!]!
 }
 
 input UpdateUserInput {
