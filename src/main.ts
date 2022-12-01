@@ -12,6 +12,7 @@ async function bootstrap(): Promise<void> {
     origin: process.env.CORS_ORIGIN,
   })
   const port = process.env.PORT || 4000
+
   await app.listen(port)
   console.log(`server listen on http://localhost:${port}/graphql`)
 }
