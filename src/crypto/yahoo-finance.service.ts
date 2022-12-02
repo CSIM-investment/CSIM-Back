@@ -6,22 +6,15 @@ import * as yahooFinance from 'yahoo-finance'
 export class YahooFinanceService {
   private readonly currencyName: string
 
-  constructor(
-    private stockOrCryptoName: string,
-    private currency: string = 'EUR',
-  ) {
+  constructor(private stockOrCryptoName: string, private currency: string = 'EUR') {
     this.currencyName = `${stockOrCryptoName}-${currency}`
   }
 
-  async checkCurrency() {
-    if (!['USD', 'EUR'].includes(this.currency))
-      throw Error('Currency must be USD or EUR !')
+  async checkCurrency(): Promise<void> {
+    if (!['USD', 'EUR'].includes(this.currency)) throw Error('Currency must be USD or EUR !')
   }
 
-  private buildFromAndToForHistory(
-    beginDate?: Date,
-    endDate?: Date,
-  ): { from: string; to: string } {
+  private buildFromAndToForHistory(beginDate?: Date, endDate?: Date): { from: string; to: string } {
     const beginDateDayjs = dayjs(endDate ?? new Date())
     const endDateDayjs = dayjs(beginDate) ?? beginDateDayjs.subtract(1, 'day')
 
@@ -31,7 +24,8 @@ export class YahooFinanceService {
     return { from, to }
   }
 
-  async getHistory(beginDate?: Date, endDate?: Date) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async getHistory(beginDate?: Date, endDate?: Date): Promise<any> {
     await this.checkCurrency()
     const { from, to } = this.buildFromAndToForHistory(beginDate, endDate)
 

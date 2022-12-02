@@ -12,10 +12,7 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  async update(
-    user: Partial<UserEntity> | number,
-    payload: Partial<User>,
-  ): Promise<void> {
+  async update(user: Partial<UserEntity> | number, payload: Partial<User>): Promise<void> {
     await this.userRepository.update(user, { ...payload })
   }
 

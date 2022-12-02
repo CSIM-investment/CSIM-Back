@@ -23,8 +23,7 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findOneByOrFail({ email })
 
-    if (!(await user.hasValidPassword(password)) || !user.isActive())
-      throw new UnauthorizedException()
+    if (!(await user.hasValidPassword(password)) || !user.isActive()) throw new UnauthorizedException()
 
     return user
   }
@@ -83,11 +82,7 @@ export class AuthService {
     }
   }
 
-  async resetPassword(
-    email: string,
-    emailCode: number,
-    password: string,
-  ): Promise<LoginResponse> {
+  async resetPassword(email: string, emailCode: number, password: string): Promise<LoginResponse> {
     const user = await this.userRepository.findOneByOrFail({ email, emailCode })
     const [loginResponse] = await Promise.all([
       this.login(user),
