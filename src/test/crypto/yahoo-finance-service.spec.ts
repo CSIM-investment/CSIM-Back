@@ -1,4 +1,4 @@
-import { YahooFinanceService } from '../../crypto/yahoo-finance.service'
+import { YahooFinanceService } from '../../crypto/db/service/yahoo-finance.service'
 
 describe('Yahoo Finance Service Controller', () => {
   let beginDate: Date
