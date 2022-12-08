@@ -40,6 +40,7 @@ type CryptoCurrencyMarket {
   symbol: String!
   total_supply: Float!
   total_volume: Float!
+  unique_id: ID!
 }
 
 type CryptoCurrencyMarketPagination {
@@ -95,6 +96,7 @@ type Query {
   account: User!
   cryptoMarketList: [CryptoCurrencyMarket!]!
   crytpoCurrencyMarketPagination(skip: Float!, sortBy: CryptoCurrencyMarketPaginationSortBy, take: Float!): CryptoCurrencyMarketPagination!
+  getCryptoCurrencyById(id: String!): CryptoCurrencyMarket!
 }
 
 enum SortDirection {
