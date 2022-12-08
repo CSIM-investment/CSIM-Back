@@ -34,13 +34,13 @@ type CryptoCurrencyMarket {
   market_cap_rank: Float!
   max_supply: Float!
   name: String!
+  pagination_id: ID!
   price_change_24h: Float!
   price_change_percentage_24h: Float!
-  roi: Float!
+  roi: String!
   symbol: String!
   total_supply: Float!
   total_volume: Float!
-  unique_id: ID!
 }
 
 type CryptoCurrencyMarketPagination {
@@ -89,12 +89,11 @@ type Mutation {
 interface Node {
   CreatedAt: DateTime!
   UpdatedAt: DateTime!
-  id: ID!
+  pagination_id: ID!
 }
 
 type Query {
   account: User!
-  cryptoMarketList: [CryptoCurrencyMarket!]!
   crytpoCurrencyMarketPagination(skip: Float!, sortBy: CryptoCurrencyMarketPaginationSortBy, take: Float!): CryptoCurrencyMarketPagination!
   getCryptoCurrencyById(id: String!): CryptoCurrencyMarket!
 }
@@ -115,6 +114,7 @@ input UpdateCryptoInput {
   current_price: Float!
   fully_diluted_valuation: Float!
   high_24h: Float!
+  id: ID!
   image: String!
   last_updated: DateTime!
   low_24h: Float!
@@ -126,7 +126,7 @@ input UpdateCryptoInput {
   name: String!
   price_change_24h: Float!
   price_change_percentage_24h: Float!
-  roi: Float!
+  roi: String!
   symbol: String!
   total_supply: Float!
   total_volume: Float!

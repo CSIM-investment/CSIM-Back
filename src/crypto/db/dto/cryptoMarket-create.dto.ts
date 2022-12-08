@@ -1,10 +1,10 @@
-import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { Field, InputType, ObjectType, ID } from '@nestjs/graphql'
 import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity';
 
 @InputType()
 export class CryptoMarketInput {
-    // @Field( () => ID )
-    id : number
+    @Field( () => ID )
+    id : string;
     
     @Field( () => String )
     symbol                              : string;
@@ -75,8 +75,8 @@ export class CryptoMarketInput {
     @Field( () => Date )
     atl_date                            : Date;
     
-    @Field( () => Number )
-    roi                                 : number;
+    @Field( () => String )
+    roi                                 : string;
     
     @Field( () => Date )
     last_updated                        : Date

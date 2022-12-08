@@ -8,7 +8,7 @@ export class CryptoCurrencyMarket extends Node{
 
     @Field(() => ID)
     @PrimaryColumn()
-    unique_id                           : string;
+    id                           : string;
 
     @Field()
     symbol                              : string;
@@ -22,11 +22,11 @@ export class CryptoCurrencyMarket extends Node{
     image                               : string;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     current_price                       : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     market_cap                          : number;
     
     @Field()
@@ -34,55 +34,55 @@ export class CryptoCurrencyMarket extends Node{
     market_cap_rank                     : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float', nullable: true })
     fully_diluted_valuation             : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     total_volume                        : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     high_24h                            : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     low_24h                             : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     price_change_24h                    : number;
 
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     price_change_percentage_24h         : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     market_cap_change_24h               : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     market_cap_change_percentage_24h    : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float', nullable: true })
     circulating_supply                  : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float', nullable: true })
     total_supply                        : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float', nullable: true })
     max_supply                          : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     ath                                 : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     ath_change_percentage               : number;
     
     @Field()
@@ -90,11 +90,11 @@ export class CryptoCurrencyMarket extends Node{
     ath_date                            : Date;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     atl                                 : number;
     
     @Field()
-    @Column({ type : 'int' })
+    @Column({ type : 'float' })
     atl_change_percentage               : number;
     
     @Field( () => Date )
@@ -102,8 +102,8 @@ export class CryptoCurrencyMarket extends Node{
     atl_date                            : Date;
     
     @Field()
-    @Column({ type : 'int' })
-    roi                                 : number;
+    @Column({ nullable: true })
+    roi                                 : string;
     
     @Field()
     @Column({ type : 'timestamp' })

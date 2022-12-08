@@ -7,7 +7,7 @@ export abstract class Node extends BaseEntity {
    
     @PrimaryGeneratedColumn()
     @Field( () => ID )
-    id : number
+    pagination_id : number
     
     @Field( () => Date)
     @CreateDateColumn()
