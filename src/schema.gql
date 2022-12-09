@@ -12,8 +12,6 @@ input CreateUserInput {
 }
 
 type CryptoCurrencyMarket {
-  CreatedAt: DateTime!
-  UpdatedAt: DateTime!
   ath: Float!
   ath_change_percentage: Float!
   ath_date: DateTime!
@@ -34,23 +32,11 @@ type CryptoCurrencyMarket {
   market_cap_rank: Float!
   max_supply: Float!
   name: String!
-  pagination_id: ID!
   price_change_24h: Float!
   price_change_percentage_24h: Float!
   roi: String!
-  symbol: String!
   total_supply: Float!
   total_volume: Float!
-}
-
-type CryptoCurrencyMarketPagination {
-  nodes: [CryptoCurrencyMarket!]!
-  totalCount: Float!
-}
-
-input CryptoCurrencyMarketPaginationSortBy {
-  createdAt: SortDirection
-  title: SortDirection
 }
 
 type CryptoMarketOutput {
@@ -86,21 +72,10 @@ type Mutation {
   updateCryptoMarket(cryptoMarketId: ID!, input: UpdateCryptoInput!): UpdateCryptoOutput!
 }
 
-interface Node {
-  CreatedAt: DateTime!
-  UpdatedAt: DateTime!
-  pagination_id: ID!
-}
-
 type Query {
   account: User!
-  crytpoCurrencyMarketPagination(skip: Float!, sortBy: CryptoCurrencyMarketPaginationSortBy, take: Float!): CryptoCurrencyMarketPagination!
+  cryptoCurrencyMarketList: [CryptoCurrencyMarket!]!
   getCryptoCurrencyById(id: String!): CryptoCurrencyMarket!
-}
-
-enum SortDirection {
-  ASC
-  DESC
 }
 
 input UpdateCryptoInput {
@@ -127,7 +102,6 @@ input UpdateCryptoInput {
   price_change_24h: Float!
   price_change_percentage_24h: Float!
   roi: String!
-  symbol: String!
   total_supply: Float!
   total_volume: Float!
 }

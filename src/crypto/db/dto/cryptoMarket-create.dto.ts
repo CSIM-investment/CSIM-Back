@@ -7,9 +7,6 @@ export class CryptoMarketInput {
     id : string;
     
     @Field( () => String )
-    symbol                              : string;
-    
-    @Field( () => String )
     name                                : string;
     
     @Field( () => String )

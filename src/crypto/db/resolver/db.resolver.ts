@@ -3,7 +3,6 @@ import { CryptoMarketInput, CryptoMarketOutput } from "../dto/cryptoMarket-creat
 import { DbService } from "../service/db.service";
 import { CryptoCurrencyMarket } from "src/crypto/model/cryptocurrency.entity";
 import { UpdateCryptoInput, UpdateCryptoOutput } from "../dto/cryptoMarket-update.dto";
-import { CryptoCurrencyMarketPagination, CryptoCurrencyMarketPaginationArgs } from "../pagination/dto/cryptoCurrencymarket-pagination.dto";
 import { YahooFinanceService } from "../service/yahoo-finance.service";
 import { CoingeckoService } from 'src/crypto/coingecko/coingecko/service/coingecko.service';
 import { Cron } from '@nestjs/schedule';
@@ -27,32 +26,26 @@ export class DbMutationResolver {
         });
     }
 
+    // @Cron('20 * * * * *')
     @Mutation( () => UpdateCryptoOutput )
     async updateCryptoMarket (@Args({ name : 'cryptoMarketId', type: () => ID}) cryptoMarketId : CryptoCurrencyMarket['id']  , @Args('input') input: UpdateCryptoInput) {
         return this.dbService.updateCryptoCurrencyMarket( cryptoMarketId, input );
     }
 
-    @Query( () => CryptoCurrencyMarketPagination)
-    async crytpoCurrencyMarketPagination(@Args() args: CryptoCurrencyMarketPaginationArgs) {
+    @Query(() => [CryptoCurrencyMarket])
+    async cryptoCurrencyMarketList(
+    ) {
         
         let cryptos : any[] = [];
 
-        this.dbService.cryptoCurrencyMarketPagination(args).then(
+        return this.dbService.cryptoCurrencyMarketList().then(
             (datas) => {
-                for ( let i = 0; i < args.skip; i++ ) {
-
-                    let aze = new YahooFinanceService(datas.nodes[i].name);
-                    aze.getHistory(new Date()).then(
-                        (data) => {
-                            console.log(data);
-                            
-                        }
-                    )
-                }
+                return datas
             }
         )
-        return cryptos;
     }
+
+
 
     @Query( returns => CryptoCurrencyMarket)
     async getCryptoCurrencyById( @Args('id', { type: () => String}) id : number) {

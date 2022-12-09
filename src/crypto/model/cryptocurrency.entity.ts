@@ -1,17 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, PrimaryColumn } from 'typeorm';
 import { ObjectType, Field, ID } from '@nestjs/graphql';
-import { Node } from '../db/pagination/models/node.model';
 
 @Entity()
 @ObjectType()
-export class CryptoCurrencyMarket extends Node{
+export class CryptoCurrencyMarket {
 
     @Field(() => ID)
     @PrimaryColumn()
     id                           : string;
-
-    @Field()
-    symbol                              : string;
     
     @Field()
     @Column()
@@ -108,5 +104,8 @@ export class CryptoCurrencyMarket extends Node{
     @Field()
     @Column({ type : 'timestamp' })
     last_updated                        : Date
+
+    historical_data: Array<any>;
     
 }
+
