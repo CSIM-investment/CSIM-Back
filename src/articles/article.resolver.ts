@@ -9,12 +9,12 @@ export class ArticleResolver {
   constructor(private readonly articleService: ArticleService) {}
 
   @Mutation(() => String)
-  @Cron('0 0 /4 * * *')
+  @Cron('0 0 4 * * *')
   updateArticles(): Promise<string> {
     return this.articleService.update()
   }
 
-  @Cron('0 0 0 /1 * *')
+  @Cron('0 0 0 1 * *')
   deleteArticlesFromYesterday(): Promise<string> {
     return this.articleService.deleteFromYesterday()
   }

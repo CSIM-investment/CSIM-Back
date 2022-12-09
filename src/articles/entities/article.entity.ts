@@ -13,7 +13,7 @@ export class ArticleEntity {
   title: string
 
   @Index({ fulltext: true })
-  @Column({ type: 'longtext' })
+  @Column({ type: 'text' })
   @Field()
   description: string
 
@@ -27,7 +27,7 @@ export class ArticleEntity {
   @Field({ nullable: true })
   author: string
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamptz' })
   @Field(() => Date)
   publishedDate: Date
 
