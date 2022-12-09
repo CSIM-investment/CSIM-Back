@@ -20,13 +20,7 @@ import { TokenService } from './token.service'
     }),
     EmailModule,
   ],
-  providers: [
-    AuthService,
-    TokenService,
-    LocalStrategy,
-    JwtStrategy,
-    AuthResolver,
-  ],
+  providers: [AuthService, TokenService, LocalStrategy, JwtStrategy, AuthResolver],
   exports: [AuthService, TokenService],
 })
 export class AuthModule {}

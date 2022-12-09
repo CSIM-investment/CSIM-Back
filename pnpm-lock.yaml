@@ -27,6 +27,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.0.0
   '@typescript-eslint/parser': ^5.0.0
   apollo-server-express: ^3.10.3
+  axios: ^1.1.3
   bcrypt: ^5.1.0
   class-transformer: ^0.5.1
   class-validator: ^0.13.2
@@ -58,6 +59,7 @@ specifiers:
   typescript: ^4.7.4
   uuid: ^9.0.0
   yahoo-finance: ^0.3.7
+  yahoo-finance-news: github:MatthiasChometon/yahoo-finance-news
 
 dependencies:
   '@nestjs-modules/mailer': 1.8.1_7zojde3t4j5itk5dcgnwb5kr3e
@@ -74,6 +76,7 @@ dependencies:
   '@nestjs/schedule': 2.1.0_6evwnopmg7pp6j7oqhprlukxha
   '@nestjs/typeorm': 9.0.1_u6s7yl4kxjrfar7vjj57aweove
   apollo-server-express: 3.10.3_graphql@16.6.0
+  axios: 1.1.3
   bcrypt: 5.1.0
   class-transformer: 0.5.1
   class-validator: 0.13.2
@@ -93,6 +96,7 @@ dependencies:
   typeorm: 0.3.10_pg@8.8.0+ts-node@10.9.1
   uuid: 9.0.0
   yahoo-finance: 0.3.7
+  yahoo-finance-news: github.com/MatthiasChometon/yahoo-finance-news/0467228505b379475d92f8b2394a390cb150b3a2
 
 devDependencies:
   '@nestjs/cli': 9.1.4
@@ -3932,6 +3936,10 @@ packages:
 
   /fs.realpath/1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
+
+  /fs/0.0.1-security:
+    resolution: {integrity: sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==}
+    dev: false
 
   /fsevents/2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
@@ -7895,7 +7903,7 @@ packages:
     engines: {node: '>= 0.8'}
 
   /verror/1.10.0:
-    resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
+    resolution: {integrity: sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=}
     engines: {'0': node >=0.6.0}
     dependencies:
       assert-plus: 1.0.0
@@ -8099,6 +8107,13 @@ packages:
         optional: true
     dev: false
 
+  /xml-js/1.6.11:
+    resolution: {integrity: sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==}
+    hasBin: true
+    dependencies:
+      sax: 1.2.4
+    dev: false
+
   /xml2js/0.4.23:
     resolution: {integrity: sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==}
     engines: {node: '>=4.0.0'}
@@ -8219,3 +8234,14 @@ packages:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
     dev: false
     optional: true
+
+  github.com/MatthiasChometon/yahoo-finance-news/0467228505b379475d92f8b2394a390cb150b3a2:
+    resolution: {tarball: https://codeload.github.com/MatthiasChometon/yahoo-finance-news/tar.gz/0467228505b379475d92f8b2394a390cb150b3a2}
+    name: yahoo-finance-news
+    version: 1.0.2
+    dependencies:
+      fs: 0.0.1-security
+      request: 2.88.2
+      request-promise: 4.2.6_request@2.88.2
+      xml-js: 1.6.11
+    dev: false

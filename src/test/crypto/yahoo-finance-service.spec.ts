@@ -20,18 +20,12 @@ describe('Yahoo Finance Service Controller', () => {
   })
 
   it('get historical of BTC with only end date parameter in function work', async () => {
-    const data = await new YahooFinanceService('BTC').getHistory(
-      undefined,
-      endDate,
-    )
+    const data = await new YahooFinanceService('BTC').getHistory(undefined, endDate)
     expect(data.length > 0).toBeTruthy()
   })
 
   it('get historical of BTC with all parameter in function work', async () => {
-    const data = await new YahooFinanceService('BTC').getHistory(
-      beginDate,
-      endDate,
-    )
+    const data = await new YahooFinanceService('BTC').getHistory(beginDate, endDate)
     expect(data.length > 0).toBeTruthy()
   })
 })

@@ -10,45 +10,36 @@ import { TokenService } from './token.service'
 
 @Resolver()
 export class AuthResolver {
-  constructor(
-    private authService: AuthService,
-    private tokenService: TokenService,
-  ) {}
+  constructor(private authService: AuthService, private tokenService: TokenService) {}
 
   @Mutation(() => User)
-  register(@Args('createUserInput') createUserInput: CreateUserInput) {
+  register(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
     return this.authService.register(createUserInput)
   }
 
   @Mutation(() => User)
-  sendRegisterConfirmation(@Args('email') email: string) {
+  sendRegisterConfirmation(@Args('email') email: string): Promise<User> {
     return this.authService.sendRegisterConfirmation(email)
   }
 
   @Mutation(() => LoginResponse)
-  confirmEmail(
-    @Args('emailCode') emailCode: number,
-    @Args('email') email: string,
-  ) {
+  confirmEmail(@Args('emailCode') emailCode: number, @Args('email') email: string): Promise<LoginResponse> {
     return this.authService.confirmEmail(emailCode, email)
   }
 
   @UseGuards(GqlAuthGuard)
   @Mutation(() => LoginResponse)
-  login(
-    @Args('loginUserInput') loginUserInput: LoginUserInput,
-    @Context() context,
-  ) {
+  login(@Args('loginUserInput') loginUserInput: LoginUserInput, @Context() context): Promise<LoginResponse> {
     return this.authService.login(context.user)
   }
 
   @Mutation(() => LoginResponse)
-  refreshTokens(@Args('refreshToken') refreshToken: string) {
+  refreshTokens(@Args('refreshToken') refreshToken: string): Promise<LoginResponse> {
     return this.tokenService.refresh(refreshToken)
   }
 
   @Mutation(() => String)
-  sendResetPasswordCode(@Args('email') email: string) {
+  sendResetPasswordCode(@Args('email') email: string): Promise<string> {
     return this.authService.sendForgotPasswordCode(email)
   }
 
@@ -57,7 +48,7 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('emailCode') code: number,
     @Args('newPassword') password: string,
-  ) {
+  ): Promise<LoginResponse> {
     return this.authService.resetPassword(email, code, password)
   }
 }

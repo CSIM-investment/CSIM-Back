@@ -4,11 +4,7 @@ import { User } from 'src/user/methods/user.methods'
 export abstract class Token {
   protected value: string
 
-  constructor(
-    protected expireTime: string,
-    protected jwtService: JwtService,
-    protected secret: string,
-  ) {}
+  constructor(protected expireTime: string, protected jwtService: JwtService, protected secret: string) {}
 
   sign(user: User): string {
     const tokenToSign = {

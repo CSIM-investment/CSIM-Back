@@ -3,7 +3,7 @@ import { AppModule } from './app.module'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { ValidationPipe } from '@nestjs/common'
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
   })
@@ -14,6 +14,6 @@ async function bootstrap() {
   const port = process.env.PORT || 4000
 
   await app.listen(port)
-  console.log(`server listen on localhost:${port}/graphql`)
+  console.log(`server listen on http://localhost:${port}/graphql`)
 }
 bootstrap()

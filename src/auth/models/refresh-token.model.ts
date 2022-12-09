@@ -5,15 +5,8 @@ import { Repository } from 'typeorm'
 import { Token } from './token.model'
 
 export class RefreshToken extends Token {
-  constructor(
-    jwtService: JwtService,
-    private userRepository: Repository<User>,
-  ) {
-    super(
-      process.env.REFRESH_TOKEN_EXPIRATION_TIME,
-      jwtService,
-      process.env.REFRESH_TOKEN_SECRET,
-    )
+  constructor(jwtService: JwtService, private userRepository: Repository<User>) {
+    super(process.env.REFRESH_TOKEN_EXPIRATION_TIME, jwtService, process.env.REFRESH_TOKEN_SECRET)
   }
 
   private async verify(refreshToken: string): Promise<void> {

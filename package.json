@@ -38,6 +38,7 @@
     "@nestjs/schedule": "^2.1.0",
     "@nestjs/typeorm": "^9.0.1",
     "apollo-server-express": "^3.10.3",
+    "axios": "^1.1.3",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
@@ -56,6 +57,7 @@
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.10",
     "uuid": "^9.0.0",
+    "yahoo-finance-news": "github:MatthiasChometon/yahoo-finance-news",
     "yahoo-finance": "^0.3.7"
   },
   "devDependencies": {
