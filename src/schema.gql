@@ -70,6 +70,12 @@ type CryptoCurrencyMarket {
   total_volume: Float!
 }
 
+input CryptoFilterInput {
+  pagination: PaginationInput
+  search: CryptoMarketInput
+  symbol: String
+}
+
 input CryptoMarketInput {
   ath: Float!
   ath_change_percentage: Float!
@@ -100,6 +106,16 @@ input CryptoMarketInput {
 
 type CryptoMarketOutput {
   cryptoCurrencyMarket: CryptoCurrencyMarket!
+}
+
+input CryptoOrderInput {
+  direction: OrderDirection!
+  name: ArticleOrderBy!
+}
+
+input CryptoSearchInput {
+  filterBy: CryptoFilterInput = {}
+  orderBy: CryptoOrderInput = {}
 }
 
 """
@@ -145,8 +161,7 @@ input PaginationInput {
 type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
-  cryptoCurrencyMarketList(options: CryptoMarketInput!): [CryptoCurrencyMarket!]!
-  getCryptoCurrencyById(id: String!): CryptoCurrencyMarket!
+  cryptos(options: CryptoSearchInput!): [CryptoCurrencyMarket!]!
 }
 
 input UpdateCryptoInput {

@@ -1,23 +1,12 @@
-import { Field, Int } from '@nestjs/graphql'
-import { PaginationInput } from '../../../articles/dto/inputs/pagination.input'
-import { ArticleOrderBy } from '../../../articles/enums/article-order-by.enum'
-import { OrderDirection } from '../../../articles/enums/order-direction.enum'
+import { Field, InputType, Int, registerEnumType } from '@nestjs/graphql'
+import { CryptoOrderInput } from './inputs/crypto-order.input'
+import { CryptoFilterInput } from './inputs/crypto-filter.input'
 
-export class CryptoFilterInput {
-  @Field({ nullable: true })
-  search?: string
+@InputType()
+export class CryptoSearchInput {
+  @Field({ nullable: true, defaultValue: {} })
+  orderBy: CryptoOrderInput
 
-  @Field({ nullable: true })
-  pagination?: PaginationInput
-
-  @Field({ nullable: true })
-  symbol?: string
-}
-
-export class CryptoOrderInput {
-  @Field(() => ArticleOrderBy)
-  name: ArticleOrderBy
-
-  @Field(() => OrderDirection)
-  direction: OrderDirection
+  @Field({ nullable: true, defaultValue: {} })
+  filterBy: CryptoFilterInput
 }
