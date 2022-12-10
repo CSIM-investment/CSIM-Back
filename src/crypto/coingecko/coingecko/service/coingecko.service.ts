@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity';
 

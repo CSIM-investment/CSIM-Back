@@ -1,12 +1,10 @@
 import { Args, ID, Mutation, Resolver, Query } from '@nestjs/graphql'
-import { CryptoMarketInput, CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
+import { CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
 import { DbService } from '../service/db.service'
 import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
 import { UpdateCryptoInput, UpdateCryptoOutput } from '../dto/cryptoMarket-update.dto'
-import { YahooFinanceService } from '../service/yahoo-finance.service'
 import { CoingeckoService } from 'src/crypto/coingecko/coingecko/service/coingecko.service'
 import { Cron } from '@nestjs/schedule'
-import { Article } from '../../../articles/methods/article.methods'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
 
 @Resolver(CryptoCurrencyMarket)

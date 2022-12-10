@@ -1,4 +1,4 @@
-import { Field, InputType, Int, registerEnumType } from '@nestjs/graphql'
+import { Field, InputType } from '@nestjs/graphql'
 import { CryptoOrderInput } from './inputs/crypto-order.input'
 import { CryptoFilterInput } from './inputs/crypto-filter.input'
 
