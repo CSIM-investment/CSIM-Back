@@ -6,8 +6,8 @@ import * as yahooFinance from 'yahoo-finance'
 export class YahooFinanceService {
   private readonly currencyName: string
 
-  constructor(private stockOrCryptoName: string, private currency: string = 'EUR') {
-    this.currencyName = `${stockOrCryptoName}-${currency}`
+  constructor(private stockOrCryptoName?: string, private currency: string = 'EUR') {
+    this.currencyName = `${this.stockOrCryptoName}-${this.currency}`
   }
 
   async checkCurrency(): Promise<void> {
