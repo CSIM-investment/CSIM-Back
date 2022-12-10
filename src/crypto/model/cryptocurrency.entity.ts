@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, PrimaryColumn } from 'typeorm'
-import { ObjectType, Field, ID } from '@nestjs/graphql'
+import { ObjectType, Field, ID, Float } from '@nestjs/graphql'
 
 @Entity()
 @ObjectType()
@@ -16,7 +16,7 @@ export class CryptoCurrencyMarket {
   @Column()
   image: string
 
-  @Field()
+  @Field( () => Float)
   @Column({ type: 'float' })
   current_price: number
 

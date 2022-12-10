@@ -60,7 +60,7 @@ export class CryptoMarketSearchInput {
   @Field({ nullable: true })
   ath_change_percentage: number
 
-  @Field(() => Date)
+  @Field({ nullable: true })
   ath_date: Date
 
   @Field({ nullable: true })

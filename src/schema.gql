@@ -83,7 +83,7 @@ type CryptoMarketOutput {
 input CryptoMarketSearchInput {
   ath: Float
   ath_change_percentage: Float
-  ath_date: DateTime!
+  ath_date: DateTime
   atl: Float
   atl_change_percentage: Float
   atl_date: DateTime
