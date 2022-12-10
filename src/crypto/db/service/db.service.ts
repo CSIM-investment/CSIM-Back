@@ -3,7 +3,6 @@ import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Brackets, Repository } from 'typeorm'
 import { CryptoMarketInput, CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
-import { UpdateCryptoInput } from '../dto/cryptoMarket-update.dto'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
 
 @Injectable()
