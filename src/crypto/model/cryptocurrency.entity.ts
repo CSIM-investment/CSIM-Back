@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, PrimaryColumn } from 'typeorm'
+import { Entity, Column, PrimaryColumn } from 'typeorm'
 import { ObjectType, Field, ID, Float } from '@nestjs/graphql'
 
 @Entity()

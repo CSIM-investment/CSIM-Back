@@ -1,5 +1,4 @@
-import { Field, InputType, ObjectType, ID } from '@nestjs/graphql'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()
 export class CryptoMarketSearchInput {

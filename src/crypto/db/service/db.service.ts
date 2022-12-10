@@ -23,7 +23,6 @@ export class DbService {
     cryptoMarketId: CryptoCurrencyMarket['id'],
     input: UpdateCryptoInput,
   ): Promise<CryptoCurrencyMarket> {
-    //TODO get by object and not id ?
     const cryptoMarket = await this.cryptoRepository.findOneByOrFail(input)
     cryptoMarket.id = input.id
     cryptoMarket.name = input.name
