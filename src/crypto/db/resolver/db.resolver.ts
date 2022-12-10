@@ -21,19 +21,6 @@ export class DbMutationResolver {
     })
   }
 
-  // @Cron('20 * * * * *')
-  @Mutation(() => UpdateCryptoOutput)
-  async updateCryptoMarket(
-    @Args({
-      name: 'cryptoMarketId',
-      type: () => ID,
-    })
-    cryptoMarketId: CryptoCurrencyMarket['id'],
-    @Args('input') input: UpdateCryptoInput,
-  ) {
-    return this.cryptoService.updateCryptoCurrencyMarket(cryptoMarketId, input)
-  }
-
   @Query(() => [CryptoCurrencyMarket])
   cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
     return this.cryptoService.search(options)
