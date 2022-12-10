@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "mod:local": "cp .env.local .env&& pnpm install",
-    "mod:staging": "cp .env.staging .env&& pnpm install",
-    "mod:production": "cp .env.production .env&& pnpm install",
+    "mod:local": "copy .env.local .env&& pnpm install",
+    "mod:staging": "copy .env.staging .env&& pnpm install",
+    "mod:production": "copy .env.production .env&& pnpm install",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \\\\\\\\\\\\\\\"src/**/*.ts\\\\\\\\\\\\\\\" \\\\\\\\\\\\\\\"src/test/**/*.ts\\\\\\\\\\\\\\\"",

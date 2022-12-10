@@ -72,40 +72,40 @@ type CryptoCurrencyMarket {
 
 input CryptoFilterInput {
   pagination: PaginationInput
-  search: CryptoMarketInput
+  search: CryptoMarketSearchInput
   symbol: String
-}
-
-input CryptoMarketInput {
-  ath: Float!
-  ath_change_percentage: Float!
-  ath_date: DateTime!
-  atl: Float!
-  atl_change_percentage: Float!
-  atl_date: DateTime!
-  circulating_supply: Float!
-  current_price: Float!
-  fully_diluted_valuation: Float!
-  high_24h: Float!
-  id: ID!
-  image: String!
-  last_updated: DateTime!
-  low_24h: Float!
-  market_cap: Float!
-  market_cap_change_24h: Float!
-  market_cap_change_percentage_24h: Float!
-  market_cap_rank: Float!
-  max_supply: Float!
-  name: String!
-  price_change_24h: Float!
-  price_change_percentage_24h: Float!
-  roi: String!
-  total_supply: Float!
-  total_volume: Float!
 }
 
 type CryptoMarketOutput {
   cryptoCurrencyMarket: CryptoCurrencyMarket!
+}
+
+input CryptoMarketSearchInput {
+  ath: Float
+  ath_change_percentage: Float
+  ath_date: DateTime!
+  atl: Float
+  atl_change_percentage: Float
+  atl_date: DateTime
+  circulating_supply: Float
+  current_price: Float
+  fully_diluted_valuation: Float
+  high_24h: Float
+  id: String
+  image: String
+  last_updated: DateTime
+  low_24h: Float
+  market_cap: Float
+  market_cap_change_24h: Float
+  market_cap_change_percentage_24h: Float
+  market_cap_rank: Float
+  max_supply: Float
+  name: String
+  price_change_24h: Float
+  price_change_percentage_24h: Float
+  roi: String
+  total_supply: Float
+  total_volume: Float
 }
 
 input CryptoOrderInput {

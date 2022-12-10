@@ -37,7 +37,7 @@ export class DbMutationResolver {
   }
 
   @Query(() => [CryptoCurrencyMarket])
-  cryptos(@Args('options') options: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
+  cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
     return this.cryptoService.search(options)
   }
 }
