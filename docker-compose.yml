@@ -1,21 +1,70 @@
 version: "3"
 services:
   db:
-    container_name: mysql_db
-    image: mysql:latest
-    env_file:
-      - ./.env.local
+    image: postgres
+    container_name: csim-postgresql
+    restart: always
     ports:
-      - "3645:3306"
+      - "5432:5432"
     volumes:
-      - ./mysql:/var/lib/mysql
-    restart: always
+      # Volume de la base de données
+      - ./csim-db-pg:/var/lib/pgsql-v1
+    environment:
+      - POSTGRES_DB=csim
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - PGDATA=/var/lib/pgsql-v1
+    networks:
+      vpcbr:
+        ipv4_address: 192.168.3.2
 
-  pma:
-    container_name: pma
-    image: phpmyadmin:latest
-    ports:
-      - "8896:80"
-    links:
-      - db
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
     restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_CONFIG_PROXY_X_FOR_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PROTO_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_HOST_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PORT_COUNT: 1
+      PGADMIN_CONFIG_PROXY_X_PREFIX_COUNT: 1
+    depends_on:
+      - db
+    ports:
+      - "5050:80"
+    networks:
+      - vpcbr
+
+
+  api:
+    container_name: csim-backend
+    ports:
+      # local:container
+      - "3031:3031"
+    env_file:
+      - .env.local
+    volumes:
+      # Volume stockant les fichiers web du projet
+      - ./:/var/www/html/csim-backend
+    build:
+      context: ../CSIM-Back/
+      dockerfile: Dockerfile
+    image: csim-backend
+    depends_on:
+      - db
+    links:
+      # Lien vers le conteneur "db" (déclaré ci-après)
+      - db:db
+    networks:
+      - vpcbr
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.3.0/24
+          gateway: 192.168.3.1
