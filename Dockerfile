@@ -13,7 +13,7 @@ RUN npm install pg --save
 RUN pnpm install
 
 # Bundle app source
-COPY .. .
+COPY . .
 
 # Creates a "dist" folder with the production build
 RUN pnpm run build
