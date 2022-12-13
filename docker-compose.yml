@@ -50,7 +50,7 @@ services:
       # Volume stockant les fichiers web du projet
       - ./:/var/www/html/csim-backend
     build:
-      context: ../CSIM-Back/
+      context: ./
       dockerfile: Dockerfile
     image: csim-backend
     depends_on:
@@ -67,4 +67,3 @@ networks:
     ipam:
       config:
         - subnet: 192.168.3.0/24
-          gateway: 192.168.3.1

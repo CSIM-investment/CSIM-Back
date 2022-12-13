@@ -3,6 +3,11 @@
 ```shell
 $> docker compose up
 ```
+OU
+```shell
+$> docker-compose up
+```
+En fonction de la version de docker
 
 #### Now your postgres database run on 192.168.3.2:5432
 
