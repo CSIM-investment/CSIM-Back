@@ -21,19 +21,19 @@ export class DbMutationResolver {
     })
   }
 
-  @Query(() => [CryptoCurrencyMarket])
-  async cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
-    return this.cryptoService.search(options).then(
-        (cryptoCurrencyMarkets) => {
-            cryptoCurrencyMarkets.forEach( async crypto => {
+  // @Query(() => [CryptoCurrencyMarket])
+  // async cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
+  //   return this.cryptoService.search(options).then(
+  //       (cryptoCurrencyMarkets) => {
+  //           cryptoCurrencyMarkets.forEach( async crypto => {
                 
                 
-                crypto.historical_data = await new YahooFinanceService(crypto.symbol, 'EUR').getHistory()
-                console.log(crypto.historical_data);
+  //               crypto.historical_data = await new YahooFinanceService(crypto.symbol, 'EUR').getHistory()
+  //               console.log(crypto.historical_data);
                 
-            })
-            return cryptoCurrencyMarkets
-        }
-    )
-  }
+  //           })
+  //           return cryptoCurrencyMarkets
+  //       }
+  //   )
+  // }
 }
