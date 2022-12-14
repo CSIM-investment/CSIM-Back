@@ -26,8 +26,8 @@ export class GoogleNewsApiService {
   }
 
   async getFromHoursToNow(hours: number): Promise<GoogleNewsApiResponse<CreateArticle>> {
-    const apiUrl = `${this.getApiUrl()}&from=${this.getDateFromHoursAgo(hours)}`
     this.subject = 'crypto'
+    const apiUrl = `${this.getApiUrl()}&from=${this.getDateFromHoursAgo(hours)}`
     const { data } = await firstValueFrom(
       this.httpService.get<GoogleNewsApiResponse<GoogleNewsApiArticle>>(apiUrl),
     )
