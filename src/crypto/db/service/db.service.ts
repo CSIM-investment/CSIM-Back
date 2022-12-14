@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Brackets, Repository } from 'typeorm'
 import { CryptoMarketInput, CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
+import { YahooFinanceService } from './yahoo-finance.service'
 
 @Injectable()
 export class DbService {
@@ -20,13 +21,14 @@ export class DbService {
   }
 
   async search(cryptosInput: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
+
     const { orderBy, filterBy } = cryptosInput
     const { symbol, pagination, search } = filterBy
 
     let query = this.cryptoRepository.createQueryBuilder().select()
 
     const searchKeys = [
-        "id", "name", 
+        "id", "name", "symbol", "image",
         "current_price", "market_cap", "market_cap_rank", "fully_diluted_valuation", "total_volume", "high_24h", "low_24h", "price_change_24h", "price_change_percentage_24h", 
         "price_change_percentage_24h", "market_cap_change_24h", "market_cap_change_percentage_24h", "circulating_supply", "total_supply", "max_supply", "ath", "ath_change_percentage", "atl", "atl_change_percentage"
     ]
@@ -44,6 +46,27 @@ export class DbService {
                 ? qb.orWhere(`${key} LIKE :${key}`, { [key]: `%${ search[key] }%` })
                 : qb.orWhere(`${key} = :${key}`, { [key]: search[key] })
         })))
+    }    
+
+    // Filters
+    if (filterBy) {
+
+      if (filterBy.max_cap) {
+        query = query.andWhere( `market_cap < ${filterBy.max_cap}` )
+      }
+
+      if (filterBy.min_cap) {
+        query = query.andWhere( `market_cap > ${filterBy.min_cap}` )
+      }
+
+      if (filterBy.max_current_price) {
+        query = query.andWhere( `current_price < ${filterBy.max_current_price}` )
+      }
+
+      if (filterBy.min_current_price) {
+        query = query.andWhere( `current_price > ${filterBy.min_current_price}` )
+      }
+
     }
 
     if (pagination) query = query.limit(pagination.end).offset(pagination.start)
@@ -51,4 +74,6 @@ export class DbService {
 
     return await query.getMany()
   }
+
+  
 }

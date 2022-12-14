@@ -9,6 +9,9 @@ export class CryptoMarketSearchInput {
   name: string
 
   @Field({ nullable: true })
+  symbol: string
+
+  @Field({ nullable: true })
   image: string
 
   @Field({ nullable: true })
