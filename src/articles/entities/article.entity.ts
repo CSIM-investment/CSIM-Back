@@ -39,4 +39,8 @@ export class ArticleEntity {
   @Column({ unique: true })
   @Field()
   url: string
+
+  @Column()
+  @Field()
+  picture: string
 }

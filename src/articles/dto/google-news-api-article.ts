@@ -27,6 +27,7 @@ export class GoogleNewsApiArticle {
       publishedDate: new Date(this.publishedAt),
       url: this.url,
       symbol: null,
+      picture: this.urlToImage,
     }
     return new CreateArticle(article)
   }

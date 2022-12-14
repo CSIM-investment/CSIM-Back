@@ -18,6 +18,7 @@ export class YahooFinanceNewsArticle {
       publishedDate: new Date(this.date),
       symbol: this.symbol,
       url: this.link,
+      picture: null,
     }
     return new CreateArticle(article)
   }
