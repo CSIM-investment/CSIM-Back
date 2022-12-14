@@ -43,7 +43,7 @@ services:
     container_name: csim-backend
     ports:
       # local:container
-      - "3031:3031"
+      - "3031:3002"
     env_file:
       - .env.local
     volumes:
