@@ -11,6 +11,6 @@ export class ArticleRepository extends Repository<Article> {
 
   async saveOrIgnore(articles: CreateArticle[]): Promise<number> {
     const queryResult = await this.createQueryBuilder().insert().values(articles).orIgnore().execute()
-    return queryResult.raw.affectedRows
+    return queryResult.raw.length
   }
 }
