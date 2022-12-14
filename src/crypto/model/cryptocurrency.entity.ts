@@ -13,6 +13,10 @@ export class CryptoCurrencyMarket {
   name: string
 
   @Field()
+  @Column({ nullable: true })
+  symbol: string
+
+  @Field()
   @Column()
   image: string
 

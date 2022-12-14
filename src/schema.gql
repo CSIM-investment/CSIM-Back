@@ -66,11 +66,16 @@ type CryptoCurrencyMarket {
   price_change_24h: Float!
   price_change_percentage_24h: Float!
   roi: String!
+  symbol: String!
   total_supply: Float!
   total_volume: Float!
 }
 
 input CryptoFilterInput {
+  max_cap: Float
+  max_current_price: Float
+  min_cap: Float
+  min_current_price: Float
   pagination: PaginationInput
   search: CryptoMarketSearchInput
   symbol: String
@@ -104,6 +109,7 @@ input CryptoMarketSearchInput {
   price_change_24h: Float
   price_change_percentage_24h: Float
   roi: String
+  symbol: String
   total_supply: Float
   total_volume: Float
 }
@@ -145,7 +151,6 @@ type Mutation {
   sendResetPasswordCode(email: String!): String!
   updateAccount(updateUserInput: UpdateUserInput!): User!
   updateArticles: String!
-  updateCryptoMarket(cryptoMarketId: ID!, input: UpdateCryptoInput!): UpdateCryptoOutput!
 }
 
 enum OrderDirection {
@@ -162,38 +167,6 @@ type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
   cryptos(options: CryptoSearchInput!): [CryptoCurrencyMarket!]!
-}
-
-input UpdateCryptoInput {
-  ath: Float!
-  ath_change_percentage: Float!
-  ath_date: DateTime!
-  atl: Float!
-  atl_change_percentage: Float!
-  atl_date: DateTime!
-  circulating_supply: Float!
-  current_price: Float!
-  fully_diluted_valuation: Float!
-  high_24h: Float!
-  id: ID!
-  image: String!
-  last_updated: DateTime!
-  low_24h: Float!
-  market_cap: Float!
-  market_cap_change_24h: Float!
-  market_cap_change_percentage_24h: Float!
-  market_cap_rank: Float!
-  max_supply: Float!
-  name: String!
-  price_change_24h: Float!
-  price_change_percentage_24h: Float!
-  roi: String!
-  total_supply: Float!
-  total_volume: Float!
-}
-
-type UpdateCryptoOutput {
-  cryptoCurrencyMarket: CryptoCurrencyMarket!
 }
 
 input UpdateUserInput {

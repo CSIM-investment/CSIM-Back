@@ -5,6 +5,7 @@ import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
 import { CoingeckoService } from 'src/crypto/coingecko/coingecko/service/coingecko.service'
 import { Cron } from '@nestjs/schedule'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
+import { YahooFinanceService } from '../service/yahoo-finance.service'
 
 @Resolver(CryptoCurrencyMarket)
 export class DbMutationResolver {
@@ -20,8 +21,19 @@ export class DbMutationResolver {
     })
   }
 
-  @Query(() => [CryptoCurrencyMarket])
-  cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
-    return this.cryptoService.search(options)
-  }
+  // @Query(() => [CryptoCurrencyMarket])
+  // async cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
+  //   return this.cryptoService.search(options).then(
+  //       (cryptoCurrencyMarkets) => {
+  //           cryptoCurrencyMarkets.forEach( async crypto => {
+                
+                
+  //               crypto.historical_data = await new YahooFinanceService(crypto.symbol, 'EUR').getHistory()
+  //               console.log(crypto.historical_data);
+                
+  //           })
+  //           return cryptoCurrencyMarkets
+  //       }
+  //   )
+  // }
 }

@@ -12,4 +12,17 @@ export class CryptoFilterInput {
 
   @Field({ nullable: true })
   symbol?: string
+
+  
+  @Field({ nullable: true })
+  min_cap?: number
+
+  @Field({ nullable: true })
+  max_cap?: number
+
+  @Field({ nullable: true })
+  min_current_price?: number
+
+  @Field({ nullable: true })
+  max_current_price?: number
 }
