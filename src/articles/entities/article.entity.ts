@@ -40,7 +40,7 @@ export class ArticleEntity {
   @Field()
   url: string
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   picture: string
 }

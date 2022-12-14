@@ -6,6 +6,7 @@ type Article {
   author: String
   description: String!
   id: ID!
+  picture: String
   publishedDate: DateTime!
   source: String
   symbol: String
