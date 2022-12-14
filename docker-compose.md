@@ -25,7 +25,7 @@ En fonction de la version de docker
 ### Connect to database with pgadmin
 1. Right clic on "Server";
 2. Click on "Register" > "Server";
-3. Set name : "csim-database" for example
+3. Set name : "csim"
 4. Go to "Connection" tab
 5. Set Host name/address : "192.168.3.2"
 6. Set username : postgres
@@ -58,7 +58,7 @@ Servers
 ```
 
 ### Query tool
-1. Right clic on "Schemas" in tree structure
+1. Right click on "Schemas" in tree structure
 2. Choose "Query tool"
 
 #
