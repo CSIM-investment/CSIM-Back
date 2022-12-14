@@ -34,6 +34,7 @@ export class ArticleService {
   async search(articlesInput: ArticlesInput): Promise<Article[]> {
     const { orderBy, filterBy } = articlesInput
     const { symbol, pagination, search } = filterBy
+    const searchKeys = ['title', 'description', 'symbol', 'author', 'source']
 
     let query = this.articleRepository.createQueryBuilder().select()
 
@@ -44,13 +45,11 @@ export class ArticleService {
 
     if (search) {
       query = query.andWhere(
-        new Brackets((qb) => {
-          qb.where(`title LIKE :title`, { title: `%${search}%` })
-            .orWhere(`description LIKE :description`, { description: `%${search}%` })
-            .orWhere(`symbol LIKE :symbol`, { symbol: `%${search}%` })
-            .orWhere(`author LIKE :author`, { author: `%${search}%` })
-            .orWhere(`source LIKE :source`, { source: `%${search}%` })
-        }),
+        new Brackets((qb) =>
+          searchKeys.forEach((key) =>
+            qb.orWhere(`LOWER(${key}) LIKE :${key}`, { [key]: `%${search.toLowerCase()}%` }),
+          ),
+        ),
       )
     }
     if (pagination) query = query.limit(pagination.end).offset(pagination.start)
