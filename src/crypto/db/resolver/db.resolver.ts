@@ -26,11 +26,13 @@ export class DbMutationResolver {
     return this.cryptoService.search(options).then(
         (cryptoCurrencyMarkets) => {
             cryptoCurrencyMarkets.forEach( async crypto => {
-             
-                // crypto.historical_data = await new YahooFinanceService(crypto.symbol, 'EUR').getHistory()
-                // console.log(crypto.historical_data);
-                
+
+				
+                 await new YahooFinanceService(crypto.symbol, 'EUR').getHistory().then(
+					(data) => crypto.historical_data = data
+				) 
             })
+			console.log(cryptoCurrencyMarkets);
             return cryptoCurrencyMarkets
         }
     )
