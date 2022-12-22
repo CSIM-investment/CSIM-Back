@@ -36,7 +36,7 @@ export class DbService {
     if (symbol) query = query.where(`symbol = :symbol`, { symbol })
 
     if ( search ) {
-      query = query.andWhere(
+      query = query.orWhere(
         new Brackets((qb) => searchKeys.forEach( key => { 
             if ( search[key] === undefined) return 
             

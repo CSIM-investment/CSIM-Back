@@ -25,4 +25,7 @@ export class CryptoFilterInput {
 
   @Field({ nullable: true })
   max_current_price?: number
+
+  
+
 }

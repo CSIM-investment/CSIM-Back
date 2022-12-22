@@ -108,5 +108,4 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'timestamp' })
   last_updated: Date
 
-  historical_data: Array<any>
 }
