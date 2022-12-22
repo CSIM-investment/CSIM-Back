@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryColumn, Any } from 'typeorm'
+import { Entity, Column, PrimaryColumn } from 'typeorm'
 import { ObjectType, Field, ID, Float } from '@nestjs/graphql'
-import { historicalCryptoData } from './historical_crypto_data.model'
 
 @Entity()
 @ObjectType()
@@ -108,7 +107,5 @@ export class CryptoCurrencyMarket {
   @Field()
   @Column({ type: 'timestamp' })
   last_updated: Date
-  
-  @Field(() => [historicalCryptoData], {nullable : true})
-  historical_data: Array<historicalCryptoData[]>
+
 }

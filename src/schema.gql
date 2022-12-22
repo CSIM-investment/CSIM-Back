@@ -53,7 +53,6 @@ type CryptoCurrencyMarket {
   current_price: Float!
   fully_diluted_valuation: Float!
   high_24h: Float!
-  historical_data: [historicalCryptoData!]
   id: ID!
   image: String!
   last_updated: DateTime!
@@ -197,15 +196,4 @@ enum UserRoles {
 enum UserStatus {
   isActive
   isPending
-}
-
-type historicalCryptoData {
-  adjClose: Float!
-  close: Float!
-  date: String!
-  high: Float!
-  low: Float!
-  open: Float!
-  symbol: String!
-  volume: Float!
 }
