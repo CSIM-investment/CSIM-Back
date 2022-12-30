@@ -23,4 +23,9 @@ export class UserResolver {
   account(@Context() context): Promise<User> {
     return context.req.user
   }
+  @ResolveField(() => [CryptoCurrencyMarket])
+  async favoritesCrypto(@Parent() { id }: User): Promise<CryptoCurrencyMarket[]> {
+    const user = await this.userService.getUserWithFavoritesCrypto(id)
+    return user.favoritesCrypto
+  }
 }
