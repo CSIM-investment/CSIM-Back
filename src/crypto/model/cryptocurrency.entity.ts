@@ -20,7 +20,7 @@ export class CryptoCurrencyMarket {
   @Column()
   image: string
 
-  @Field( () => Float)
+  @Field(() => Float)
   @Column({ type: 'float' })
   current_price: number
 
@@ -107,5 +107,4 @@ export class CryptoCurrencyMarket {
   @Field()
   @Column({ type: 'timestamp' })
   last_updated: Date
-
 }
