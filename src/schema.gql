@@ -150,6 +150,7 @@ type Mutation {
   resetPassword(email: String!, emailCode: Float!, newPassword: String!): LoginResponse!
   sendRegisterConfirmation(email: String!): User!
   sendResetPasswordCode(email: String!): String!
+  toggleFavoriteCrypto(input: ToggleFavoriteInput!): User!
   updateAccount(updateUserInput: UpdateUserInput!): User!
   updateArticles: String!
 }
@@ -170,6 +171,11 @@ type Query {
   cryptos(options: CryptoSearchInput!): [CryptoCurrencyMarket!]!
 }
 
+input ToggleFavoriteInput {
+  cryptoId: String!
+  hadToFavorite: Boolean!
+}
+
 input UpdateUserInput {
   firstName: String
   lastName: String
@@ -180,6 +186,7 @@ input UpdateUserInput {
 
 type User {
   email: String!
+  favoritesCrypto: [CryptoCurrencyMarket!]!
   firstName: String!
   id: ID!
   lastName: String!
