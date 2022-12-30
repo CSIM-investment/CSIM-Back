@@ -4,6 +4,7 @@ import { CreateUserInput } from './dto/create-user.input'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './methods/user.methods'
 import { UserEntity } from './entities/user.entity'
+import { ToggleFavoriteInput } from './dto/toggle-favorite.input'
 import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
 
 @Injectable()
@@ -29,6 +30,18 @@ export class UserService {
   async updateAndGet(id: number, payload: Partial<User>): Promise<User> {
     await this.userRepository.update({ id }, { ...payload })
     return await this.userRepository.findOneBy({ id })
+  }
+
+  async toggleFavoriteCrypto(userId: number, input: ToggleFavoriteInput): Promise<User> {
+    const [crypto, user] = await Promise.all([
+      this.cryptoRepository.findOneByOrFail({ id: input.cryptoId }),
+      this.getUserWithFavoritesCrypto(userId),
+    ])
+    user.favoritesCrypto = input.hadToFavorite
+      ? [...user.favoritesCrypto, crypto]
+      : user.favoritesCrypto.filter((crypto) => crypto.id !== input.cryptoId)
+    await this.userRepository.save(user)
+    return user
   }
 
   async getUserWithFavoritesCrypto(userId: number): Promise<User> {
