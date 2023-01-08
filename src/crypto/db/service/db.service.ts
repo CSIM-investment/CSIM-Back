@@ -5,6 +5,7 @@ import { Brackets, Repository } from 'typeorm'
 import { CryptoMarketInput, CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
 import { YahooFinanceService } from './yahoo-finance.service'
+import { PaginatedResults } from '../dto/paginated-results'
 
 @Injectable()
 export class DbService {
@@ -20,7 +21,7 @@ export class DbService {
     return { cryptoCurrencyMarket }
   }
 
-  async search(cryptosInput: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
+  async search(cryptosInput: CryptoSearchInput): Promise<PaginatedResults<CryptoCurrencyMarket>> {
 
     const { orderBy, filterBy } = cryptosInput
     const { symbol, pagination, search } = filterBy
@@ -66,14 +67,14 @@ export class DbService {
       if (filterBy.min_current_price) {
         query = query.andWhere( `current_price > ${filterBy.min_current_price}` )
       }
-
     }
 
     if (pagination) query = query.limit(pagination.end).offset(pagination.start)
     if (orderBy) query = query.orderBy(orderBy.name, orderBy.direction)
 
-    return await query.getMany()
-  }
+    const [datas, count] = await query.getManyAndCount()
+    
+    return {datas, count}
 
-  
+  }  
 }

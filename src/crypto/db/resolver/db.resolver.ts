@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver, Query } from '@nestjs/graphql'
+import { Args, Mutation, Resolver, Query, InputType } from '@nestjs/graphql'
 import { CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
 import { DbService } from '../service/db.service'
 import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
@@ -6,6 +6,7 @@ import { CoingeckoService } from 'src/crypto/coingecko/coingecko/service/coingec
 import { Cron } from '@nestjs/schedule'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
 import { YahooFinanceService } from '../service/yahoo-finance.service'
+import { PaginatedResults } from '../dto/paginated-results'
 
 @Resolver(CryptoCurrencyMarket)
 export class DbMutationResolver {
@@ -21,8 +22,8 @@ export class DbMutationResolver {
 		})
 	}
 
-	@Query(() => [CryptoCurrencyMarket])
-	async cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarket[]> {
+	@Query(() => PaginatedResults<CryptoCurrencyMarket>)
+	async cryptos(@Args('options') options?: CryptoSearchInput): Promise<PaginatedResults<CryptoCurrencyMarket>> {
 		return await this.cryptoService.search(options)
 	}
 }
