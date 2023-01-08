@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql'
-import { Column, PrimaryGeneratedColumn } from 'typeorm'
+import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { Column, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { UserRoles } from '../enums/user-roles.enum'
 import { UserStatus } from '../enums/user-status.enum'
 
@@ -41,4 +42,9 @@ export class UserEntity {
 
   @Column({ nullable: true })
   emailCode: number
+
+  @Field(() => [CryptoCurrencyMarket])
+  @ManyToMany(() => CryptoCurrencyMarket)
+  @JoinTable()
+  favoritesCrypto: CryptoCurrencyMarket[]
 }
