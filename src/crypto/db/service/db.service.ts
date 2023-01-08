@@ -5,7 +5,7 @@ import { Brackets, Repository } from 'typeorm'
 import { CryptoMarketInput, CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
 import { YahooFinanceService } from './yahoo-finance.service'
-import { PaginatedResults } from '../dto/paginated-results'
+import { CryptoCurrencyMarketPaginatedResults } from '../dto/crypto-paginated-results'
 
 @Injectable()
 export class DbService {
@@ -21,7 +21,7 @@ export class DbService {
     return { cryptoCurrencyMarket }
   }
 
-  async search(cryptosInput: CryptoSearchInput): Promise<PaginatedResults<CryptoCurrencyMarket>> {
+  async search(cryptosInput: CryptoSearchInput): Promise<CryptoCurrencyMarketPaginatedResults> {
 
     const { orderBy, filterBy } = cryptosInput
     const { symbol, pagination, search } = filterBy
