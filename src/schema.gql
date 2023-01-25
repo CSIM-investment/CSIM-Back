@@ -124,6 +124,7 @@ enum CryptoOrderBy {
   high_24h
   low_24
   market_cap
+  price_change_percentage_24h
 }
 
 input CryptoOrderInput {

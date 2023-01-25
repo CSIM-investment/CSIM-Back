@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Brackets, Repository } from 'typeorm'
 import { CryptoMarketInput, CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
-import { YahooFinanceService } from './yahoo-finance.service'
 import { CryptoCurrencyMarketPaginatedResults } from '../dto/crypto-paginated-results'
 
 @Injectable()
