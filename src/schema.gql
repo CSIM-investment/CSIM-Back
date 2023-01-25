@@ -72,6 +72,11 @@ type CryptoCurrencyMarket {
   total_volume: Float!
 }
 
+type CryptoCurrencyMarketPaginatedResults {
+  count: Float!
+  datas: [CryptoCurrencyMarket!]!
+}
+
 input CryptoFilterInput {
   max_cap: Float
   max_current_price: Float
@@ -168,7 +173,7 @@ input PaginationInput {
 type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
-  cryptos(options: CryptoSearchInput!): [CryptoCurrencyMarket!]!
+  cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
 }
 
 input ToggleFavoriteInput {
