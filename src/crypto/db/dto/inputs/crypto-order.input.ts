@@ -5,7 +5,7 @@ import { OrderDirection } from '../../../../articles/enums/order-direction.enum'
 
 @InputType()
 export class CryptoOrderInput {
-  @Field(() => ArticleOrderBy)
+  @Field(() => CryptoOrderBy)
   name: CryptoOrderBy
 
   @Field(() => OrderDirection)
