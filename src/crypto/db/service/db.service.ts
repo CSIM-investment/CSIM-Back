@@ -47,7 +47,7 @@ export class DbService {
                 ? qb.orWhere(`${key} LIKE :${key}`, { [key]: `%${ search[key] }%` })
                 : qb.orWhere(`${key} = :${key}`, { [key]: search[key] })
         })))
-    }    
+    }
 
     // Filters
     if (filterBy) {
