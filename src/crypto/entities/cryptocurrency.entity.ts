@@ -1,24 +1,13 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
-import { ObjectType, Field, ID, Float } from '@nestjs/graphql'
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm'
+import { ObjectType, Field, Float, ID } from '@nestjs/graphql'
+import { InvestmentEntity } from 'src/investments/entities/investment.entity'
 
 @Entity()
 @ObjectType()
 export class CryptoCurrencyMarket {
-  @Field(() => ID)
   @PrimaryColumn()
+  @Field(() => ID)
   id: string
-
-  @Field()
-  @Column()
-  name: string
-
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  symbol: string
-
-  @Field()
-  @Column()
-  image: string
 
   @Field(() => Float)
   @Column({ type: 'float' })
@@ -64,8 +53,8 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'float' })
   market_cap_change_percentage_24h: number
 
-  @Field({ nullable: true })
-  @Column({ type: 'float', nullable: true })
+  @Field()
+  @Column({ type: 'float' })
   circulating_supply: number
 
   @Field({ nullable: true })
@@ -107,4 +96,22 @@ export class CryptoCurrencyMarket {
   @Field()
   @Column({ type: 'timestamp' })
   last_updated: Date
+
+  @Field()
+  @Column()
+  name: string
+
+  @Field()
+  @Column()
+  symbol: string
+
+  @Field()
+  @Column()
+  image: string
+
+  @OneToMany(() => InvestmentEntity, ({ baseCurrency }) => baseCurrency)
+  baseInvestment: InvestmentEntity[]
+
+  @OneToMany(() => InvestmentEntity, ({ quoteCurrency }) => quoteCurrency)
+  quoteInvestment: InvestmentEntity[]
 }
