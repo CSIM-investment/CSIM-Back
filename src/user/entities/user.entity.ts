@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from '@nestjs/graphql'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
-import { Column, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
+import { InvestmentEntity } from 'src/investments/entities/investment.entity'
+import { Column, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { UserRoles } from '../enums/user-roles.enum'
 import { UserStatus } from '../enums/user-status.enum'
 
@@ -43,8 +44,12 @@ export class UserEntity {
   @Column({ nullable: true })
   emailCode: number
 
-  @Field(() => [CryptoCurrencyMarket])
+  @Field(() => [CryptoCurrencyMarket], { defaultValue: [] })
   @ManyToMany(() => CryptoCurrencyMarket)
   @JoinTable()
   favoritesCrypto: CryptoCurrencyMarket[]
+
+  @Field(() => [InvestmentEntity], { defaultValue: [] })
+  @OneToMany(() => InvestmentEntity, (investment) => investment.user)
+  investments: InvestmentEntity[]
 }
