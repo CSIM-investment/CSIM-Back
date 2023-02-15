@@ -24,7 +24,6 @@ export class AuthService {
     const user = await this.userRepository.findOneByOrFail({ email })
 
     if (!(await user.hasValidPassword(password)) || !user.isActive()) throw new UnauthorizedException()
-
     return user
   }
 
