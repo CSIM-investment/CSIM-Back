@@ -5,7 +5,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard'
 import { UpdateUserInput } from './dto/update-user.input'
 import { User } from './methods/user.methods'
 import { ToggleFavoriteInput } from './dto/toggle-favorite.input'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 
 @Resolver(() => User)
 export class UserResolver {
