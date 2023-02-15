@@ -43,7 +43,7 @@ export class DbService {
             const isStringKey = typeof search[key] === 'string'
             
             return isStringKey 
-                ? qb.orWhere(`${key} LIKE :${key}`, { [key]: `%${ search[key] }%` })
+                ? qb.orWhere(`LOWER(${key}) LIKE LOWER(:${key})`, { [key]: `%${ search[key] }%` })
                 : qb.orWhere(`${key} = :${key}`, { [key]: search[key] })
         })))
     }
