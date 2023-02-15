@@ -1,7 +1,6 @@
-import { Args, Mutation, Resolver, Query, InputType } from '@nestjs/graphql'
-import { CryptoMarketOutput } from '../dto/cryptoMarket-create.dto'
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql'
 import { DbService } from '../service/db.service'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 import { CoingeckoService } from 'src/crypto/coingecko/coingecko/service/coingecko.service'
 import { Cron } from '@nestjs/schedule'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
@@ -12,13 +11,14 @@ export class DbMutationResolver {
 	constructor(private cryptoService: DbService, private coinGeckoService: CoingeckoService) { }
 
 	@Cron('10 * * * * *')
-	@Mutation(() => CryptoMarketOutput)
+	@Mutation(() => String)
 	async createCryptoMarket() {
-		return this.coinGeckoService.getAllCoinsMarket().then((resp) => {
+		this.coinGeckoService.getAllCoinsMarket().then((resp) => {
 			resp.forEach((elmnt) => {
 				this.cryptoService.createCryptoCurrencyMarket(elmnt)
 			})
 		})
+		return 'datas has been created'
 	}
 
 	@Query(() => CryptoCurrencyMarketPaginatedResults)

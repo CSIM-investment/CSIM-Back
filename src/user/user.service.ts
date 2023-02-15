@@ -3,9 +3,9 @@ import { Repository } from 'typeorm/repository/Repository'
 import { CreateUserInput } from './dto/create-user.input'
 import { InjectRepository } from '@nestjs/typeorm'
 import { User } from './methods/user.methods'
-import { UserEntity } from './entities/user.entity'
 import { ToggleFavoriteInput } from './dto/toggle-favorite.input'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
+import { UpdateUserInput } from './dto/update-user.input'
 
 @Injectable()
 export class UserService {
@@ -16,7 +16,7 @@ export class UserService {
     private cryptoRepository: Repository<CryptoCurrencyMarket>,
   ) {}
 
-  async update(user: Partial<UserEntity> | number, payload: Partial<User>): Promise<void> {
+  async update(user: Partial<UpdateUserInput> | number, payload: Partial<User>): Promise<void> {
     await this.userRepository.update(user, { ...payload })
   }
 

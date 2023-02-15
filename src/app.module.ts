@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { EmailModule } from './email/email.module'
 import { DbModule } from './crypto/db/db.module'
 import { ArticleModule } from './articles/article.module'
+import { InvestmentModule } from './investments/investment.module'
 
 type DatabaseType = 'mysql' | 'postgres'
 
@@ -41,6 +42,7 @@ type DatabaseType = 'mysql' | 'postgres'
     AuthModule,
     DbModule,
     ArticleModule,
+    InvestmentModule,
   ],
 })
 export class AppModule {}

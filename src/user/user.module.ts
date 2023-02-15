@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserSubscriber } from './user.subscriber'
 import { UserEntity } from './entities/user.entity'
 import { User } from './methods/user.methods'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 
 @Global()
 @Module({

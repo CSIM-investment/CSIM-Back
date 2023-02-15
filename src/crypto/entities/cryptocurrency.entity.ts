@@ -1,24 +1,13 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm'
-import { ObjectType, Field, ID, Float } from '@nestjs/graphql'
+import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm'
+import { ObjectType, Field, Float, ID } from '@nestjs/graphql'
+import { InvestmentEntity } from 'src/investments/entities/investment.entity'
 
 @Entity()
 @ObjectType()
 export class CryptoCurrencyMarket {
-  @Field(() => ID)
   @PrimaryColumn()
+  @Field(() => ID)
   id: string
-
-  @Field()
-  @Column()
-  name: string
-
-  @Field()
-  @Column({ nullable: true })
-  symbol: string
-
-  @Field()
-  @Column()
-  image: string
 
   @Field(() => Float)
   @Column({ type: 'float' })
@@ -32,7 +21,7 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'int' })
   market_cap_rank: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   fully_diluted_valuation: number
 
@@ -65,14 +54,14 @@ export class CryptoCurrencyMarket {
   market_cap_change_percentage_24h: number
 
   @Field()
-  @Column({ type: 'float', nullable: true })
+  @Column({ type: 'float' })
   circulating_supply: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   total_supply: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   max_supply: number
 
@@ -100,11 +89,29 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'timestamp' })
   atl_date: Date
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   roi: string
 
   @Field()
   @Column({ type: 'timestamp' })
   last_updated: Date
+
+  @Field()
+  @Column()
+  name: string
+
+  @Field()
+  @Column()
+  symbol: string
+
+  @Field()
+  @Column()
+  image: string
+
+  @OneToMany(() => InvestmentEntity, ({ baseCurrency }) => baseCurrency)
+  baseInvestment: InvestmentEntity[]
+
+  @OneToMany(() => InvestmentEntity, ({ quoteCurrency }) => quoteCurrency)
+  quoteInvestment: InvestmentEntity[]
 }

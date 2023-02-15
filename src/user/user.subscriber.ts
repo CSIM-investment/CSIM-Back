@@ -15,7 +15,6 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
   async beforeInsert(event: InsertEvent<User>): Promise<void> {
     event.entity.emailCode = this.authService.createSixDigitsCode()
     event.entity.password = await this.authService.hashPassword(event.entity.password)
-    event.entity.favoritesCrypto = []
   }
 
   async beforeUpdate(event: UpdateEvent<User>): Promise<void> {

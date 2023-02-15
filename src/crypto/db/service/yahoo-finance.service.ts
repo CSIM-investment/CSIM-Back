@@ -15,14 +15,10 @@ export class YahooFinanceService {
   }
 
   private buildFromAndToForHistory(beginDate?: Date, endDate?: Date): { from: string; to: string } {
-
     const endDateDayjs = dayjs(endDate ?? new Date())
     let beginDateDayjs = null
-    if(beginDate)
-      beginDateDayjs = dayjs(beginDate)
-    else
-      beginDateDayjs = endDateDayjs.subtract(1, 'day')
-    
+    if (beginDate) beginDateDayjs = dayjs(beginDate)
+    else beginDateDayjs = endDateDayjs.subtract(1, 'day')
 
     const from = dayjs(beginDateDayjs).format('YYYY-MM-DD')
     const to = dayjs(endDateDayjs).format('YYYY-MM-DD')
@@ -40,7 +36,7 @@ export class YahooFinanceService {
         symbol: this.currencyName,
         from,
         to,
-        period:"d"
+        period: 'd',
       },
       async function (err: string, quotes) {
         if (err) throw new Error(err)

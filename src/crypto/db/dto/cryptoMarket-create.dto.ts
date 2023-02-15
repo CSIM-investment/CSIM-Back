@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType, ID } from '@nestjs/graphql'
-import { CryptoCurrencyMarket } from 'src/crypto/model/cryptocurrency.entity'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 
 @InputType()
 export class CryptoMarketInput {
@@ -77,6 +77,9 @@ export class CryptoMarketInput {
 
   @Field(() => Date)
   last_updated: Date
+
+  @Field({ nullable: true })
+  symbol: string
 }
 
 @ObjectType()
