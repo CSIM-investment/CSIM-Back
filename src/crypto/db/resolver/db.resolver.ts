@@ -12,13 +12,14 @@ export class DbMutationResolver {
 	constructor(private cryptoService: DbService, private coinGeckoService: CoingeckoService) { }
 
 	@Cron('10 * * * * *')
-	@Mutation(() => CryptoMarketOutput)
+	@Mutation(() => String)
 	async createCryptoMarket() {
-		return this.coinGeckoService.getAllCoinsMarket().then((resp) => {
+		this.coinGeckoService.getAllCoinsMarket().then((resp) => {
 			resp.forEach((elmnt) => {
 				this.cryptoService.createCryptoCurrencyMarket(elmnt)
 			})
 		})
+		return 'datas has been created'
 	}
 
 	@Query(() => CryptoCurrencyMarketPaginatedResults)

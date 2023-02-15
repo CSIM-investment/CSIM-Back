@@ -12,7 +12,7 @@ export class CryptoCurrencyMarket {
   @Column()
   name: string
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   symbol: string
 
@@ -32,7 +32,7 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'int' })
   market_cap_rank: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   fully_diluted_valuation: number
 
@@ -64,15 +64,15 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'float' })
   market_cap_change_percentage_24h: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   circulating_supply: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   total_supply: number
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'float', nullable: true })
   max_supply: number
 
@@ -100,7 +100,7 @@ export class CryptoCurrencyMarket {
   @Column({ type: 'timestamp' })
   atl_date: Date
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   roi: string
 

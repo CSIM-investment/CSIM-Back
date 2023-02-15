@@ -39,8 +39,6 @@ input CreateUserInput {
   firstName: String!
   lastName: String!
   password: String!
-  phone: String!
-  username: String!
 }
 
 type CryptoCurrencyMarket {
@@ -50,9 +48,9 @@ type CryptoCurrencyMarket {
   atl: Float!
   atl_change_percentage: Float!
   atl_date: DateTime!
-  circulating_supply: Float!
+  circulating_supply: Float
   current_price: Float!
-  fully_diluted_valuation: Float!
+  fully_diluted_valuation: Float
   high_24h: Float!
   id: ID!
   image: String!
@@ -62,13 +60,13 @@ type CryptoCurrencyMarket {
   market_cap_change_24h: Float!
   market_cap_change_percentage_24h: Float!
   market_cap_rank: Float!
-  max_supply: Float!
+  max_supply: Float
   name: String!
   price_change_24h: Float!
   price_change_percentage_24h: Float!
-  roi: String!
-  symbol: String!
-  total_supply: Float!
+  roi: String
+  symbol: String
+  total_supply: Float
   total_volume: Float!
 }
 
@@ -85,10 +83,6 @@ input CryptoFilterInput {
   pagination: PaginationInput
   search: CryptoMarketSearchInput
   symbol: String
-}
-
-type CryptoMarketOutput {
-  cryptoCurrencyMarket: CryptoCurrencyMarket!
 }
 
 input CryptoMarketSearchInput {
@@ -155,7 +149,7 @@ input LoginUserInput {
 
 type Mutation {
   confirmEmail(email: String!, emailCode: Float!): LoginResponse!
-  createCryptoMarket: CryptoMarketOutput!
+  createCryptoMarket: String!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!
@@ -192,8 +186,6 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   password: String
-  phone: String
-  username: String
 }
 
 type User {
