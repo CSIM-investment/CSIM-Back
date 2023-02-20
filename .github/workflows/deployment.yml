@@ -1,0 +1,39 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - feature/CD
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install OpenVPN
+        run: sudo apt-get update && sudo apt-get install -y openvpn
+
+      - name: Copy OpenVPN configuration file to server
+        run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
+
+      - name: Start OpenVPN and SSH into server
+        uses: appleboy/ssh-action@master
+        with:
+          host: 10.1.1.16
+          username: tgimenez
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo openvpn --config YnovVPN.ovpn &
+            sleep 10
+            cd /path/to
+            docker-compose up -d
+
+# TODO Créer un script de déploiement sur l'accès Ynov
+# TODO Tester le process
