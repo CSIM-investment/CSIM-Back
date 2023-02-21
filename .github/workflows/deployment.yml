@@ -19,7 +19,6 @@ jobs:
       - name: Set up OpenVPN and SSH
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.OPENVPN_HOST }}
           username: ${{ secrets.OPENVPN_USERNAME }}
           password: ${{ secrets.OPENVPN_PASSWORD }}
           script: |
