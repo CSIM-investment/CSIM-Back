@@ -27,4 +27,4 @@ jobs:
             sudo openvpn --config ./YnovVPN.ovpn
             sleep 10
             echo ${{ secrets.SSH_PRIVATE_KEY }} > ./key
-            ssh -i ./key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} deploy.sh
+            ssh -i ./key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} ./deploy.sh
