@@ -17,8 +17,14 @@ jobs:
       - name: Copy OpenVPN configuration file to server
         run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
 
+      - name: Prepare auth user pass
+        run: echo "${{ secrets.OPENVPN_USERNAME }}\n${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
+
       - name: connect to VPN
-        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass <(echo "${{ secrets.OPENVPN_USERNAME }}\n${{ secrets.OPENVPN_PASSWORD }}")
+        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt
+
+      - name: remove auth user pass
+        run: rm authPass.txt
 
       - name: Set up SSH
         uses: appleboy/ssh-action@master
