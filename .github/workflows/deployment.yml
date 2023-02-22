@@ -6,7 +6,8 @@ on:
       - feature/CD
 
 jobs:
-  deploy:
+  deployment:
+    environment: CSIM-Back
     runs-on: ubuntu-latest
     steps:
 
