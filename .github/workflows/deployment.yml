@@ -15,7 +15,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y openvpn
 
       - name: Copy OpenVPN configuration file to server
-        run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn ~/YnovVPN.ovpn
+        run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
 
       - name: connect to VPN
         run: sudo openvpn --config vpn/config.ovpn --auth-user-pass <(echo "${{ secrets.OPENVPN_USERNAME }}\n${{ secrets.OPENVPN_PASSWORD }}")
