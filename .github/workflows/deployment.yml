@@ -18,7 +18,9 @@ jobs:
         run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
 
       - name: Prepare auth user pass
-        run: echo "${{ secrets.OPENVPN_USERNAME }}\n${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
+        run: |
+          echo "${{ secrets.OPENVPN_USERNAME }}
+          ${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
 
       - name: connect to VPN
         run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --daemon
