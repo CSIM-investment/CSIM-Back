@@ -15,7 +15,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y openvpn
 
       - name: Copy OpenVPN configuration file to server
-        run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn ~/YnovVPN.ovpn
+        run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
 
       - name: Set up OpenVPN and SSH
         uses: appleboy/ssh-action@master
@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets.OPENVPN_USERNAME }}
           password: ${{ secrets.OPENVPN_PASSWORD }}
           script: |
-            wget https://ydayslyon.fr/assets/YnovVPN.ovpn ~/YnovVPN.ovpn
+            wget https://ydayslyon.fr/assets/YnovVPN.ovpn
             sudo apt-get update && sudo apt-get install -y openvpn
             sudo openvpn --config ./YnovVPN.ovpn
             sleep 10
