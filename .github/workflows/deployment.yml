@@ -39,7 +39,6 @@ jobs:
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_HOST }}
           key: ${{ secrets.SSH_PUBLIC_KEY }}
           script: |
             ./deploy.sh
