@@ -21,10 +21,16 @@ jobs:
         run: echo "${{ secrets.OPENVPN_USERNAME }}\n${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
 
       - name: connect to VPN
-        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt
+        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --daemon
+
+      - name: Wait 10 seconds
+        run: sleep 10
 
       - name: remove auth user pass
         run: rm authPass.txt
+
+      - name: remove ynov vpn file
+        run: rm ./YnovVPN.ovpn
 
       - name: Set up SSH
         uses: appleboy/ssh-action@master
@@ -32,6 +38,6 @@ jobs:
           host: ${{secrets.SSH_HOST}}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_HOST }}
-          key: SSH_PUBLIC_KEY
+          key: ${{ secrets.SSH_PUBLIC_KEY }}
           script: |
             ./deploy.sh
