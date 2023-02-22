@@ -23,9 +23,5 @@ jobs:
           username: ${{ secrets.OPENVPN_USERNAME }}
           password: ${{ secrets.OPENVPN_PASSWORD }}
           script: |
-#            sudo apt-get update && sudo apt-get install -y openvpn
             stat -c "%s" ./YnovVPN.ovpn
             sudo openvpn --config ./YnovVPN.ovpn
-#            sleep 10
-#            echo ${{secrets.SSH_PUBLIC_KEY}} > ~/.ssh/key
-#            ssh -o "StrictHostKeyChecking no" -i ~/.ssh/key ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} ./deploy.sh
