@@ -28,21 +28,26 @@ jobs:
       - name: connect to VPN
         run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --daemon
 
-      - name: Wait 1 seconds
-        run: sleep 1
-
       - name: remove auth user pass
         run: rm authPass.txt
 
       - name: remove ynov vpn file
         run: rm ./YnovVPN.ovpn
 
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
+      - name: install ssh
+        run: sudo apt-get install ssh -y
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          timeout: "100s"
-          script: |
-            ./deploy
+          known_hosts: 'just-a-placeholder-so-we-dont-get-errors'
+
+      - name: ssh-keyscan -H SSH_HOST
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Run script on remote server
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
