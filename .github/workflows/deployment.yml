@@ -44,7 +44,10 @@ jobs:
           known_hosts: ${{ secrets.SSH_HOST }}
 
       - name: Connect to ssh
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+
+      - name: Call deploy script
+        run: ./deploy
 
       - name: Run script on remote server
         env:
