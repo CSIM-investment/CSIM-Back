@@ -26,7 +26,7 @@ jobs:
           ${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
 
       - name: connect to VPN
-        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --daemon
+        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt
 
       - name: Wait 1 seconds
         run: sleep 1
