@@ -37,11 +37,11 @@ jobs:
       - name: remove ynov vpn file
         run: rm ./YnovVPN.ovpn
 
-      - name: Set up SSH
-        uses: shimataro/ssh-key-action@v2
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
         with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-
-      - name: connect to ssh
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          script: |
+            ./deploy
