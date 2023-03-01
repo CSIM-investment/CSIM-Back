@@ -41,7 +41,7 @@ jobs:
         run: sudo mkdir ~/.ssh/
 
       - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+        run: sudo ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Set up SSH
         uses: shimataro/ssh-key-action@v2
