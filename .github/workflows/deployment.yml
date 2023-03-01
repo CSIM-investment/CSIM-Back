@@ -40,14 +40,14 @@ jobs:
       - name: create .ssh dir
         run: sudo mkdir ~/.ssh/
 
-      - name: chmod 600 .ssh
-        run: sudo chmod 600 ~/.ssh/
+      - name: chmod 777 .ssh
+        run: sudo chmod 777 ~/.ssh/
 
       - name: create known_hosts
         run: sudo touch ~/.ssh/known_hosts
 
-      - name: chmod 600 known_hosts
-        run: sudo chmod 600 ~/.ssh/known_hosts
+      - name: chmod 777 known_hosts
+        run: sudo chmod 777 ~/.ssh/known_hosts
 
       - name: Adding Known Hosts
         run: sudo ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
