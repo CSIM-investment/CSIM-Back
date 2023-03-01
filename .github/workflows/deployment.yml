@@ -14,6 +14,9 @@ jobs:
       - name: Install OpenVPN
         run: sudo apt-get update && sudo apt-get install -y openvpn
 
+      - name: Install OpenVPN
+        run: sudo apt-get -yqq install ssh
+
       - name: Copy OpenVPN configuration file to server
         run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
 
@@ -35,7 +38,7 @@ jobs:
         run: rm ./YnovVPN.ovpn
 
       - name: create .ssh dir
-        run: mkdir ~/.ssh/
+        run: sudo mkdir ~/.ssh/
 
       - name: Adding Known Hosts
         run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
