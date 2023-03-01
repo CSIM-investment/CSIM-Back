@@ -37,20 +37,8 @@ jobs:
       - name: install ssh
         run: sudo apt-get install ssh -y
 
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-
-      - name: Connect to ssh
-        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-
-      - name: Call deploy script
-        run: ./deploy
-
       - name: Run script on remote server
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'bash -s' < deploy.sh
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
