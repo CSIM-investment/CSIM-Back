@@ -31,9 +31,6 @@ jobs:
       - name: remove ynov vpn file
         run: rm ./YnovVPN.ovpn
 
-      - name: remove ynov vpn file
-        run: rm ./YnovVPN.ovpn
-
       - name: install iputils
         run: sudo apt-get install iputils-ping
 
