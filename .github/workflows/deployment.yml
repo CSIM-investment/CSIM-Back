@@ -37,6 +37,9 @@ jobs:
       - name: allow ssh
         run: sudo ufw allow ssh
 
+      - name: wait 5 seconds
+        run: sleep 5
+
       - name: multiple command
         uses: appleboy/ssh-action@v0.1.8
         with:
