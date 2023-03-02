@@ -44,10 +44,10 @@ jobs:
         run: mkdir .ssh
 
       - name: create private_key file
-        run: echo ${{ secrets.SSH_PRIVATE_KEY }} >> .ssh/deploy_key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> .ssh/deploy_key
 
       - name: create known_hosts
-        run: echo ${{ secrets.KNOWN_HOSTS }} >> .ssh/known_hosts
+        run: echo "${{ secrets.KNOWN_HOSTS }}" >> .ssh/known_hosts
 
       - name: connect to ssh
         run: ssh -o StrictHostKeyChecking=no -i .ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
