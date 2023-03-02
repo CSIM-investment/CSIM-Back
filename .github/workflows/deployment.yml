@@ -50,4 +50,4 @@ jobs:
         run: echo ${{ secrets.KNOWN_HOSTS }} >> .ssh/known_hosts
 
       - name: connect to ssh
-        run: ssh -o StrictHostKeyChecking=no -i .ssh/deploy_key ${{ SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: ssh -o StrictHostKeyChecking=no -i .ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
