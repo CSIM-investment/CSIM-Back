@@ -39,7 +39,6 @@ jobs:
 
       - name: Run script on remote server
         env:
-          PORT: 8000
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
