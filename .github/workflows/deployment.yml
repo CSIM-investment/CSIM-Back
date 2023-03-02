@@ -37,14 +37,8 @@ jobs:
       - name: Install ssh
         run: sudo apt-get -yqq install ssh
 
-      - name: conn to ssh
-        run: ssh -tt -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ./deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      - name: Install ssh-pass
+        run: sudo apt-get install sshpass
 
-      - name: multiple command
-        uses: appleboy/ssh-action@v0.1.8
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            ./deploy
+      - name: Connect to ssh
+        run: sshpass -p ${{ secrets.SSH_PASSWORD }} ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
