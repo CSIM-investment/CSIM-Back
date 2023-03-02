@@ -41,4 +41,4 @@ jobs:
         run: sudo apt-get install sshpass
 
       - name: Connect to ssh
-        run: sshpass -p ${{ secrets.SSH_PASSWORD }} ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
