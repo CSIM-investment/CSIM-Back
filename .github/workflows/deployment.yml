@@ -37,14 +37,11 @@ jobs:
       - name: allow ssh
         run: sudo ufw allow ssh
 
-      - name: wait 5 seconds
-        run: sleep 5
-
-      - name: create ssh folder
-        run: mkdir .ssh
-
-      - name: create private_key file
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> .ssh/deploy_key
-
-      - name: connect to ssh
-        run: ssh -o StrictHostKeyChecking=no -i .ssh/deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      - name: multiple command
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            ./deploy
