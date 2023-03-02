@@ -31,11 +31,14 @@ jobs:
       - name: remove ynov vpn file
         run: rm ./YnovVPN.ovpn
 
-      - name: install iputils
-        run: sudo apt-get install iputils-ping
+      - name: create certificate
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ./deploy_key_rsa
 
-      - name: ping host
-        run: ping ${{ secrets.SSH_HOST }}
+      - name: Install ssh
+        run: sudo apt-get -yqq install ssh
+
+      - name: conn to ssh
+        run: ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ./deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
       - name: multiple command
         uses: appleboy/ssh-action@v0.1.8
