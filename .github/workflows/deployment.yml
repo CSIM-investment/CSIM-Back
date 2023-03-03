@@ -51,6 +51,9 @@ jobs:
   
       - name: Allow Ping to 10.1.1.16
         run: sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
+      
+      - name: Check the reverse DNS record configuration using dig
+        run: dig -x 10.1.1.16
         
       - name: run nslookup
         run: nslookup 10.1.1.16
