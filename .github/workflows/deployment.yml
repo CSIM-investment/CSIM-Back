@@ -57,7 +57,8 @@ jobs:
   
       - name: ping
         run: |
-          ping 10.1.1.16      
+          ping -c 30 10.1.1.16
+      
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master 
         with: 
