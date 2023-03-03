@@ -58,14 +58,11 @@ jobs:
       - name: Allow Ping to 10.1.1.16
         run: sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
       
-      - name: Check the reverse DNS record configuration using dig
-        run: dig -x 10.1.1.16
-      
       - name: change main interface
         run: sudo route add default tun0
       
-      - name: ping host
-        run: ping -I tun0 10.1.1.16
+      - name: print private_ssh_key
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
 
       - name: Connect to ssh
-        run: sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -b tun0 ${{ secrets.SSH_USER }}@10.1.1.16
+        run: ssh -b tun0 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
