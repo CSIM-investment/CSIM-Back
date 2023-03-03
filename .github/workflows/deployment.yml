@@ -16,6 +16,9 @@ jobs:
       
       - name: install dnsutils
         run: sudo apt-get install dnsutils
+      
+      - name: install traceroute
+        run: sudo apt-get install traceroute
 
       - name: Copy OpenVPN configuration file to server
         run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
@@ -51,9 +54,9 @@ jobs:
       
       - name: Check the reverse DNS record configuration using dig
         run: dig -x 10.1.1.16
-        
-      - name: run nslookup
-        run: nslookup 10.1.1.16
+      
+      - name: traceroute
+        run: traceroute 10.1.1.16
       
       - name: ping host
         run: ping 10.1.1.16
