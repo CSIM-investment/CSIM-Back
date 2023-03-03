@@ -15,7 +15,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y openvpn
       
       - name: install dnsutils
-        run: sudo apt-get install dnsutils
+        run: sudo apt-get install net-tools
       
       - name: install traceroute
         run: sudo apt-get install traceroute
@@ -54,9 +54,12 @@ jobs:
       
       - name: Check the reverse DNS record configuration using dig
         run: dig -x 10.1.1.16
+        
+      - name: ifconfig
+        run: ifconfig -a
       
-      - name: traceroute
-        run: traceroute 10.1.1.16
+      - name: change main interface
+        run: sudo route add default tun0
       
       - name: ping host
         run: ping 10.1.1.16
