@@ -49,9 +49,6 @@ jobs:
       - name: remove auth user pass
         run: rm authPass.txt
 
-      - name: create certificate
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ./deploy_key_rsa
-
       - name: Install ssh
         run: |
           sudo apt-get -yqq install openssh-client
@@ -64,11 +61,6 @@ jobs:
           sudo route add default gw $tun0_ip
           sudo iptables -A OUTPUT -o tun0 -j ACCEPT
           sudo iptables -A OUTPUT -o eth0 -j DROP
-
-      - name: print private_ssh_key
-        run: |
-          mkdir ~/.ssh/
-          sudo echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
       
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master 
@@ -76,8 +68,15 @@ jobs:
           host: ${{ secrets.SSH_HOST }} 
           username: ${{ secrets.SSH_USERNAME }} 
           password: ${{ secrets.SSH_PASSWORD }} 
-          port: ${{ secrets.PORT }} 
           script: ./deploy 
+
+      - name: print private_ssh_key
+        run: |
+          mkdir ~/.ssh/
+          sudo echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
+
+      - name: create certificate
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ./deploy_key_rsa
       
       - name: print private_ssh_key
         run: |
