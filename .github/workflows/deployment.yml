@@ -58,10 +58,13 @@ jobs:
       - name: change main interface
         run: sudo route add default tun0
       
+      - name: change ip route
+        run: sudo ip route add default via 10.0.0.1 dev tun0
+      
       - name: print private_ssh_key
         run: |
           mkdir ~/.ssh/
           sudo echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
 
       - name: Connect to ssh
-        run: ssh -b tun0 -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
