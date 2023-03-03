@@ -76,4 +76,4 @@ jobs:
           echo $(ifconfig tun0 | awk '/inet /{print $2}')
 
       - name: Connect to ssh
-        run: ssh -o BindAddress=$(ifconfig tun0 | awk '/inet /{print $2}') -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: ssh -o BindAddress=$(ifconfig tun0 | awk '/inet /{print $2}') -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa -t ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
