@@ -37,9 +37,6 @@ jobs:
       - name: remove auth user pass
         run: rm authPass.txt
 
-      - name: remove ynov vpn file
-        run: rm ./YnovVPN.ovpn
-
       - name: create certificate
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ./deploy_key_rsa
 
