@@ -19,6 +19,9 @@ jobs:
       
       - name: install traceroute
         run: sudo apt-get install traceroute
+      
+      - name: install gawk
+        run: sudo apt-get install gawk
 
       - name: Copy OpenVPN configuration file to server
         run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
@@ -61,10 +64,13 @@ jobs:
       - name: change ip route
         run: sudo ip route add default via 10.0.0.1 dev tun0
       
+      - name: get tun0 ip
+        run: tun0_ip=$(ifconfig tun0 | awk '/inet /{print $2}')
+      
       - name: print private_ssh_key
         run: |
           mkdir ~/.ssh/
           sudo echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
 
       - name: Connect to ssh
-        run: ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        run: ssh -b $tun0_ip -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
