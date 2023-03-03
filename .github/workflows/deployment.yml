@@ -29,7 +29,7 @@ jobs:
         run: sleep 5
       
       - name: cat vpnlog
-        run: cat vpn.log
+        run: sudo cat vpn.log
 
       - name: remove auth user pass
         run: rm authPass.txt
