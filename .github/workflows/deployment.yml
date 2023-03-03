@@ -61,9 +61,6 @@ jobs:
       - name: change main interface
         run: sudo route add default tun0
       
-      - name: change ip route
-        run: sudo ip route add default via 10.0.0.1 dev tun0
-      
       - name: get tun0 ip
         run: tun0_ip=$(ifconfig tun0 | awk '/inet /{print $2}')
       
