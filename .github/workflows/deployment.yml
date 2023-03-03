@@ -37,6 +37,9 @@ jobs:
       - name: connect to VPN
         run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --log "vpn.log" --daemon
       
+      - name: sleep 2
+        run: sleep 2
+      
       - name: cat vpnlog
         run: sudo cat vpn.log
         
