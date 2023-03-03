@@ -27,6 +27,9 @@ jobs:
         run: |
           echo "${{ secrets.OPENVPN_USERNAME }}
           ${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
+        
+      - name: first ifconfig
+        run: ifconfig -a
 
       - name: connect to VPN
         run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --log "vpn.log" --daemon
@@ -36,6 +39,9 @@ jobs:
       
       - name: cat vpnlog
         run: sudo cat vpn.log
+        
+      - name: second ifconfig
+        run: ifconfig -a
 
       - name: remove auth user pass
         run: rm authPass.txt
@@ -54,9 +60,6 @@ jobs:
       
       - name: Check the reverse DNS record configuration using dig
         run: dig -x 10.1.1.16
-        
-      - name: ifconfig
-        run: ifconfig -a
       
       - name: change main interface
         run: sudo route add default tun0
