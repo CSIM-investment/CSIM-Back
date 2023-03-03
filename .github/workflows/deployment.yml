@@ -57,6 +57,7 @@ jobs:
         run: |
           sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
           sudo route add default dev tun0
+          sudo ip route add 10.1.0.0/16 dev tun0
   
       - name: ping
         run: |
