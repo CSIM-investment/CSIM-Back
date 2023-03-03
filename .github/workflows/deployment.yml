@@ -47,7 +47,7 @@ jobs:
         run: sudo apt-get install sshpass
   
       - name: Allow Ping to 10.1.1.16
-        run: sudo ufw allow from 10.1.1.16 to any proto icmp
+        run: sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
       
       - name: ping host
         run: ping 10.1.1.16
