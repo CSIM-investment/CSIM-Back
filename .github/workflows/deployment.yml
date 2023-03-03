@@ -70,6 +70,10 @@ jobs:
         run: |
           mkdir ~/.ssh/
           sudo echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
+      
+      - name: print private_ssh_key
+        run: |
+          echo $(ifconfig tun0 | awk '/inet /{print $2}')
 
       - name: Connect to ssh
         run: ssh -o BindAddress=$(ifconfig tun0 | awk '/inet /{print $2}') -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
