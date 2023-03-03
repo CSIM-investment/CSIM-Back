@@ -53,7 +53,9 @@ jobs:
         run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ./deploy_key_rsa
 
       - name: Install ssh
-        run: sudo apt-get -yqq install ssh
+        run: |
+          sudo apt-get -yqq install openssh-client
+          
   
       - name: Allow Ping to 10.1.1.16
         run: sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
