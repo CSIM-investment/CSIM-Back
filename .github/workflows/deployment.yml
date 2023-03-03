@@ -57,15 +57,13 @@ jobs:
           sudo apt-get -yqq install openssh-client
           
   
-      - name: Allow Ping to 10.1.1.16
-        run: sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
-      
-      - name: change main interface
-        run: sudo route add default tun0
-      
-      - name: get tun0 ip
-        run: tun0_ip=$(ifconfig tun0 | awk '/inet /{print $2}')
-      
+      - name: routing
+        run: |
+          sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
+          sudo route add default tun0
+          tun0_ip=$(ifconfig tun0 | awk '/inet /{print $2}')
+          sudo route add default gw $tun0_ip
+
       - name: print private_ssh_key
         run: |
           mkdir ~/.ssh/
@@ -74,6 +72,9 @@ jobs:
       - name: print private_ssh_key
         run: |
           echo $(ifconfig tun0 | awk '/inet /{print $2}')
+          
+      - name: Connect to ssh 1
+        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa -t ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
 
-      - name: Connect to ssh
+      - name: Connect to ssh 2
         run: ssh -o BindAddress=$(ifconfig tun0 | awk '/inet /{print $2}') -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa -t ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
