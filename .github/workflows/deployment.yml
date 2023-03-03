@@ -45,6 +45,9 @@ jobs:
 
       - name: Install ssh-pass
         run: sudo apt-get install sshpass
+  
+      - name: Allow Ping to 10.1.1.16
+        run: sudo ufw allow from 10.1.1.16 to any proto icmp
       
       - name: ping host
         run: ping 10.1.1.16
