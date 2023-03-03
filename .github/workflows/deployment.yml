@@ -13,6 +13,9 @@ jobs:
 
       - name: Install OpenVPN
         run: sudo apt-get update && sudo apt-get install -y openvpn
+      
+      - name: install dnsutils
+        run: sudo apt-get install dnsutils
 
       - name: Copy OpenVPN configuration file to server
         run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
@@ -48,6 +51,9 @@ jobs:
   
       - name: Allow Ping to 10.1.1.16
         run: sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
+        
+      - name: run nslookup
+        run: nslookup 10.1.1.16
       
       - name: ping host
         run: ping 10.1.1.16
