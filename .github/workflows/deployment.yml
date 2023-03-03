@@ -65,7 +65,7 @@ jobs:
         run: sudo route add default tun0
       
       - name: ping host
-        run: ping 10.1.1.16
+        run: ping -I tun0 10.1.1.16
 
       - name: Connect to ssh
-        run: sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh ${{ secrets.SSH_USER }}@10.1.1.16
+        run: sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -b tun0 ${{ secrets.SSH_USER }}@10.1.1.16
