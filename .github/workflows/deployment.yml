@@ -13,13 +13,13 @@ jobs:
 
       - name: Install OpenVPN
         run: sudo apt-get update && sudo apt-get install -y openvpn
-      
+
       - name: install dnsutils
         run: sudo apt-get install net-tools
-      
+
       - name: install traceroute
         run: sudo apt-get install traceroute
-      
+
       - name: install gawk
         run: sudo apt-get install gawk
 
@@ -30,19 +30,19 @@ jobs:
         run: |
           echo "${{ secrets.OPENVPN_USERNAME }}
           ${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
-        
+
       - name: first ifconfig
         run: ifconfig -a
 
       - name: connect to VPN
         run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --log "vpn.log" --daemon
-      
+
       - name: sleep 2
         run: sleep 2
-      
+
       - name: cat vpnlog
         run: sudo cat vpn.log
-        
+
       - name: second ifconfig
         run: ifconfig -a
 
@@ -52,39 +52,21 @@ jobs:
       - name: Install ssh
         run: |
           sudo apt-get -yqq install openssh-client
-  
+
       - name: routing
         run: |
           sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
           sudo route add default dev tun0
           sudo ip route add 10.1.0.0/16 dev tun0
-  
+
       - name: ping
         run: |
           ping -c 30 10.1.1.16
-      
+
       - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master 
-        with: 
-          host: ${{ secrets.SSH_HOST }} 
-          username: ${{ secrets.SSH_USER }} 
-          key: ${{ secrets.SSH_PRIVATE_KEY }} 
-          script: ./deploy 
-
-      - name: print private_ssh_key
-        run: |
-          mkdir ~/.ssh/
-          sudo echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key_rsa
-
-      - name: create certificate
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" >> ./deploy_key_rsa
-      
-      - name: print private_ssh_key
-        run: |
-          echo $(ifconfig tun0 | awk '/inet /{print $2}')
-          
-      - name: Connect to ssh 1
-        run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa -t ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-
-      - name: Connect to ssh 2
-        run: ssh -o BindAddress=$(ifconfig tun0 | awk '/inet /{print $2}') -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key_rsa -t ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: ./deploy
