@@ -5,7 +5,7 @@ import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 
 @Injectable()
 export class CoingeckoService {
-    constructor(private readonly httpService: HttpService,) { }
+    constructor(private readonly httpService: HttpService) {}
     private readonly apiUrl: string = process.env.COINGECKO_API
 
     async getAllCoinsMarket(): Promise<CryptoCurrencyMarket[]> {
