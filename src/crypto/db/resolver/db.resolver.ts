@@ -1,7 +1,7 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql'
 import { DbService } from '../service/db.service'
 import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
-import { CoingeckoService } from 'src/crypto/coingecko/coingecko/service/coingecko.service'
+import { CoingeckoService } from 'src/crypto/coingecko/services/coingecko.service'
 import { Cron } from '@nestjs/schedule'
 import { CryptoSearchInput } from '../dto/cryptoMarket-query'
 import { CryptoCurrencyMarketPaginatedResults } from '../dto/crypto-paginated-results'
