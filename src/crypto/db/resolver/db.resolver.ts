@@ -8,21 +8,26 @@ import { CryptoCurrencyMarketPaginatedResults } from '../dto/crypto-paginated-re
 
 @Resolver(CryptoCurrencyMarket)
 export class DbMutationResolver {
-	constructor(private cryptoService: DbService, private coinGeckoService: CoingeckoService) { }
+    constructor(
+        private cryptoService: DbService,
+        private coinGeckoService: CoingeckoService,
+    ) {}
 
-	@Cron('10 * * * * *')
-	@Mutation(() => String)
-	async createCryptoMarket() {
-		this.coinGeckoService.getAllCoinsMarket().then((resp) => {
-			resp.forEach((elmnt) => {
-				this.cryptoService.createCryptoCurrencyMarket(elmnt)
-			})
-		})
-		return 'datas has been created'
-	}
+    @Cron('10 * * * * *')
+    @Mutation(() => String)
+    async createCryptoMarket(): Promise<string> {
+        this.coinGeckoService.getAllCoinsMarket().then((resp) => {
+            resp.forEach((elmnt) => {
+                this.cryptoService.createCryptoCurrencyMarket(elmnt)
+            })
+        })
+        return 'datas has been created'
+    }
 
-	@Query(() => CryptoCurrencyMarketPaginatedResults)
-	async cryptos(@Args('options') options?: CryptoSearchInput): Promise<CryptoCurrencyMarketPaginatedResults> {
-		return await this.cryptoService.search(options)
-	}
+    @Query(() => CryptoCurrencyMarketPaginatedResults)
+    async cryptos(
+        @Args('options') options?: CryptoSearchInput,
+    ): Promise<CryptoCurrencyMarketPaginatedResults> {
+        return await this.cryptoService.search(options)
+    }
 }

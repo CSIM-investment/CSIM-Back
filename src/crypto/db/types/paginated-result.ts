@@ -1,5 +1,1 @@
-
-export abstract class PaginatedResults<T> {
-    datas: T[]    
-    count: number
-}
+export abstract class PaginatedResults<T> {    datas: T[]    count: number}
