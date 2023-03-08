@@ -3,7 +3,6 @@
   "trailingComma": "all",
   "semi": false,
   "endOfLine": "auto",
-  "formatOnSave": true,
   "tabWidth": 4,
   "useTabs": false,
   "bracketSpacing": true
