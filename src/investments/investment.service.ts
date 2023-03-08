@@ -31,4 +31,8 @@ export class InvestmentService {
     })
     return await this.investmentRepository.save(investment)
   }
+
+  async getInvestementsByUserId(userId: number): Promise<InvestmentEntity[]> {
+    return await this.investmentRepository.find({ where: { user: { id: userId } } })
+  }
 }

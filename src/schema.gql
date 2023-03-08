@@ -148,6 +148,7 @@ type InvestmentEntity {
   baseCurrency: CryptoCurrencyMarket!
   creationDate: DateTime!
   id: ID!
+  investments: [InvestmentEntity!]!
   quantity: Int!
   quoteCurrency: CryptoCurrencyMarket!
   valueBaseCurrency: Float!
