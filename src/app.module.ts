@@ -1,5 +1,5 @@
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { join } from 'path'
 import { UserModule } from './user/user.module'
@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { EmailModule } from './email/email.module'
 import { DbModule } from './crypto/db/db.module'
 import { ArticleModule } from './articles/article.module'
+import { CorsMiddleware } from './middleware/CorsMiddleware'
 
 type DatabaseType = 'mysql' | 'postgres'
 
@@ -43,4 +44,8 @@ type DatabaseType = 'mysql' | 'postgres'
     ArticleModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  public configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(CorsMiddleware).forRoutes('*')
+  }
+}
