@@ -39,8 +39,6 @@ jobs:
 
       - name: sleep 2
         run: sleep 2
-      
-      - name: cat vpn.log
 
       - name: cat vpnlog
         run: sudo cat vpn.log
