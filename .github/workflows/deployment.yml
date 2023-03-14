@@ -35,10 +35,12 @@ jobs:
         run: ifconfig -a
 
       - name: connect to VPN
-        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --log "vpn.log" --daemon
+        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --log "vpn.log"
 
       - name: sleep 2
         run: sleep 2
+      
+      - name: cat vpn.log
 
       - name: cat vpnlog
         run: sudo cat vpn.log
