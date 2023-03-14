@@ -23,8 +23,8 @@ jobs:
       - name: install gawk
         run: sudo apt-get install gawk
 
-      - name: Copy OpenVPN configuration file to server
-        run: wget https://ydayslyon.fr/assets/YnovVPN.ovpn
+      - name: create openvpn file
+        run: echo "${{ secrets.OPENVPN_CONFIG }}" > ./YnovVPN.ovpn
 
       - name: Prepare auth user pass
         run: |
