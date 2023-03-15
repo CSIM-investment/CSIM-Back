@@ -57,11 +57,11 @@ jobs:
         run: |
           sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
           sudo route add default dev tun0
-          sudo ip route add 10.1.0.0/16 dev tun0
+          sudo ip route add 10.4.0.0/16 dev tun0
 
       - name: ping
         run: |
-          ping -c 30 10.1.1.16
+          ping -c 30 10.4.1.15
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
@@ -71,3 +71,4 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             ./deploy.sh
+4
