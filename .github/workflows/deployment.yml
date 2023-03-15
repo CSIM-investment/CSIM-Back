@@ -61,7 +61,7 @@ jobs:
 
       - name: ping
         run: |
-          ping -c 30 10.4.1.15
+         ping -c 30 10.4.1.15
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
@@ -71,4 +71,3 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             ./deploy.sh
-4
