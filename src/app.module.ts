@@ -44,8 +44,4 @@ type DatabaseType = 'mysql' | 'postgres'
     ArticleModule,
   ],
 })
-export class AppModule implements NestModule {
-  public configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(CorsMiddleware).forRoutes('*')
-  }
-}
+export class AppModule {}
