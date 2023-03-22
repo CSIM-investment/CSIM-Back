@@ -34,13 +34,19 @@ input ArticlesInput {
   orderBy: ArticleOrderInput = {}
 }
 
+input CreateInvestmentInput {
+  baseCurrencyId: String!
+  quantity: Int!
+  quoteCurrencyId: String!
+  valueBaseCurrency: Float!
+  valueQuoteCurrency: Float!
+}
+
 input CreateUserInput {
   email: String!
   firstName: String!
   lastName: String!
   password: String!
-  phone: String!
-  username: String!
 }
 
 type CryptoCurrencyMarket {
@@ -52,7 +58,7 @@ type CryptoCurrencyMarket {
   atl_date: DateTime!
   circulating_supply: Float!
   current_price: Float!
-  fully_diluted_valuation: Float!
+  fully_diluted_valuation: Float
   high_24h: Float!
   id: ID!
   image: String!
@@ -62,14 +68,19 @@ type CryptoCurrencyMarket {
   market_cap_change_24h: Float!
   market_cap_change_percentage_24h: Float!
   market_cap_rank: Float!
-  max_supply: Float!
+  max_supply: Float
   name: String!
   price_change_24h: Float!
   price_change_percentage_24h: Float!
-  roi: String!
+  roi: String
   symbol: String!
-  total_supply: Float!
+  total_supply: Float
   total_volume: Float!
+}
+
+type CryptoCurrencyMarketPaginatedResults {
+  count: Float!
+  datas: [CryptoCurrencyMarket!]!
 }
 
 input CryptoFilterInput {
@@ -80,10 +91,6 @@ input CryptoFilterInput {
   pagination: PaginationInput
   search: CryptoMarketSearchInput
   symbol: String
-}
-
-type CryptoMarketOutput {
-  cryptoCurrencyMarket: CryptoCurrencyMarket!
 }
 
 input CryptoMarketSearchInput {
@@ -115,9 +122,16 @@ input CryptoMarketSearchInput {
   total_volume: Float
 }
 
+enum CryptoOrderBy {
+  current_price
+  high_24h
+  low_24
+  market_cap
+}
+
 input CryptoOrderInput {
   direction: OrderDirection!
-  name: ArticleOrderBy!
+  name: CryptoOrderBy!
 }
 
 input CryptoSearchInput {
@@ -129,6 +143,17 @@ input CryptoSearchInput {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type InvestmentEntity {
+  baseCurrency: CryptoCurrencyMarket!
+  creationDate: DateTime!
+  id: ID!
+  investments: [InvestmentEntity!]!
+  quantity: Int!
+  quoteCurrency: CryptoCurrencyMarket!
+  valueBaseCurrency: Float!
+  valueQuoteCurrency: Float!
+}
 
 type LoginResponse {
   accessToken: String!
@@ -143,7 +168,8 @@ input LoginUserInput {
 
 type Mutation {
   confirmEmail(email: String!, emailCode: Float!): LoginResponse!
-  createCryptoMarket: CryptoMarketOutput!
+  createCryptoMarket: String!
+  createInvestment(createInvestmentInput: CreateInvestmentInput!): InvestmentEntity!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!
@@ -168,7 +194,7 @@ input PaginationInput {
 type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
-  cryptos(options: CryptoSearchInput!): [CryptoCurrencyMarket!]!
+  cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
 }
 
 input ToggleFavoriteInput {
@@ -180,8 +206,6 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   password: String
-  phone: String
-  username: String
 }
 
 type User {
@@ -189,6 +213,7 @@ type User {
   favoritesCrypto: [CryptoCurrencyMarket!]!
   firstName: String!
   id: ID!
+  investments: [InvestmentEntity!]!
   lastName: String!
   role: UserRoles!
   status: UserStatus!

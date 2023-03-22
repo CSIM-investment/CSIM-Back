@@ -1,0 +1,36 @@
+name: ESLint Check
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Check if any errors
+        id: eslint-status
+        run: echo ::set-output name=has_errors::$(git diff --name-only origin/main | grep '\.jsx\?$' | xargs eslint --max-warnings=0 --format=compact || true)
+
+      - name: Fail if there are errors
+        run: |
+          if [ "${{ steps.eslint-status.outputs.has_errors }}" != "" ]; then
+            echo "ESLint check failed"
+            exit 1
+          fi
