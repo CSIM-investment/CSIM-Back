@@ -1,0 +1,73 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - feature/CD
+
+jobs:
+  deployment:
+    environment: CSIM-Back
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Install OpenVPN
+        run: sudo apt-get update && sudo apt-get install -y openvpn
+
+      - name: install dnsutils
+        run: sudo apt-get install net-tools
+
+      - name: install traceroute
+        run: sudo apt-get install traceroute
+
+      - name: install gawk
+        run: sudo apt-get install gawk
+
+      - name: create openvpn file
+        run: echo "${{ secrets.OPENVPN_CONFIG }}" > ./YnovVPN.ovpn
+
+      - name: Prepare auth user pass
+        run: |
+          echo "${{ secrets.OPENVPN_USERNAME }}
+          ${{ secrets.OPENVPN_PASSWORD }}" > authPass.txt
+
+      - name: first ifconfig
+        run: ifconfig -a
+
+      - name: connect to VPN
+        run: sudo openvpn --config ./YnovVPN.ovpn --auth-user-pass authPass.txt --log "vpn.log" --daemon
+
+      - name: sleep 2
+        run: sleep 2
+
+      - name: cat vpnlog
+        run: sudo cat vpn.log
+
+      - name: second ifconfig
+        run: ifconfig -a
+
+      - name: remove auth user pass
+        run: rm authPass.txt
+
+      - name: Install ssh
+        run: |
+          sudo apt-get -yqq install openssh-client
+
+      - name: routing
+        run: |
+          sudo iptables -A INPUT -p icmp --icmp-type 8 -s 10.1.1.16 -j ACCEPT
+          sudo route add default dev tun0
+          sudo ip route add 10.4.0.0/16 dev tun0
+
+      - name: ping
+        run: |
+         ping -c 30 10.4.1.15
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            ./deploy.sh
