@@ -3,7 +3,7 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - feature/CD
+      - develop
 
 jobs:
   deployment:
