@@ -43,6 +43,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "dayjs": "^1.11.6",
+    "docx": "^8.0.1",
     "graphql": "^16.6.0",
     "graphql-tools": "^8.3.6",
     "handlebars": "^4.7.7",
@@ -57,8 +58,8 @@
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.10",
     "uuid": "^9.0.0",
-    "yahoo-finance-news": "github:MatthiasChometon/yahoo-finance-news",
-    "yahoo-finance": "^0.3.7"
+    "yahoo-finance": "^0.3.7",
+    "yahoo-finance-news": "github:MatthiasChometon/yahoo-finance-news"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
