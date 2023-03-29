@@ -57,8 +57,8 @@
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.10",
     "uuid": "^9.0.0",
-    "yahoo-finance-news": "github:MatthiasChometon/yahoo-finance-news",
-    "yahoo-finance": "^0.3.7"
+    "yahoo-finance": "^0.3.7",
+    "yahoo-finance-news": "github:MatthiasChometon/yahoo-finance-news"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
