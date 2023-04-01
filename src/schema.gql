@@ -34,14 +34,6 @@ input ArticlesInput {
   orderBy: ArticleOrderInput = {}
 }
 
-input CreateInvestmentInput {
-  baseCurrencyId: String!
-  quantity: Int!
-  quoteCurrencyId: String!
-  valueBaseCurrency: Float!
-  valueQuoteCurrency: Float!
-}
-
 input CreateUserInput {
   email: String!
   firstName: String!
@@ -149,8 +141,11 @@ type InvestmentEntity {
   creationDate: DateTime!
   id: ID!
   investments: [InvestmentEntity!]!
-  quantity: Int!
+  origin: String!
+  quantity: Float!
   quoteCurrency: CryptoCurrencyMarket!
+  status: String!
+  type: String!
   valueBaseCurrency: Float!
   valueQuoteCurrency: Float!
 }
@@ -169,7 +164,7 @@ input LoginUserInput {
 type Mutation {
   confirmEmail(email: String!, emailCode: Float!): LoginResponse!
   createCryptoMarket: String!
-  createInvestment(createInvestmentInput: CreateInvestmentInput!): InvestmentEntity!
+  importInvestments(link: String!): [InvestmentEntity!]!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
   register(createUserInput: CreateUserInput!): User!

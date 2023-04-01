@@ -1,1 +1,14 @@
-import { InputType, Field, Int, Float } from '@nestjs/graphql'@InputType()export class CreateInvestmentInput {    @Field(() => Int)    quantity: number    @Field(() => Float)    valueBaseCurrency: number    @Field(() => Float)    valueQuoteCurrency: number    @Field()    quoteCurrencyId: string    @Field()    baseCurrencyId: string}
+export class CreateInvestmentInput {
+    quantity: number
+    valueBaseCurrency: number
+    valueQuoteCurrency: number
+    quoteCurrencySymbol: string
+    baseCurrencySymbol: string
+    type: string
+    status: string
+    origin: string
+
+    constructor(investment) {
+        Object.assign(this, investment)
+    }
+}
