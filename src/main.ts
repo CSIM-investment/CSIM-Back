@@ -7,10 +7,9 @@ async function bootstrap(): Promise<void> {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
         cors: true,
     })
-    app.useGlobalPipes(new ValidationPipe())
 
     const options = {
-        origin: '*',
+        origin: 'localhost, http://csim-finance.com',
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         preflightContinue: false,
         optionsSuccessStatus: 204,
@@ -19,6 +18,10 @@ async function bootstrap(): Promise<void> {
     //app.use(cors(options))
     app.enableCors(options)
 
+    app.useGlobalPipes(new ValidationPipe())
+    /*app.enableCors({
+      origin: process.env.CORS_ORIGIN,
+    })*/
     const port = process.env.PORT || 4000
 
     await app.listen(port)

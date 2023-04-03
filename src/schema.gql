@@ -155,6 +155,31 @@ type InvestmentEntity {
   valueQuoteCurrency: Float!
 }
 
+input InvestmentReportsOrderInput {
+  direction: OrderDirection
+  name: ArticleOrderBy
+}
+
+type InvestmentsReportsEntity {
+  fromDate: DateTime!
+  id: ID!
+  mensualReport: Boolean!
+  reportUri: Boolean!
+  toDate: DateTime!
+  user: User!
+}
+
+input InvestmentsReportsFilterInput {
+  pagination: PaginationInput
+  search: String
+  symbol: String
+}
+
+input InvestmentsReportsInput {
+  filterBy: InvestmentsReportsFilterInput = {}
+  orderBy: InvestmentReportsOrderInput = {}
+}
+
 type LoginResponse {
   accessToken: String!
   refreshToken: String!
@@ -195,6 +220,7 @@ type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
+  reports(options: InvestmentsReportsInput!): [InvestmentsReportsEntity!]!
 }
 
 input ToggleFavoriteInput {
@@ -214,6 +240,7 @@ type User {
   firstName: String!
   id: ID!
   investments: [InvestmentEntity!]!
+  investmentsReports: [InvestmentsReportsEntity!]!
   lastName: String!
   role: UserRoles!
   status: UserStatus!
