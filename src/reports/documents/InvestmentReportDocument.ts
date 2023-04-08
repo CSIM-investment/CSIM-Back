@@ -1,14 +1,16 @@
-import * as fs from 'fs'
 import {
     Document,
-    Paragraph,
-    TextRun,
     HeadingLevel,
     ISectionOptions,
     Packer,
+    Paragraph,
+    TextRun,
 } from 'docx'
 import * as dayjs from 'dayjs'
-import { convert } from 'docx-pdf'
+import * as fs from 'fs'
+import tmp from 'tmp'
+import * as mammoth from 'mammoth'
+import pdf from 'html-pdf'
 
 export class InvestmentReportDocument {
     private title: string
@@ -124,9 +126,33 @@ export class InvestmentReportDocument {
         return await Packer.toBuffer(this.doc)
     }
 
-    public async to_pdf_buffer(): Promise<Buffer> {
-        const buffer = await this.to_buffer()
-        const pdfBuffer = await convert(buffer)
-        return pdfBuffer
+    public async to_pdf(): Promise<Buffer> {
+        const docxBuffer = await this.to_buffer()
+
+        // Create a temporary file to store the Docx buffer
+        const docxTempFile = tmp.fileSync()
+        fs.writeFileSync(docxTempFile.name, docxBuffer)
+
+        // Convert the Docx file to HTML
+        const result = await mammoth.convertToHtml({ path: docxTempFile.name })
+        const html = result.value
+
+        // Convert the HTML to PDF and write it to a temporary file
+        const pdfTempFile = tmp.fileSync({ postfix: '.pdf' })
+        await new Promise((resolve, reject) => {
+            pdf.create(html).toFile(pdfTempFile.name, (err, res) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(res)
+                }
+            })
+        })
+
+        // Remove the temporary Docx file
+        fs.unlinkSync(docxTempFile.name)
+
+        // Return the file path of the PDF file
+        return pdfTempFile
     }
 }
