@@ -11,8 +11,8 @@ export class ReportService {
             gains: [
                 '1 SOL - 23/03/2023 - 20 EUR -> 1 SOL - 24/03/2023 - 23 EUR --> 3 EUR',
             ],
-            startDate: options.startDate,
-            endDate: options.endDate,
+            startDate: options.fromDate,
+            endDate: options.toDate,
             sales: [
                 '5 SOL - 23/03/2023 - 20 EUR -> 5 SOL - 24/03/2023 - 23 EUR --> 3 EUR',
             ],

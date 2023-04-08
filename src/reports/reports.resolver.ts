@@ -28,8 +28,6 @@ export class ReportsResolver {
         investment_report_entity.mensualReport = false
         investment_report_entity.fromDate = options.fromDate
 
-        return new Promise(() => {
-            return [new InvestmentsReportsEntity()]
-        })
+        return new InvestmentsReportsEntity()
     }
 }

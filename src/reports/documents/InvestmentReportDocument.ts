@@ -8,14 +8,14 @@ import {
 } from 'docx'
 import * as dayjs from 'dayjs'
 import * as fs from 'fs'
-import tmp from 'tmp'
+import * as tmp from 'tmp'
 import * as mammoth from 'mammoth'
-import pdf from 'html-pdf'
+import * as pdf from 'html-pdf'
 
 export class InvestmentReportDocument {
     private title: string
-    private startDate: dayjs.Dayjs
-    private endDate: dayjs.Dayjs
+    private startDate: Date
+    private endDate: Date
     private description: string
     private creator: string
     private sections: Array<ISectionOptions>
@@ -24,17 +24,17 @@ export class InvestmentReportDocument {
 
     constructor(
         private options: {
-            endDate: dayjs.Dayjs
+            endDate: Date
             investments: string[]
             gains: string[]
-            startDate: dayjs.Dayjs
+            startDate: Date
             sales: string[]
         },
     ) {
         if (options !== undefined) {
             this.startDate = options.startDate
             this.endDate = options.endDate
-            this.title = `-${options.endDate.toString()}-Crypto-Report`
+            this.title = `${options.startDate}-${options.endDate}-Crypto-Report`
             this.description = 'Generated report from csim-finance.fr'
             this.creator = 'CSIM-Finance'
             this.sections = []
@@ -62,11 +62,7 @@ export class InvestmentReportDocument {
 
     private getCoverPage(): Paragraph {
         const title = "Rapport d'investissement"
-        const subtitle = `Du ${this.options.startDate
-            .toDate()
-            .toLocaleDateString()} au ${this.options.endDate
-            .toDate()
-            .toLocaleDateString()}`
+        const subtitle = `Du ${this.options.startDate.toLocaleDateString()} au ${this.options.endDate.toLocaleDateString()}`
         return new Paragraph({
             children: [
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
