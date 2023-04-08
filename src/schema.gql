@@ -155,6 +155,11 @@ type InvestmentEntity {
   valueQuoteCurrency: Float!
 }
 
+input InvestmentReportCreate {
+  fromDate: DateTime
+  toDate: DateTime
+}
+
 input InvestmentReportsOrderInput {
   direction: OrderDirection
   name: ArticleOrderBy
@@ -219,6 +224,7 @@ input PaginationInput {
 type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
+  createInvestmentReport(options: InvestmentReportCreate!): InvestmentsReportsEntity!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
   reports(options: InvestmentsReportsInput!): [InvestmentsReportsEntity!]!
 }

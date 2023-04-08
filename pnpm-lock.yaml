@@ -33,14 +33,15 @@ specifiers:
   class-validator: ^0.13.2
   dayjs: ^1.11.6
   docx: ^8.0.1
-  docx-pdf: ^0.0.1
   eslint: ^8.0.1
   eslint-config-prettier: ^8.3.0
   eslint-plugin-prettier: ^4.0.0
   graphql: ^16.6.0
   graphql-tools: ^8.3.6
   handlebars: ^4.7.7
+  html-pdf: ^3.0.1
   jest: 28.1.3
+  mammoth: ^1.5.1
   nestjs-typeorm-paginate: ^4.0.2
   nodemailer: ^6.8.0
   passport: ^0.6.0
@@ -53,6 +54,7 @@ specifiers:
   rxjs: ^7.2.0
   source-map-support: ^0.5.20
   supertest: ^6.1.3
+  tmp: ^0.2.1
   ts-jest: 28.0.8
   ts-loader: ^9.2.3
   ts-node: ^10.0.0
@@ -84,10 +86,11 @@ dependencies:
   class-validator: 0.13.2
   dayjs: 1.11.6
   docx: 8.0.1
-  docx-pdf: 0.0.1
   graphql: 16.6.0
   graphql-tools: 8.3.6_graphql@16.6.0
   handlebars: 4.7.7
+  html-pdf: 3.0.1
+  mammoth: 1.5.1
   nestjs-typeorm-paginate: 4.0.2_wsurbll5rdxtp25tsyr63d4nti
   nodemailer: 6.8.0
   passport: 0.6.0
@@ -97,6 +100,7 @@ dependencies:
   reflect-metadata: 0.1.13
   rimraf: 3.0.2
   rxjs: 7.5.7
+  tmp: 0.2.1
   typeorm: 0.3.10_pg@8.8.0+ts-node@10.9.1
   uuid: 9.0.0
   yahoo-finance: 0.3.7
@@ -3257,15 +3261,6 @@ packages:
     resolution: {integrity: sha512-LLBi6pEqS6Do3EKQ3J0NqHWV5hhb78Pi8vvESYwyOy2c31ZEZVdtitdzsQsKb7878PEERhzUk0ftqGhG6Mz+pQ==}
     dev: false
 
-  /docx-pdf/0.0.1:
-    resolution: {integrity: sha512-JbQ7w2ZPRzJGY2uLjL5nCAtCtjRoiZS2YYh7eVjax5K6XIFSEalt5FyK3OLwac37qLywtBlx3TG+z1MqYTA0Vw==}
-    dependencies:
-      html-pdf: 2.2.0
-      mammoth: 1.5.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /docx/8.0.1:
     resolution: {integrity: sha512-C1gUzdTw7D+0NA5T6JZeV4xM8pqaaKezrNg6PZ5pPmjUh/qV9PWuoV0k5ZdpTpCOaPJIMzBoMx9cHQgLJRPDEA==}
     engines: {node: '>=10'}
@@ -4329,8 +4324,8 @@ packages:
       uglify-js: 3.17.3
     dev: false
 
-  /html-pdf/2.2.0:
-    resolution: {integrity: sha512-k4F0znJNVx5ViGEq2HlQIcI8eosSOxFQBbwj8zBqYPT7xx508IDamIhmXiJNha7xuJqRIxn70beDn1qMgYlEdw==}
+  /html-pdf/3.0.1:
+    resolution: {integrity: sha512-CKNSacmQn+CKJ2GNfT4UYKaPy/T3Ndj82yJ2aju/UPmnvWNjIpyumqRqkFU0mwT6BTHBFhFGTnXN8dBn4Bdj0Q==}
     engines: {node: '>=4.0.0'}
     deprecated: Please migrate your projects to a newer library like puppeteer
     hasBin: true
@@ -7789,6 +7784,13 @@ packages:
     dependencies:
       os-tmpdir: 1.0.2
     dev: true
+
+  /tmp/0.2.1:
+    resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
+    engines: {node: '>=8.17.0'}
+    dependencies:
+      rimraf: 3.0.2
+    dev: false
 
   /tmpl/1.0.5:
     resolution: {integrity: sha512-3f0uOEAQwIqGuWW2MVzYg8fV/QNnc/IpuJNG837rLuczAaLVHslWHZQj4IGiEl5Hs3kkbhwL9Ab7Hrsmuj+Smw==}
