@@ -5,6 +5,8 @@ import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
 import { InvestmentsReportsInput } from './dto/inputs/InvestmentsReports-input'
 import { ReportsResolver } from './reports.resolver'
 import { ReportService } from './reports.service'
+import { InvestmentService } from '../investments/services/investment.service'
+import { InvestmentEntity } from '../investments/entities/investment.entity'
 
 @Global()
 @Module({
@@ -13,6 +15,7 @@ import { ReportService } from './reports.service'
             InvestmentReportDocument,
             InvestmentsReportsEntity,
             InvestmentsReportsInput,
+            InvestmentEntity,
         ]),
     ],
     providers: [
@@ -21,6 +24,8 @@ import { ReportService } from './reports.service'
         InvestmentReportDocument,
         InvestmentsReportsEntity,
         InvestmentsReportsInput,
+        InvestmentService,
+        InvestmentEntity,
     ],
     exports: [TypeOrmModule],
 })
