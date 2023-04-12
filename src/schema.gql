@@ -139,6 +139,7 @@ scalar DateTime
 type InvestmentEntity {
   baseCurrency: CryptoCurrencyMarket!
   creationDate: DateTime!
+  dateOfInvestment: DateTime!
   id: ID!
   investments: [InvestmentEntity!]!
   origin: String!
@@ -222,6 +223,7 @@ type Query {
   createInvestmentReport(options: InvestmentReportCreate!): InvestmentsReportsEntity!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
   reports(options: InvestmentsReportsInput!): [InvestmentsReportsEntity!]!
+  sold: Float!
 }
 
 input ToggleFavoriteInput {
