@@ -44,6 +44,10 @@ export class InvestmentEntity {
     @Field(() => Float)
     valueQuoteCurrency: number
 
+    @CreateDateColumn()
+    @Field(() => Date)
+    dateOfInvestment: Date
+
     @ManyToOne(() => User, (user: User) => user.investments)
     user: User
 
