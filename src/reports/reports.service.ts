@@ -69,18 +69,20 @@ export class ReportService {
         cryptoSelled.forEach((selledInvestmentEntity: InvestmentEntity) => {
             let costOfInvestmentSelled : { [key: string]: number }= await this.calculCost(selledInvestmentEntity)
             cryptoBuy.forEach((buyInvestmentEntity: InvestmentEntity) => {
-                let costOfInvestmentBuyed = this.calculCost(buyInvestmentEntity)
-                if(costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol] >= costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol]){
-                    costOfInvestmentSelled[buyInvestmentEntity.quoteCurrency.symbol] -= costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
-                    costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] -= costOfInvestmentBuyed[buyInvestmentEntity.baseCurrency.symbol]
-                }else{
-                    // get difference
-                    let differenceBetweenCryptoValue = costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] - costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
-                    let percentageOfCryptoBuy = differenceBetweenCryptoValue / costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
-                    let costOfInvestmentBuyedToSubstract = this.calculCost(buyInvestmentEntity, percentageOfCryptoBuy)
-                    costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] -= costOfInvestmentBuyedToSubstract[buyInvestmentEntity.baseCurrency.symbol]
-                    costOfInvestmentSelled[buyInvestmentEntity.quoteCurrency.symbol] -= costOfInvestmentBuyedToSubstract[buyInvestmentEntity.quoteCurrency.symbol]
-                    break;
+                if(buyInvestmentEntity.dateOfInvestment < date) {
+                    let costOfInvestmentBuyed = this.calculCost(buyInvestmentEntity)
+                    if(costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol] >= costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol]){
+                        costOfInvestmentSelled[buyInvestmentEntity.quoteCurrency.symbol] -= costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
+                        costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] -= costOfInvestmentBuyed[buyInvestmentEntity.baseCurrency.symbol]
+                    }else{
+                        // get difference
+                        let differenceBetweenCryptoValue = costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] - costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
+                        let percentageOfCryptoBuy = differenceBetweenCryptoValue / costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
+                        let costOfInvestmentBuyedToSubstract = this.calculCost(buyInvestmentEntity, percentageOfCryptoBuy)
+                        costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] -= costOfInvestmentBuyedToSubstract[buyInvestmentEntity.baseCurrency.symbol]
+                        costOfInvestmentSelled[buyInvestmentEntity.quoteCurrency.symbol] -= costOfInvestmentBuyedToSubstract[buyInvestmentEntity.quoteCurrency.symbol]
+                        break;
+                    }
                 }
             })
         })
