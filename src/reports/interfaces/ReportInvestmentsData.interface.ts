@@ -8,8 +8,7 @@ export interface ReportInvestmentsDataInterface {
 
     gainOfMonth: number
     looseOfMonth: number
-    gainByCrypto: GainOrLooseByCryptoInterfaceInterface[]
-    looseByCrypto: GainOrLooseByCryptoInterfaceInterface[]
+    gainOrLooseByCrypto: GainOrLooseByCryptoInterfaceInterface[]
 
     startDate: Date
     endDate: Date

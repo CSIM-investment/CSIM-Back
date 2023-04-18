@@ -5,10 +5,15 @@ import { InvestmentService } from '../investments/services/investment.service'
 import { ReportInvestmentsDataInterface } from './interfaces/ReportInvestmentsData.interface'
 import { GainOrLooseByCryptoInterfaceInterface } from './interfaces/GainByCryptoInterface.interface'
 import { CryptoCount } from './interfaces/CryptoCount'
+import { Repository } from 'typeorm'
+import { CryptoCurrencyMarket } from '../crypto/entities/cryptocurrency.entity'
 
 @Injectable()
 export class ReportService {
-    constructor(private readonly investmentService: InvestmentService) {}
+    constructor(
+        private readonly investmentService: InvestmentService,
+        private investmentRepository: Repository<InvestmentEntity>,
+    ) {}
 
     async isInvestmentSell(investment: InvestmentEntity): Promise<boolean> {
         return investment.quoteCurrency.symbol == 'eur'
@@ -18,9 +23,9 @@ export class ReportService {
         return investment.baseCurrency.symbol == 'eur'
     }
 
-    async getCryptosBuyAndSellSortedByCryptoSymbol(
+    getCryptosBuyAndSellSortedByCryptoSymbol(
         investmentsList: InvestmentEntity[],
-    ): Promise<object> {
+    ): object {
         /**
          * {
          *     "sol": [{
@@ -50,57 +55,149 @@ export class ReportService {
         return { cryptoBuy, cryptoSelled }
     }
 
-    private async countAllCryptoBuyOrSellBySymbol(cryptoBuyOfSymbol: InvestmentEntity[]) {
+    private async countAllCryptoBuyOrSellBySymbol(
+        cryptoBuyOfSymbol: InvestmentEntity[],
+    ): Promise<number> {
         let numberOfCryptoOfSymbol = 0.0
-        await cryptoBuyOfSymbol.forEach((investmentEntity: InvestmentEntity) => {
-            numberOfCryptoOfSymbol += investmentEntity.valueQuoteCurrency * investmentEntity.quantity
-        })
+        await cryptoBuyOfSymbol.forEach(
+            (investmentEntity: InvestmentEntity) => {
+                numberOfCryptoOfSymbol +=
+                    investmentEntity.valueQuoteCurrency *
+                    investmentEntity.quantity
+            },
+        )
         return numberOfCryptoOfSymbol
     }
 
-    private async calculCost(investmentEntity: InvestmentEntity, percentage=1): Promise<{ [key: string]: number }>{
-        let costToReturn = {}
-        costToReturn[investmentEntity.quoteCurrency.symbol] = investmentEntity.valueQuoteCurrency * (investmentEntity.quantity * percentage)
-        costToReturn[investmentEntity.baseCurrency.symbol] = investmentEntity.valueBaseCurrency * (investmentEntity.quantity * percentage)
+    private calculCost(
+        investmentEntity: InvestmentEntity,
+        percentage = 1,
+    ): { [key: string]: number } {
+        const costToReturn = {}
+        costToReturn[investmentEntity.quoteCurrency.symbol] =
+            investmentEntity.valueQuoteCurrency *
+            (investmentEntity.quantity * percentage)
+        costToReturn[investmentEntity.baseCurrency.symbol] =
+            investmentEntity.valueBaseCurrency *
+            (investmentEntity.quantity * percentage)
         return costToReturn
     }
 
-    private async substractCryptoSelledUsingCryptoBuyBeforeDate(cryptoBuy: InvestmentEntity[], cryptoSelled: InvestmentEntity[], date){
+    private async substractCryptoSelledUsingCryptoBuyBeforeDate(
+        cryptoBuy: InvestmentEntity[],
+        cryptoSelled: InvestmentEntity[],
+        date: Date,
+    ): Promise<GainOrLooseByCryptoInterfaceInterface[]> {
+        const detailedGainOrLoose: GainOrLooseByCryptoInterfaceInterface[] = []
+        const cryptoCurrencyMarket: CryptoCurrencyMarket =
+            cryptoSelled.length > 0 ? cryptoSelled[0].quoteCurrency : null
+
         cryptoSelled.forEach((selledInvestmentEntity: InvestmentEntity) => {
-            let costOfInvestmentSelled : { [key: string]: number }= await this.calculCost(selledInvestmentEntity)
+            const costOfInvestmentSelled: { [key: string]: number } =
+                this.calculCost(selledInvestmentEntity)
+            const investmentsBuyedForThisSell: InvestmentEntity[] = []
             cryptoBuy.forEach((buyInvestmentEntity: InvestmentEntity) => {
-                if(buyInvestmentEntity.dateOfInvestment < date) {
-                    let costOfInvestmentBuyed = this.calculCost(buyInvestmentEntity)
-                    if(costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol] >= costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol]){
-                        costOfInvestmentSelled[buyInvestmentEntity.quoteCurrency.symbol] -= costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
-                        costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] -= costOfInvestmentBuyed[buyInvestmentEntity.baseCurrency.symbol]
-                    }else{
+                if (buyInvestmentEntity.dateOfInvestment < date) {
+                    const costOfInvestmentBuyed =
+                        this.calculCost(buyInvestmentEntity)
+                    if (
+                        costOfInvestmentBuyed[
+                            buyInvestmentEntity.quoteCurrency.symbol
+                        ] >=
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.baseCurrency.symbol
+                        ]
+                    ) {
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.quoteCurrency.symbol
+                        ] -=
+                            costOfInvestmentBuyed[
+                                buyInvestmentEntity.quoteCurrency.symbol
+                            ]
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.baseCurrency.symbol
+                        ] -=
+                            costOfInvestmentBuyed[
+                                buyInvestmentEntity.baseCurrency.symbol
+                            ]
+                        investmentsBuyedForThisSell.push(buyInvestmentEntity)
+                        buyInvestmentEntity.quantity = 0
+                    } else {
                         // get difference
-                        let differenceBetweenCryptoValue = costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] - costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
-                        let percentageOfCryptoBuy = differenceBetweenCryptoValue / costOfInvestmentBuyed[buyInvestmentEntity.quoteCurrency.symbol]
-                        let costOfInvestmentBuyedToSubstract = this.calculCost(buyInvestmentEntity, percentageOfCryptoBuy)
-                        costOfInvestmentSelled[buyInvestmentEntity.baseCurrency.symbol] -= costOfInvestmentBuyedToSubstract[buyInvestmentEntity.baseCurrency.symbol]
-                        costOfInvestmentSelled[buyInvestmentEntity.quoteCurrency.symbol] -= costOfInvestmentBuyedToSubstract[buyInvestmentEntity.quoteCurrency.symbol]
-                        break;
+                        const differenceBetweenCryptoValue =
+                            costOfInvestmentSelled[
+                                buyInvestmentEntity.baseCurrency.symbol
+                            ] -
+                            costOfInvestmentBuyed[
+                                buyInvestmentEntity.quoteCurrency.symbol
+                            ]
+                        const percentageOfCryptoBuy =
+                            differenceBetweenCryptoValue /
+                            costOfInvestmentBuyed[
+                                buyInvestmentEntity.quoteCurrency.symbol
+                            ]
+                        const costOfInvestmentBuyedToSubstract =
+                            this.calculCost(
+                                buyInvestmentEntity,
+                                percentageOfCryptoBuy,
+                            )
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.baseCurrency.symbol
+                        ] -=
+                            costOfInvestmentBuyedToSubstract[
+                                buyInvestmentEntity.baseCurrency.symbol
+                            ]
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.quoteCurrency.symbol
+                        ] -=
+                            costOfInvestmentBuyedToSubstract[
+                                buyInvestmentEntity.quoteCurrency.symbol
+                            ]
+                        buyInvestmentEntity.quantity -= parseFloat(
+                            String(costOfInvestmentBuyedToSubstract),
+                        )
+                        const investmentToAddToSell: InvestmentEntity =
+                            this.investmentRepository.create(
+                                buyInvestmentEntity,
+                            )
+                        investmentToAddToSell.quantity =
+                            costOfInvestmentBuyedToSubstract[
+                                buyInvestmentEntity.quoteCurrency.symbol
+                            ]
+                        investmentsBuyedForThisSell.push(investmentToAddToSell)
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        break
                     }
                 }
             })
+            detailedGainOrLoose.push({
+                crypto: cryptoCurrencyMarket,
+                investmentEntityBuy: investmentsBuyedForThisSell,
+                type: 'idk',
+                gains: costOfInvestmentSelled[
+                    selledInvestmentEntity.quoteCurrency.symbol
+                ],
+                looses: -costOfInvestmentSelled[
+                    selledInvestmentEntity.quoteCurrency.symbol
+                ],
+                investmentEntitySell: selledInvestmentEntity,
+            })
         })
+        return detailedGainOrLoose
     }
 
     private async separateInvestmentBuyAndSelledToGenerateReport(
-        investments: InvestmentEntity[],
-        cryptoBuy: {[key: string]: InvestmentEntity[]},
-        cryptoSelled: {[key: string]: InvestmentEntity[]},
+        cryptoBuy: { [key: string]: InvestmentEntity[] },
+        cryptoSelled: { [key: string]: InvestmentEntity[] },
         beginDate: Date,
         endDate: Date,
     ): Promise<ReportInvestmentsDataInterface> {
-        const gainsByCrypto: GainOrLooseByCryptoInterfaceInterface[] = []
-        const loosesByCrypto: GainOrLooseByCryptoInterfaceInterface[] = []
+        const gainOrLooseByCrypto: GainOrLooseByCryptoInterfaceInterface[] = []
         const investmentsOfMonth: InvestmentEntity[] = []
         const numberOfCryptoOnEndDate: CryptoCount[] = []
         const numberOfCryptoOnStartDate: CryptoCount[] = []
-        let loosesOfMonth = 0,
+        const loosesOfMonth = 0,
             gainsOfMonth = 0
 
         for (const symbol in cryptoSelled) {
@@ -108,50 +205,25 @@ export class ReportService {
             const cryptoBuyOfSymbol = cryptoBuy[symbol]
 
             // Count all crypto
-            const countAllCryptoBuyed = this.countAllCryptoBuyOrSellBySymbol(cryptoBuyOfSymbol)
-            const countAllCryptoSelled = this.countAllCryptoBuyOrSellBySymbol(cryptoSelledOfSymbol)
+            const countAllCryptoBuyed =
+                this.countAllCryptoBuyOrSellBySymbol(cryptoBuyOfSymbol)
+            const countAllCryptoSelled =
+                this.countAllCryptoBuyOrSellBySymbol(cryptoSelledOfSymbol)
 
             // Substract cryptoSelledOfSymbol by cryptoBuyOfSymbol
-            this.substractCryptoSelledUsingCryptoBuyBeforeDate(cryptoBuyOfSymbol, cryptoSelledOfSymbol, beginDate)
-
-
-            numberOfCryptoOnStartDate =
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            if (crypto.baseCurrency.symbol === symbol) {
-                if (cryptoBuy.includes(crypto.baseCurrency.symbol)) {
-                    while (crypto.valueBaseCurrency * crypto.quantity !== 0) {
-                        cryptoBuyUsingThisSymbol.forEach(
-                            (cryptoBuyEntity: InvestmentEntity) => {
-                                if (crypto.dateOfInvestment < endDate)
-                                    if (
-                                        cryptoBuyEntity.valueBaseCurrency *
-                                        cryptoBuyEntity.quantity <
-                                        crypto.valueQuoteCurrency *
-                                        crypto.quantity
-                                    ) {
-                                    } else if (
-                                        cryptoBuyEntity.valueBaseCurrency *
-                                        cryptoBuyEntity.quantity ==
-                                        crypto.valueBaseCurrency *
-                                        crypto.quantity
-                                    ) {
-                                    } else {
-                                    }
-                            },
-                        )
-                    }
-                }
-            }
+            const gainOrLooseByCrypto =
+                await this.substractCryptoSelledUsingCryptoBuyBeforeDate(
+                    cryptoBuyOfSymbol,
+                    cryptoSelledOfSymbol,
+                    beginDate,
+                )
         }
 
         return {
             investments: investmentsOfMonth,
             numberOfCryptoOnEndDate: numberOfCryptoOnEndDate,
             numberOfCryptoOnBeginDate: numberOfCryptoOnStartDate,
-            gainByCrypto: gainsByCrypto,
-            looseByCrypto: loosesByCrypto,
+            gainOrLooseByCrypto: gainOrLooseByCrypto,
             gainOfMonth: gainsOfMonth,
             looseOfMonth: loosesOfMonth,
             startDate: beginDate,
@@ -164,11 +236,11 @@ export class ReportService {
         start_date: Date,
         end_date: Date,
     ): Promise<ReportInvestmentsDataInterface> {
-        let gains = 0
-        let loose = 0
-        let investmentsBetweenDates = []
-        let cryptoOnBeginDate = []
-        let cryptoOnEndDate = []
+        const gains = 0
+        const loose = 0
+        const investmentsBetweenDates = []
+        const cryptoOnBeginDate = []
+        const cryptoOnEndDate = []
 
         // Get crypto
 
@@ -181,32 +253,34 @@ export class ReportService {
          * }
          */
 
-        let { cryptoBuy, cryptoSelled } =
-            await this.getCryptosBuyAndSellSortedByCryptoSymbol(investmentsList)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const { cryptoBuy, cryptoSelled } =
+            this.getCryptosBuyAndSellSortedByCryptoSymbol(investmentsList)
 
-        this.separateInvestmentBuyAndSelledToGenerateReport(
-            cryptoBuy,
-            cryptoSelled,
-            start_date,
-            end_date,
-        )
+        const gainOrLooseByCrypto =
+            await this.separateInvestmentBuyAndSelledToGenerateReport(
+                cryptoBuy,
+                cryptoSelled,
+                start_date,
+                end_date,
+            )
 
         return {
             startDate: start_date,
             endDate: end_date,
-            gainOfMonth: gains,
-            looseOfMonth: loose,
+            gainOfMonth: gainOrLooseByCrypto.gainOfMonth,
+            looseOfMonth: gainOrLooseByCrypto.looseOfMonth,
             investments: investmentsBetweenDates,
             numberOfCryptoOnBeginDate: cryptoOnBeginDate,
             numberOfCryptoOnEndDate: cryptoOnEndDate,
-            gainByCrypto: [],
-            looseByCrypto: [],
+            gainOrLooseByCrypto: gainOrLooseByCrypto.gainOrLooseByCrypto,
         }
     }
 
     async generateInvestmentReports(options, user): Promise<Buffer> {
         console.log(options.toDate)
-        let investmentService =
+        const investmentService =
             await this.investmentService.getInvestementsByUserIdAndEndDateOfInvestment(
                 user ? user.id : null,
                 new Date(options.toDate),
