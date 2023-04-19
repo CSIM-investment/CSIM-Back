@@ -139,6 +139,14 @@ input CryptoSearchInput {
   orderBy: CryptoOrderInput = {}
 }
 
+type DashboardEntity {
+  diffSold: Float!
+  fourthCryptos: [CryptoCurrencyMarket!]!
+  lastSold: Float!
+  newSold: Float!
+  spent: Float!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -195,7 +203,7 @@ type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
-  dashboard(id: Float!): [Float!]!
+  dashboard(id: Float!): [DashboardEntity!]!
   fourthCryptos: Float!
   lastSold(id: Float!): Float!
   sold(id: Float!): Float!

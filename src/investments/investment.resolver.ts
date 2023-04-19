@@ -16,6 +16,7 @@ import { User } from 'src/user/methods/user.methods'
 import { UserService } from 'src/user/user.service'
 import { CoingeckoService } from 'src/crypto/coingecko/services/coingecko.service'
 import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
+import { DashboardEntity } from './entities/dashboard.entity'
 
 @Resolver(() => InvestmentEntity)
 export class InvestmentResolver {
@@ -44,7 +45,7 @@ export class InvestmentResolver {
         return this.investmentService.getInvestementsByUserId(id)
     }
 
-    @Query(() => [Number])
+    @Query(() => [DashboardEntity])
     // eslint-disable-next-line @typescript-eslint/ban-types
     async dashboard(@Args('id') id: number): Promise<{}> {
         const newSold = await this.sold(id)
@@ -54,7 +55,6 @@ export class InvestmentResolver {
         const diffSold = newSold / lastSold
 
         const spent = 2000.22
-        console.log(fourthCryptos)
         const datas = {
             newSold: newSold,
             lastSold: lastSold,
@@ -62,6 +62,7 @@ export class InvestmentResolver {
             spent: spent,
             fourthCryptos: fourthCryptos,
         }
+        console.log(datas)
         return datas
     }
 
