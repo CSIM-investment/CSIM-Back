@@ -25,6 +25,9 @@ export class InvestmentService {
             quantity,
             valueBaseCurrency,
             valueQuoteCurrency,
+            type,
+            status,
+            origin,
         } = input
         const [baseCurrency, quoteCurrency] = await Promise.all([
             this.currencyRepository.findOneByOrFail({
@@ -35,6 +38,9 @@ export class InvestmentService {
             }),
         ])
         const investment = this.investmentRepository.create({
+            status,
+            type,
+            origin,
             quoteCurrency,
             baseCurrency,
             user,
