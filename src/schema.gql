@@ -195,10 +195,6 @@ type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
-  dashboard(id: Float!): [Float!]!
-  fourthCryptos: Float!
-  lastSold(id: Float!): Float!
-  sold(id: Float!): Float!
 }
 
 input ToggleFavoriteInput {
@@ -220,7 +216,7 @@ type User {
   investments: [InvestmentEntity!]!
   lastName: String!
   role: UserRoles!
-  sold: Float!
+  sold: UserSold!
   status: UserStatus!
 }
 
@@ -229,6 +225,14 @@ enum UserRoles {
   user
   validator
   visitor
+}
+
+type UserSold {
+  currentSold: Float!
+  fourthCryptos: [CryptoCurrencyMarket!]!
+  lastSold: Float!
+  newSold: Float!
+  soldRatio: Float!
 }
 
 enum UserStatus {
