@@ -10,7 +10,6 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard'
 import { InvestmentEntity } from './entities/investment.entity'
 import { InvestmentService } from './services/investment.service'
-import { User } from 'src/user/methods/user.methods'
 import { ImportInvestmentService } from './services/import-investments.service'
 
 @Resolver(() => InvestmentEntity)
@@ -27,11 +26,5 @@ export class InvestmentResolver {
         @Context() context,
     ): Promise<InvestmentEntity[]> {
         return this.importInvestmentService.run(context.req.user, link)
-    }
-
-    @ResolveField(() => [InvestmentEntity])
-    @UseGuards(JwtAuthGuard)
-    investments(@Parent() { id }: User): Promise<InvestmentEntity[]> {
-        return this.investmentService.getInvestementsByUserId(id)
     }
 }
