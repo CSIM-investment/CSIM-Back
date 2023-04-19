@@ -195,6 +195,10 @@ type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
+  dashboard(id: Float!): [Float!]!
+  fourthCryptos: Float!
+  lastSold(id: Float!): Float!
+  sold(id: Float!): Float!
 }
 
 input ToggleFavoriteInput {
@@ -216,6 +220,7 @@ type User {
   investments: [InvestmentEntity!]!
   lastName: String!
   role: UserRoles!
+  sold: Float!
   status: UserStatus!
 }
 
