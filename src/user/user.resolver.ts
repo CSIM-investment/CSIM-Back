@@ -58,9 +58,4 @@ export class UserResolver {
         const user = await this.userService.getUserWithFavoritesCrypto(id)
         return user.favoritesCrypto
     }
-
-    @ResolveField(() => Float)
-    async sold(@Parent() { id }: User): Promise<number> {
-        return this.userService.getUserSold(id)
-    }
 }
