@@ -60,5 +60,6 @@ export class UserEntity {
     investments: InvestmentEntity[]
 
     @Field(() => Float)
+    @Column({ default: 0 })
     sold: number
 }

@@ -48,22 +48,19 @@ export class InvestmentResolver {
     // eslint-disable-next-line @typescript-eslint/ban-types
     async dashboard(@Args('id') id: number): Promise<{}> {
         const newSold = await this.sold(id)
-        console.log('new sold', newSold)
         const lastSold = await this.lastSold(id)
-        console.log('last sold', lastSold)
+        const fourthCryptos = await this.fourthCryptos()
 
         const diffSold = newSold / lastSold
 
-        console.log('last sold', diffSold)
-
         const spent = 2000.22
-        const fourthCryptos = await this.fourthCryptos()
+        console.log(fourthCryptos)
         const datas = {
             newSold: newSold,
             lastSold: lastSold,
             diffSold: diffSold,
             spent: spent,
-            fourthCryptos: [fourthCryptos],
+            fourthCryptos: fourthCryptos,
         }
         return datas
     }
