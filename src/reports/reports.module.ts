@@ -7,6 +7,8 @@ import { ReportsResolver } from './reports.resolver'
 import { ReportService } from './reports.service'
 import { InvestmentService } from '../investments/services/investment.service'
 import { InvestmentEntity } from '../investments/entities/investment.entity'
+import { FirebaseService } from './firebase/firebaseService'
+import { Repository } from 'typeorm'
 
 @Global()
 @Module({
@@ -26,6 +28,8 @@ import { InvestmentEntity } from '../investments/entities/investment.entity'
         InvestmentsReportsInput,
         InvestmentService,
         InvestmentEntity,
+        FirebaseService,
+        Repository,
     ],
     exports: [TypeOrmModule],
 })

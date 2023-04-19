@@ -122,7 +122,11 @@ export class ReportService {
                             ]
                         investmentsBuyedForThisSell.push(buyInvestmentEntity)
                         buyInvestmentEntity.quantity = 0
-                    } else {
+                    } else if (
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.baseCurrency.symbol
+                        ] == 0
+                    ) {
                         // get difference
                         const differenceBetweenCryptoValue =
                             costOfInvestmentSelled[
@@ -165,9 +169,6 @@ export class ReportService {
                                 buyInvestmentEntity.quoteCurrency.symbol
                             ]
                         investmentsBuyedForThisSell.push(investmentToAddToSell)
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        break
                     }
                 }
             })
@@ -187,13 +188,41 @@ export class ReportService {
         return detailedGainOrLoose
     }
 
+    private async generateGainOrLooseOfCrypto(
+        gainOrLooseOfCrypto: GainOrLooseByCryptoInterfaceInterface[],
+    ): Promise<GainOrLooseByCryptoInterfaceInterface> {
+        if (gainOrLooseOfCrypto.length > 0) {
+            let gains = 0.0
+            let looses = 0.0
+            const investmentsBuy: InvestmentEntity[] = []
+            const investmentSelled: InvestmentEntity[] = []
+            gainOrLooseOfCrypto.forEach((value) => {
+                gains += value.gains
+                looses += value.looses
+                investmentsBuy.concat(value.investmentEntityBuy)
+                investmentSelled.concat(value.investmentEntitySell)
+            })
+            return {
+                crypto: gainOrLooseOfCrypto[0].crypto,
+                gains: gains,
+                looses: looses,
+                type: 'investment selled',
+                investmentEntityBuy: investmentsBuy,
+                investmentEntitySell: investmentSelled,
+            }
+        } else {
+            return null
+        }
+    }
+
     private async separateInvestmentBuyAndSelledToGenerateReport(
         cryptoBuy: { [key: string]: InvestmentEntity[] },
         cryptoSelled: { [key: string]: InvestmentEntity[] },
         beginDate: Date,
         endDate: Date,
     ): Promise<ReportInvestmentsDataInterface> {
-        const gainOrLooseByCrypto: GainOrLooseByCryptoInterfaceInterface[] = []
+        const gainOrLooseByCryptoList: GainOrLooseByCryptoInterfaceInterface[] =
+            []
         const investmentsOfMonth: InvestmentEntity[] = []
         const numberOfCryptoOnEndDate: CryptoCount[] = []
         const numberOfCryptoOnStartDate: CryptoCount[] = []
@@ -211,19 +240,23 @@ export class ReportService {
                 this.countAllCryptoBuyOrSellBySymbol(cryptoSelledOfSymbol)
 
             // Substract cryptoSelledOfSymbol by cryptoBuyOfSymbol
-            const gainOrLooseByCrypto =
+            const gainOrLooseOfCrypto: GainOrLooseByCryptoInterfaceInterface[] =
                 await this.substractCryptoSelledUsingCryptoBuyBeforeDate(
                     cryptoBuyOfSymbol,
                     cryptoSelledOfSymbol,
                     beginDate,
                 )
+
+            gainOrLooseByCryptoList.push(
+                await this.generateGainOrLooseOfCrypto(gainOrLooseOfCrypto),
+            )
         }
 
         return {
             investments: investmentsOfMonth,
             numberOfCryptoOnEndDate: numberOfCryptoOnEndDate,
             numberOfCryptoOnBeginDate: numberOfCryptoOnStartDate,
-            gainOrLooseByCrypto: gainOrLooseByCrypto,
+            gainOrLooseByCrypto: gainOrLooseByCryptoList,
             gainOfMonth: gainsOfMonth,
             looseOfMonth: loosesOfMonth,
             startDate: beginDate,

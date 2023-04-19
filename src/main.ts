@@ -2,8 +2,21 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { ValidationPipe } from '@nestjs/common'
+import * as admin from 'firebase-admin'
 
 async function bootstrap(): Promise<void> {
+    const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n')
+
+    const firebaseConfig = {
+        projectId: process.env.PROJECT_ID,
+        privateKey,
+        clientEmail: process.env.CLIENT_EMAIL,
+    }
+
+    admin.initializeApp({
+        credential: admin.credential.cert(firebaseConfig),
+    })
+
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
         cors: true,
     })

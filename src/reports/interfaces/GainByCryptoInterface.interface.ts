@@ -6,6 +6,7 @@ export interface GainOrLooseByCryptoInterfaceInterface {
     gains?: number
     looses?: number
     investmentEntityBuy: InvestmentEntity[]
-    investmentEntitySell: InvestmentEntity
+    investmentEntitySell: InvestmentEntity | InvestmentEntity[]
     type: string
+    gainOrLooseByCryptoInterface?: GainOrLooseByCryptoInterfaceInterface[]
 }
