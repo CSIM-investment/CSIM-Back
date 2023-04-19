@@ -291,7 +291,7 @@ export class ReportService {
         const { cryptoBuy, cryptoSelled } =
             this.getCryptosBuyAndSellSortedByCryptoSymbol(investmentsList)
 
-        const gainOrLooseByCrypto =
+        const gainOrLooseByCrypto: ReportInvestmentsDataInterface =
             await this.separateInvestmentBuyAndSelledToGenerateReport(
                 cryptoBuy,
                 cryptoSelled,
