@@ -7,6 +7,7 @@ import { InvestmentService } from './investment.service'
 import { CoingeckoService } from 'src/crypto/coingecko/services/coingecko.service'
 import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 import { HttpModule } from '@nestjs/axios'
+import { SoldResolver } from './sold.resolver'
 
 @Global()
 @Module({
@@ -17,6 +18,7 @@ import { HttpModule } from '@nestjs/axios'
     providers: [
         InvestmentEntity,
         InvestmentResolver,
+        SoldResolver,
         InvestmentService,
         DbService,
         CoingeckoService,
