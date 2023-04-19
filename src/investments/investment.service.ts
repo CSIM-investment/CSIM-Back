@@ -53,11 +53,7 @@ export class InvestmentService {
         let sold = 0
         const investments = await this.getInvestementsByUserId(id)
         investments.forEach((item) => {
-            console.log(item.baseCurrency)
-            const price =
-                item.quantity *
-                item.valueBaseCurrency 
-                // * item.baseCurrency.current_price
+            const price = item.quantity * item.valueBaseCurrency
             sold += price
         })
         return sold
