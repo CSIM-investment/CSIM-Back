@@ -6,7 +6,6 @@ import {
     Query,
     ResolveField,
     Parent,
-    Float,
 } from '@nestjs/graphql'
 import { UserService } from './user.service'
 import { UseGuards } from '@nestjs/common'
