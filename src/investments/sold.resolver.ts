@@ -18,7 +18,7 @@ export class SoldResolver {
         const newSold = await this.investmentService.soldUser(id)
         const lastSold = await this.userService.getUserSold(id)
         const fourthCryptos = await this.coingeckoService.getFourthCryptos()
-        const soldRatio = newSold / lastSold
+        const soldRatio = lastSold === 0 ? 0 : newSold / lastSold
 
         const sold: UserSold = {
             newSold,
