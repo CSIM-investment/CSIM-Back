@@ -22,6 +22,6 @@ import { CoingeckoService } from 'src/crypto/coingecko/services/coingecko.servic
         DbService,
         CoingeckoService,
     ],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, InvestmentService],
 })
 export class InvestmentModule {}

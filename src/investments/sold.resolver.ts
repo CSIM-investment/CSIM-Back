@@ -1,9 +1,9 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { User } from 'src/user/methods/user.methods'
 import { UserSold } from './dto/user-sold.output'
-import { InvestmentService } from './investment.service'
 import { UserService } from 'src/user/user.service'
 import { CoingeckoService } from 'src/crypto/coingecko/services/coingecko.service'
+import { InvestmentService } from './services/investment.service'
 
 @Resolver(() => User)
 export class SoldResolver {

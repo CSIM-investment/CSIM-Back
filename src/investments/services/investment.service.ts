@@ -56,4 +56,14 @@ export class InvestmentService {
             where: { user: { id: userId } },
         })
     }
+
+    async soldUser(id: number): Promise<number> {
+        let sold = 0
+        const investments = await this.getInvestementsByUserId(id)
+        investments.forEach((item) => {
+            const price = item.quantity * item.valueBaseCurrency
+            sold += price
+        })
+        return sold
+    }
 }

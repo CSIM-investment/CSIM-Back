@@ -14,7 +14,7 @@ import { UpdateUserInput } from './dto/update-user.input'
 import { User } from './methods/user.methods'
 import { ToggleFavoriteInput } from './dto/toggle-favorite.input'
 import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
-import { InvestmentService } from 'src/investments/investment.service'
+import { InvestmentService } from 'src/investments/services/investment.service'
 
 @Resolver(() => User)
 export class UserResolver {
