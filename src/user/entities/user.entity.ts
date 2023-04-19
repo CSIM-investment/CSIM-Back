@@ -1,4 +1,4 @@
-import { ObjectType, Field, ID, Float } from '@nestjs/graphql'
+import { ObjectType, Field, ID } from '@nestjs/graphql'
 import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 import { InvestmentEntity } from 'src/investments/entities/investment.entity'
 import {
@@ -59,7 +59,6 @@ export class UserEntity {
     @OneToMany(() => InvestmentEntity, (investment) => investment.user)
     investments: InvestmentEntity[]
 
-    @Field(() => Float)
     @Column({ default: 0 })
     sold: number
 }
