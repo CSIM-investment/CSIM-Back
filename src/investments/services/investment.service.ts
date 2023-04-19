@@ -54,6 +54,7 @@ export class InvestmentService {
     async getInvestementsByUserId(userId: number): Promise<InvestmentEntity[]> {
         return await this.investmentRepository.find({
             where: { user: { id: userId } },
+            relations: ['baseCurrency', 'quoteCurrency'],
         })
     }
 }
