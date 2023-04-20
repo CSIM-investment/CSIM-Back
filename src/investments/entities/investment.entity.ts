@@ -60,4 +60,8 @@ export class InvestmentEntity {
         ({ baseInvestment }) => baseInvestment,
     )
     baseCurrency: CryptoCurrencyMarket
+
+    @Column({ type: 'float', nullable: true })
+    @Field(() => Float)
+    amount: number
 }
