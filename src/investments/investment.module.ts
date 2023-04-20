@@ -5,6 +5,7 @@ import { InvestmentResolver } from './investment.resolver'
 import { InvestmentService } from './services/investment.service'
 import { ImportInvestmentService } from './services/import-investments.service'
 import { HttpModule } from '@nestjs/axios'
+import { UserInvestmentsResolver } from './user-investments.resolver'
 
 @Module({
     imports: [TypeOrmModule.forFeature([InvestmentEntity]), HttpModule],
@@ -13,6 +14,7 @@ import { HttpModule } from '@nestjs/axios'
         InvestmentResolver,
         InvestmentService,
         ImportInvestmentService,
+        UserInvestmentsResolver,
     ],
     exports: [TypeOrmModule],
 })

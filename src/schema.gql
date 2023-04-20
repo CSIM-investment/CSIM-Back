@@ -141,7 +141,6 @@ type InvestmentEntity {
   creationDate: DateTime!
   dateOfInvestment: DateTime!
   id: ID!
-  investments: [InvestmentEntity!]!
   origin: String!
   quantity: Float!
   quoteCurrency: CryptoCurrencyMarket!
