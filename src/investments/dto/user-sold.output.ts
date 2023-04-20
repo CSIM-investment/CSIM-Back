@@ -1,5 +1,5 @@
 import { Field, Float, ObjectType } from '@nestjs/graphql'
-import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
+import { InvestmentEntity } from '../entities/investment.entity'
 
 @ObjectType()
 export class UserSold {
@@ -9,8 +9,11 @@ export class UserSold {
     @Field(() => Float)
     lastSold: number
 
-    @Field(() => [CryptoCurrencyMarket])
-    fourthCryptos: CryptoCurrencyMarket[]
+    @Field(() => [InvestmentEntity])
+    lastInvestments: InvestmentEntity[]
+
+    @Field(() => [InvestmentEntity])
+    topInvestments: InvestmentEntity[]
 
     @Field(() => Float)
     soldRatio: number
