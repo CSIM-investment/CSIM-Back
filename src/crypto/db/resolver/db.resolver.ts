@@ -14,7 +14,7 @@ export class DbMutationResolver {
         private coinGeckoService: CoingeckoService,
     ) {}
 
-    // @Cron('10 * * * * *')
+    @Cron('10 * * * * *')
     @Mutation(() => String)
     async createCryptoMarket(): Promise<string> {
         this.coinGeckoService.getAllCoinsMarket().then((resp) => {
