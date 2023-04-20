@@ -11,6 +11,7 @@ import * as fs from 'fs'
 import * as tmp from 'tmp'
 import * as mammoth from 'mammoth'
 import * as pdf from 'html-pdf'
+import {ReportInvestmentsDataInterface} from "../interfaces/ReportInvestmentsData.interface";
 
 export class InvestmentReportDocument {
     private title: string
@@ -22,15 +23,7 @@ export class InvestmentReportDocument {
 
     private doc: Document
 
-    constructor(
-        private options: {
-            endDate: Date
-            investments: string[]
-            gains: string[]
-            startDate: Date
-            sales: string[]
-        },
-    ) {
+    constructor(private options: ReportInvestmentsDataInterface) {
         if (options !== undefined) {
             this.startDate = options.startDate
             this.endDate = options.endDate

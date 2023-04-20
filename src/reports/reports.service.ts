@@ -7,12 +7,16 @@ import { GainOrLooseByCryptoInterfaceInterface } from './interfaces/GainByCrypto
 import { CryptoCount } from './interfaces/CryptoCount'
 import { Repository } from 'typeorm'
 import { CryptoCurrencyMarket } from '../crypto/entities/cryptocurrency.entity'
+import { FirebaseService } from './firebase/firebaseService'
+import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
 
 @Injectable()
 export class ReportService {
     constructor(
         private readonly investmentService: InvestmentService,
         private investmentRepository: Repository<InvestmentEntity>,
+        private investmentReportRepository: Repository<InvestmentsReportsEntity>,
+        private readonly firebaseService: FirebaseService,
     ) {}
 
     async isInvestmentSell(investment: InvestmentEntity): Promise<boolean> {
@@ -311,7 +315,10 @@ export class ReportService {
         }
     }
 
-    async generateInvestmentReports(options, user): Promise<Buffer> {
+    async generateInvestmentReports(
+        options,
+        user,
+    ): Promise<InvestmentsReportsEntity> {
         console.log(options.toDate)
         const investmentService =
             await this.investmentService.getInvestementsByUserIdAndEndDateOfInvestment(
@@ -319,28 +326,31 @@ export class ReportService {
                 new Date(options.toDate),
             )
 
-        await this.generateReportDataUsingInvestmentsList(
-            investmentService,
-            options.fromDate,
-            options.toDate,
-        )
+        const reportInvestmentData =
+            await this.generateReportDataUsingInvestmentsList(
+                investmentService,
+                options.fromDate,
+                options.toDate,
+            )
 
         console.log(investmentService)
 
         const invest1 = new InvestmentEntity()
-        const investmentReport = new InvestmentReportDocument({
-            investments: ['Investment 1', 'Investment 2', 'Investment 3'],
-            gains: [
-                '1 SOL - 23/03/2023 - 20 EUR -> 1 SOL - 24/03/2023 - 23 EUR --> 3 EUR',
-            ],
-            startDate: options.fromDate,
-            endDate: options.toDate,
-            sales: [
-                '5 SOL - 23/03/2023 - 20 EUR -> 5 SOL - 24/03/2023 - 23 EUR --> 3 EUR',
-            ],
-        })
+        const investmentReport = new InvestmentReportDocument(
+            reportInvestmentData,
+        )
         investmentReport.generate_investment_report_using_investments()
-        return await investmentReport.to_pdf()
+        const pdfFile = await investmentReport.to_pdf()
+        const path = await this.firebaseService.uploadPdf(pdfFile)
+        const generatedInvestmentReport: InvestmentsReportsEntity =
+            this.investmentReportRepository.create({
+                mensualReport: false,
+                reportUri: path,
+                user: user,
+                toDate: options.toDate,
+                fromDate: options.fromDate,
+            })
+        return this.investmentReportRepository.save(generatedInvestmentReport)
     }
 
     async soldUser(userId: number): Promise<number> {

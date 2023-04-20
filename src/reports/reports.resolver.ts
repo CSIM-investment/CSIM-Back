@@ -82,14 +82,11 @@ export class ReportsResolver {
             dateOfInvestment: '2023-07-04T20:01:00',
         })
 
-        let pdf_file = await this.reportService.generateInvestmentReports(
-            options,
-            context.req.user,
-        )
-
-        const investment_report_entity = new InvestmentsReportsEntity()
-        investment_report_entity.mensualReport = false
-        investment_report_entity.fromDate = options.fromDate
+        const investmentsReportsEntity: InvestmentsReportsEntity =
+            await this.reportService.generateInvestmentReports(
+                options,
+                context.req.user,
+            )
 
         return new InvestmentsReportsEntity()
     }

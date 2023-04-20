@@ -29,7 +29,7 @@ export class InvestmentsReportsEntity {
 
     @Column({ type: 'text' })
     @Field()
-    reportUri: boolean
+    reportUri: string
 
     @Field(() => User)
     @ManyToOne(() => User, (user: User) => user.investmentsReports)
