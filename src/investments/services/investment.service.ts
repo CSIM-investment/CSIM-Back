@@ -54,6 +54,7 @@ export class InvestmentService {
     async getInvestementsByUserId(userId: number): Promise<InvestmentEntity[]> {
         return await this.investmentRepository.find({
             where: { user: { id: userId } },
+            relations: ['baseCurrency', 'quoteCurrency'],
         })
     }
 
@@ -65,5 +66,33 @@ export class InvestmentService {
             sold += price
         })
         return sold
+    }
+
+    async getMostRecentInvestments(
+        userId: number,
+    ): Promise<InvestmentEntity[]> {
+        return await this.investmentRepository
+            .createQueryBuilder('investment')
+            .leftJoinAndSelect('investment.quoteCurrency', 'quoteCurrency')
+            .leftJoinAndSelect('investment.baseCurrency', 'baseCurrency')
+            .where('investment.user.id = :userId', { userId })
+            .orderBy('investment.creationDate', 'DESC')
+            .take(4)
+            .getMany()
+    }
+
+    async getTopInvestments(userId: number): Promise<InvestmentEntity[]> {
+        return await this.investmentRepository
+            .createQueryBuilder('investment')
+            .addSelect(
+                `CASE WHEN investment.type = 'eur' THEN investment.quantity * investment.valueBaseCurrency ELSE investment.quantity * investment.valueQuoteCurrency END`,
+                'amount',
+            )
+            .where({ user: { id: userId } })
+            .orderBy('amount', 'DESC')
+            .leftJoinAndSelect('investment.quoteCurrency', 'quoteCurrency')
+            .leftJoinAndSelect('investment.baseCurrency', 'baseCurrency')
+            .limit(4)
+            .getMany()
     }
 }
