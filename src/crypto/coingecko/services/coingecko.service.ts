@@ -9,20 +9,7 @@ export class CoingeckoService {
     private readonly apiUrl: string = process.env.COINGECKO_API
 
     async getAllCoinsMarket(): Promise<CryptoCurrencyMarket[]> {
-        const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en`
-        const { data } = await firstValueFrom(this.httpService.get(url))
-        return data
-    }
-
-    async getFourthCryptos(): Promise<CryptoCurrencyMarket[]> {
-        const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en`
-        const { data } = await firstValueFrom(
-            this.httpService.get(url, {
-                params: {
-                    per_page: 4,
-                },
-            }),
-        )
+        const { data } = await firstValueFrom(this.httpService.get(this.apiUrl))
         return data
     }
 }
