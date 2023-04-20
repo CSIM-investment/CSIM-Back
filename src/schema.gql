@@ -138,12 +138,12 @@ scalar DateTime
 
 type InvestmentEntity {
   amount: Float!
-  baseCurrency: CryptoCurrencyMarket
+  baseCurrency: CryptoCurrencyMarket!
   creationDate: DateTime!
   id: ID!
   origin: String!
   quantity: Float!
-  quoteCurrency: CryptoCurrencyMarket
+  quoteCurrency: CryptoCurrencyMarket!
   status: String!
   type: String!
   valueBaseCurrency: Float!
