@@ -11,10 +11,11 @@ import * as fs from 'fs'
 import * as tmp from 'tmp'
 import * as mammoth from 'mammoth'
 import * as pdf from 'html-pdf'
-import {ReportInvestmentsDataInterface} from "../interfaces/ReportInvestmentsData.interface";
+import { ReportInvestmentsDataInterface } from '../interfaces/ReportInvestmentsData.interface'
+import { FileSyncObject } from '../interfaces/FileSyncObject'
 
 export class InvestmentReportDocument {
-    private title: string
+    public title: string
     private startDate: Date
     private endDate: Date
     private description: string
@@ -115,7 +116,7 @@ export class InvestmentReportDocument {
         return await Packer.toBuffer(this.doc)
     }
 
-    public async to_pdf(): Promise<Buffer> {
+    public async to_pdf(): Promise<FileSyncObject> {
         const docxBuffer = await this.to_buffer()
 
         // Create a temporary file to store the Docx buffer

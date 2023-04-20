@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common'
 import * as fs from 'fs'
 import * as admin from 'firebase-admin'
 import { Bucket } from '@google-cloud/storage'
-import path from "path";
+import path from 'path'
+import { FileSyncObject } from '../interfaces/FileSyncObject'
 
 @Injectable()
 export class FirebaseService {
@@ -11,10 +12,14 @@ export class FirebaseService {
     }
     private bucket: Bucket
 
-    async uploadPdf(pdfBuffer: Buffer): Promise<string> {
-        const pdfFilePath = `pdfs/${Date.now()}.pdf`
+    async uploadPdf(
+        pdfBuffer: FileSyncObject,
+        nameOfPdf: string,
+    ): Promise<string> {
+        console.log(pdfBuffer)
+        const pdfFilePath = `/reports/pdfs/${nameOfPdf}.pdf`
         const file = this.bucket.file(pdfFilePath)
-        await file.save(pdfBuffer, {
+        await file.save(pdfBuffer.name, {
             metadata: {
                 contentType: 'application/pdf',
             },

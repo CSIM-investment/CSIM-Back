@@ -55,6 +55,7 @@ export class InvestmentEntity {
     @ManyToOne(
         () => CryptoCurrencyMarket,
         ({ quoteInvestment }) => quoteInvestment,
+        { eager: true },
     )
     quoteCurrency: CryptoCurrencyMarket
 
@@ -62,6 +63,7 @@ export class InvestmentEntity {
     @ManyToOne(
         () => CryptoCurrencyMarket,
         ({ baseInvestment }) => baseInvestment,
+        { eager: true },
     )
     baseCurrency: CryptoCurrencyMarket
 }

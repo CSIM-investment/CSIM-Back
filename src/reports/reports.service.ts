@@ -9,21 +9,25 @@ import { Repository } from 'typeorm'
 import { CryptoCurrencyMarket } from '../crypto/entities/cryptocurrency.entity'
 import { FirebaseService } from './firebase/firebaseService'
 import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
+import { InjectRepository } from '@nestjs/typeorm'
 
 @Injectable()
 export class ReportService {
     constructor(
         private readonly investmentService: InvestmentService,
         private investmentRepository: Repository<InvestmentEntity>,
+        @InjectRepository(InvestmentsReportsEntity)
         private investmentReportRepository: Repository<InvestmentsReportsEntity>,
         private readonly firebaseService: FirebaseService,
     ) {}
 
     async isInvestmentSell(investment: InvestmentEntity): Promise<boolean> {
+        console.log(investment.quoteCurrency)
         return investment.quoteCurrency.symbol == 'eur'
     }
 
     async isInvestmentBuy(investment: InvestmentEntity): Promise<boolean> {
+        console.log(investment)
         return investment.baseCurrency.symbol == 'eur'
     }
 
@@ -48,12 +52,12 @@ export class ReportService {
                 ) {
                     cryptoBuy[investment.quoteCurrency.symbol] = []
                 }
-                cryptoBuy[investment.quoteCurrency.symbol].append(investment)
+                cryptoBuy[investment.quoteCurrency.symbol].push(investment)
             } else if (this.isInvestmentSell(investment)) {
                 if (!cryptoBuy.hasOwnProperty(investment.baseCurrency.symbol)) {
                     cryptoBuy[investment.baseCurrency.symbol] = []
                 }
-                cryptoSelled[investment.baseCurrency.symbol].append(investment)
+                cryptoSelled[investment.baseCurrency.symbol].push(investment)
             }
         })
         return { cryptoBuy, cryptoSelled }
@@ -335,13 +339,15 @@ export class ReportService {
 
         console.log(investmentService)
 
-        const invest1 = new InvestmentEntity()
         const investmentReport = new InvestmentReportDocument(
             reportInvestmentData,
         )
         investmentReport.generate_investment_report_using_investments()
         const pdfFile = await investmentReport.to_pdf()
-        const path = await this.firebaseService.uploadPdf(pdfFile)
+        const path = await this.firebaseService.uploadPdf(
+            pdfFile,
+            investmentReport.title,
+        )
         const generatedInvestmentReport: InvestmentsReportsEntity =
             this.investmentReportRepository.create({
                 mensualReport: false,
