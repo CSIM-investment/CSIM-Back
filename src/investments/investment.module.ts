@@ -9,9 +9,13 @@ import { UserInvestmentsResolver } from './user-investments.resolver'
 import { SoldResolver } from './sold.resolver'
 import { DbService } from 'src/crypto/db/service/db.service'
 import { CoingeckoService } from 'src/crypto/coingecko/services/coingecko.service'
+import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 
 @Module({
-    imports: [TypeOrmModule.forFeature([InvestmentEntity]), HttpModule],
+    imports: [
+        TypeOrmModule.forFeature([InvestmentEntity, CryptoCurrencyMarket]),
+        HttpModule,
+    ],
     providers: [
         InvestmentEntity,
         InvestmentResolver,
