@@ -70,6 +70,9 @@ export class InvestmentService {
                 },
                 dateOfInvestment: LessThan(endDateOfInvestment),
             },
+            order: {
+                dateOfInvestment: 'ASC',
+            },
         })
     }
 }

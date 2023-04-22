@@ -1,4 +1,11 @@
-import { Args, Context, Parent, Query, Resolver } from '@nestjs/graphql'
+import {
+    Args,
+    Context,
+    Mutation,
+    Parent,
+    Query,
+    Resolver,
+} from '@nestjs/graphql'
 import { ReportService } from './reports.service'
 import { InvestmentsReportsInput } from './dto/inputs/InvestmentsReports-input'
 import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
@@ -28,7 +35,7 @@ export class ReportsResolver {
         return this.reportService.soldUser(id)
     }
 
-    @Query(() => InvestmentsReportsEntity)
+    @Mutation(() => InvestmentsReportsEntity)
     @UseGuards(JwtAuthGuard)
     async createInvestmentReport(
         @Args('options') options: InvestmentReportCreate,
@@ -88,6 +95,6 @@ export class ReportsResolver {
                 context.req.user,
             )
 
-        return new InvestmentsReportsEntity()
+        return investmentsReportsEntity
     }
 }

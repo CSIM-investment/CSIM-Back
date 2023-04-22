@@ -194,6 +194,7 @@ input LoginUserInput {
 type Mutation {
   confirmEmail(email: String!, emailCode: Float!): LoginResponse!
   createCryptoMarket: String!
+  createInvestmentReport(options: InvestmentReportCreate!): InvestmentsReportsEntity!
   importInvestments(link: String!): [InvestmentEntity!]!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
@@ -219,7 +220,6 @@ input PaginationInput {
 type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
-  createInvestmentReport(options: InvestmentReportCreate!): InvestmentsReportsEntity!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
   reports(options: InvestmentsReportsInput!): [InvestmentsReportsEntity!]!
   sold: Float!
