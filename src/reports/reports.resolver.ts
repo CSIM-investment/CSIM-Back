@@ -43,54 +43,6 @@ export class ReportsResolver {
         @Args('options') options: InvestmentReportCreate,
         @Context() context,
     ): Promise<InvestmentsReportsEntity> {
-        const invest1 = await this.investmentService.createInvestment(
-            context.req.user,
-            {
-                type: 'in',
-                quantity: 10,
-                baseCurrencySymbol: 'eur',
-                valueBaseCurrency: 1,
-                quoteCurrencySymbol: 'sol',
-                valueQuoteCurrency: 20,
-                origin: 'uphold',
-                status: 'completed',
-                dateOfInvestment: '2023-04-09T20:01:00',
-            },
-        )
-        await this.investmentService.createInvestment(context.req.user, {
-            type: 'in',
-            quantity: 5,
-            baseCurrencySymbol: 'sol',
-            valueBaseCurrency: 1,
-            quoteCurrencySymbol: 'eur',
-            valueQuoteCurrency: 1,
-            origin: 'uphold',
-            status: 'completed',
-            dateOfInvestment: '2023-03-09T20:01:00',
-        })
-        await this.investmentService.createInvestment(context.req.user, {
-            type: 'in',
-            quantity: 5,
-            baseCurrencySymbol: 'sol',
-            valueBaseCurrency: 1,
-            quoteCurrencySymbol: 'eur',
-            valueQuoteCurrency: 1,
-            origin: 'uphold',
-            status: 'completed',
-            dateOfInvestment: '2023-04-08T20:01:00',
-        })
-        await this.investmentService.createInvestment(context.req.user, {
-            type: 'in',
-            quantity: 5,
-            baseCurrencySymbol: 'sol',
-            valueBaseCurrency: 1,
-            quoteCurrencySymbol: 'eur',
-            valueQuoteCurrency: 1,
-            origin: 'uphold',
-            status: 'completed',
-            dateOfInvestment: '2023-07-04T20:01:00',
-        })
-
         const investmentsReportsEntity: InvestmentsReportsEntity =
             await this.reportService.generateInvestmentReports(
                 options,

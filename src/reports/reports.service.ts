@@ -45,8 +45,6 @@ export class ReportService {
 
         if (orderBy) query = query.orderBy(orderBy.name, orderBy.direction)
 
-        console.log(query.getSql())
-
         return await query.getMany()
     }
 
