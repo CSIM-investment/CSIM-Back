@@ -23,10 +23,12 @@ export class ReportsResolver {
     ) {}
 
     @Query(() => [InvestmentsReportsEntity])
+    @UseGuards(JwtAuthGuard)
     async reports(
         @Args('options') options: InvestmentsReportsInput,
+        @Context() context,
     ): Promise<InvestmentsReportsEntity[]> {
-        return this.reportService.search(options)
+        return this.reportService.search(options, context.req.user)
     }
 
     @Query(() => Number)

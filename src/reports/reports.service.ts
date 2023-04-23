@@ -11,6 +11,7 @@ import { FirebaseService } from './firebase/firebaseService'
 import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { InvestmentsReportsInput } from './dto/inputs/InvestmentsReports-input'
+import { UserEntity } from '../user/entities/user.entity'
 
 @Injectable()
 export class ReportService {
@@ -24,14 +25,17 @@ export class ReportService {
 
     async search(
         reportsInput: InvestmentsReportsInput,
+        user: UserEntity,
     ): Promise<InvestmentsReportsEntity[]> {
         const { orderBy, filterBy } = reportsInput
         const { pagination, search } = filterBy
+        const userId = user.id
         const searchKeys = ['mensualReport']
 
         let query = this.investmentReportRepository
             .createQueryBuilder()
             .select()
+            .where(`userId = :userId`, { userId })
 
         if (pagination)
             query = query.limit(pagination.end).offset(pagination.start)
