@@ -32,15 +32,20 @@ export class ReportService {
         const userId = user.id
         const searchKeys = ['mensualReport']
 
+        console.log(user.id)
+
         let query = this.investmentReportRepository
             .createQueryBuilder()
             .select()
-            .where(`userId = :userId`, { userId })
+            .leftJoinAndSelect('InvestmentsReportsEntity.user', 'UserEntity')
+            .where('"InvestmentsReportsEntity"."userId" = :userId', { userId })
 
         if (pagination)
             query = query.limit(pagination.end).offset(pagination.start)
 
         if (orderBy) query = query.orderBy(orderBy.name, orderBy.direction)
+
+        console.log(query.getSql())
 
         return await query.getMany()
     }
