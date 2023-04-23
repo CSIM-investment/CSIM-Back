@@ -172,7 +172,6 @@ type InvestmentsReportsEntity {
 input InvestmentsReportsFilterInput {
   pagination: PaginationInput
   search: String
-  symbol: String
 }
 
 input InvestmentsReportsInput {

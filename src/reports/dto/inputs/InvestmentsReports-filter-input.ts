@@ -8,7 +8,4 @@ export class InvestmentsReportsFilterInput {
 
     @Field({ nullable: true })
     pagination?: PaginationInput
-
-    @Field({ nullable: true })
-    symbol?: string
 }

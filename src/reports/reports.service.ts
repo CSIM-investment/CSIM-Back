@@ -10,6 +10,7 @@ import { CryptoCurrencyMarket } from '../crypto/entities/cryptocurrency.entity'
 import { FirebaseService } from './firebase/firebaseService'
 import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
 import { InjectRepository } from '@nestjs/typeorm'
+import { InvestmentsReportsInput } from './dto/inputs/InvestmentsReports-input'
 
 @Injectable()
 export class ReportService {
@@ -20,6 +21,25 @@ export class ReportService {
         private investmentReportRepository: Repository<InvestmentsReportsEntity>,
         private readonly firebaseService: FirebaseService,
     ) {}
+
+    async search(
+        reportsInput: InvestmentsReportsInput,
+    ): Promise<InvestmentsReportsEntity[]> {
+        const { orderBy, filterBy } = reportsInput
+        const { pagination, search } = filterBy
+        const searchKeys = ['mensualReport']
+
+        let query = this.investmentReportRepository
+            .createQueryBuilder()
+            .select()
+
+        if (pagination)
+            query = query.limit(pagination.end).offset(pagination.start)
+
+        if (orderBy) query = query.orderBy(orderBy.name, orderBy.direction)
+
+        return await query.getMany()
+    }
 
     async isInvestmentSell(investment: InvestmentEntity): Promise<boolean> {
         console.log(investment.quoteCurrency)

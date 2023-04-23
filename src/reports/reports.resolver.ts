@@ -26,7 +26,7 @@ export class ReportsResolver {
     async reports(
         @Args('options') options: InvestmentsReportsInput,
     ): Promise<InvestmentsReportsEntity[]> {
-        return []
+        return this.reportService.search(options)
     }
 
     @Query(() => Number)
