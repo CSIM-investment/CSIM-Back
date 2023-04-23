@@ -21,6 +21,7 @@ export class InvestmentReportDocument {
     private description: string
     private creator: string
     private sections: Array<ISectionOptions>
+    private reportsInvestmentData: ReportInvestmentsDataInterface
 
     private doc: Document
 
@@ -32,6 +33,9 @@ export class InvestmentReportDocument {
             this.description = 'Generated report from csim-finance.fr'
             this.creator = 'CSIM-Finance'
             this.sections = []
+
+            this.reportsInvestmentData = options
+            console.log(this.options)
         }
     }
 

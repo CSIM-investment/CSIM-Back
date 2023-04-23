@@ -49,18 +49,16 @@ export class ReportService {
     }
 
     async isInvestmentSell(investment: InvestmentEntity): Promise<boolean> {
-        console.log(investment.quoteCurrency)
-        return investment.quoteCurrency.symbol == 'eur'
+        return ['eur', 'euro'].includes(investment.quoteCurrency.symbol)
     }
 
     async isInvestmentBuy(investment: InvestmentEntity): Promise<boolean> {
-        console.log(investment)
-        return investment.baseCurrency.symbol == 'eur'
+        return ['eur', 'euro'].includes(investment.baseCurrency.symbol)
     }
 
-    getCryptosBuyAndSellSortedByCryptoSymbol(
+    async getCryptosBuyAndSellSortedByCryptoSymbol(
         investmentsList: InvestmentEntity[],
-    ): object {
+    ): Promise<object> {
         /**
          * {
          *     "sol": [{
@@ -72,21 +70,21 @@ export class ReportService {
         const cryptoBuy = {}
         const cryptoSelled = {}
 
-        investmentsList.forEach((investment) => {
-            if (this.isInvestmentBuy(investment)) {
+        for (const investment of investmentsList) {
+            if (await this.isInvestmentBuy(investment)) {
                 if (
                     !cryptoBuy.hasOwnProperty(investment.quoteCurrency.symbol)
                 ) {
                     cryptoBuy[investment.quoteCurrency.symbol] = []
                 }
                 cryptoBuy[investment.quoteCurrency.symbol].push(investment)
-            } else if (this.isInvestmentSell(investment)) {
+            } else if (await this.isInvestmentSell(investment)) {
                 if (!cryptoBuy.hasOwnProperty(investment.baseCurrency.symbol)) {
-                    cryptoBuy[investment.baseCurrency.symbol] = []
+                    cryptoSelled[investment.baseCurrency.symbol] = []
                 }
                 cryptoSelled[investment.baseCurrency.symbol].push(investment)
             }
-        })
+        }
         return { cryptoBuy, cryptoSelled }
     }
 
@@ -264,15 +262,22 @@ export class ReportService {
         const loosesOfMonth = 0,
             gainsOfMonth = 0
 
+        console.log(cryptoSelled.length)
+
         for (const symbol in cryptoSelled) {
+            console.log(symbol)
+            throw Error('error')
             const cryptoSelledOfSymbol = cryptoSelled[symbol]
             const cryptoBuyOfSymbol = cryptoBuy[symbol]
 
+            console.log(cryptoBuyOfSymbol)
+            console.log(cryptoSelledOfSymbol)
+
             // Count all crypto
             const countAllCryptoBuyed =
-                this.countAllCryptoBuyOrSellBySymbol(cryptoBuyOfSymbol)
+                await this.countAllCryptoBuyOrSellBySymbol(cryptoBuyOfSymbol)
             const countAllCryptoSelled =
-                this.countAllCryptoBuyOrSellBySymbol(cryptoSelledOfSymbol)
+                await this.countAllCryptoBuyOrSellBySymbol(cryptoSelledOfSymbol)
 
             // Substract cryptoSelledOfSymbol by cryptoBuyOfSymbol
             const gainOrLooseOfCrypto: GainOrLooseByCryptoInterfaceInterface[] =
@@ -286,6 +291,9 @@ export class ReportService {
                 await this.generateGainOrLooseOfCrypto(gainOrLooseOfCrypto),
             )
         }
+
+        console.log(gainOrLooseByCryptoList)
+        throw Error('error')
 
         return {
             investments: investmentsOfMonth,
@@ -324,7 +332,10 @@ export class ReportService {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const { cryptoBuy, cryptoSelled } =
-            this.getCryptosBuyAndSellSortedByCryptoSymbol(investmentsList)
+            await this.getCryptosBuyAndSellSortedByCryptoSymbol(investmentsList)
+
+        console.log(cryptoSelled)
+        throw 'error'
 
         const gainOrLooseByCrypto: ReportInvestmentsDataInterface =
             await this.separateInvestmentBuyAndSelledToGenerateReport(
@@ -350,7 +361,6 @@ export class ReportService {
         options,
         user,
     ): Promise<InvestmentsReportsEntity> {
-        console.log(options.toDate)
         const investmentService =
             await this.investmentService.getInvestementsByUserIdAndEndDateOfInvestment(
                 user ? user.id : null,
@@ -364,7 +374,7 @@ export class ReportService {
                 options.toDate,
             )
 
-        console.log(investmentService)
+        console.log(reportInvestmentData)
 
         const investmentReport = new InvestmentReportDocument(
             reportInvestmentData,
