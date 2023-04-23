@@ -262,16 +262,9 @@ export class ReportService {
         const loosesOfMonth = 0,
             gainsOfMonth = 0
 
-        console.log(cryptoSelled.length)
-
         for (const symbol in cryptoSelled) {
-            console.log(symbol)
-            throw Error('error')
             const cryptoSelledOfSymbol = cryptoSelled[symbol]
             const cryptoBuyOfSymbol = cryptoBuy[symbol]
-
-            console.log(cryptoBuyOfSymbol)
-            console.log(cryptoSelledOfSymbol)
 
             // Count all crypto
             const countAllCryptoBuyed =
@@ -291,9 +284,6 @@ export class ReportService {
                 await this.generateGainOrLooseOfCrypto(gainOrLooseOfCrypto),
             )
         }
-
-        console.log(gainOrLooseByCryptoList)
-        throw Error('error')
 
         return {
             investments: investmentsOfMonth,
@@ -334,9 +324,6 @@ export class ReportService {
         const { cryptoBuy, cryptoSelled } =
             await this.getCryptosBuyAndSellSortedByCryptoSymbol(investmentsList)
 
-        console.log(cryptoSelled)
-        throw 'error'
-
         const gainOrLooseByCrypto: ReportInvestmentsDataInterface =
             await this.separateInvestmentBuyAndSelledToGenerateReport(
                 cryptoBuy,
@@ -373,8 +360,6 @@ export class ReportService {
                 options.fromDate,
                 options.toDate,
             )
-
-        console.log(reportInvestmentData)
 
         const investmentReport = new InvestmentReportDocument(
             reportInvestmentData,
