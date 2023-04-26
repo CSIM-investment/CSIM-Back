@@ -124,7 +124,7 @@ export class ReportService {
     ): Promise<GainOrLooseByCryptoInterface[]> {
         const detailedGainOrLoose: GainOrLooseByCryptoInterface[] = []
         const cryptoCurrencyMarket: CryptoCurrencyMarket =
-            cryptoSelled.length > 0 ? cryptoSelled[0].quoteCurrency : null
+            cryptoSelled.length > 0 ? cryptoSelled[0].baseCurrency : null
 
         cryptoSelled.forEach((selledInvestmentEntity: InvestmentEntity) => {
             const costOfInvestmentSelled: { [key: string]: number } =
@@ -155,6 +155,7 @@ export class ReportService {
                                 buyInvestmentEntity.baseCurrency.symbol
                             ]
                         investmentsBuyedForThisSell.push(buyInvestmentEntity)
+                        console.log(investmentsBuyedForThisSell)
                         buyInvestmentEntity.quantity = 0
                     } else if (
                         costOfInvestmentSelled[
@@ -278,7 +279,7 @@ export class ReportService {
                 await this.substractCryptoSelledUsingCryptoBuyBeforeDate(
                     cryptoBuyOfSymbol,
                     cryptoSelledOfSymbol,
-                    beginDate,
+                    endDate,
                 )
 
             gainOrLooseByCryptoList.push(
