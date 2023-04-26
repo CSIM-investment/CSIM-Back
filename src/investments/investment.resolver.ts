@@ -41,4 +41,18 @@ export class InvestmentResolver {
     investments(@Parent() { id }: User): Promise<InvestmentEntity[]> {
         return this.investmentService.getInvestementsByUserId(id)
     }
+
+    @ResolveField(() => [InvestmentEntity])
+    @UseGuards(JwtAuthGuard)
+    fourthBiggestInvestment(
+        @Parent() { id }: User,
+    ): Promise<InvestmentEntity[]> {
+        return this.investmentService.fourthBiggestInvestment(id)
+    }
+
+    @ResolveField(() => [InvestmentEntity])
+    @UseGuards(JwtAuthGuard)
+    fourthLastInvestment(@Parent() { id }: User): Promise<InvestmentEntity[]> {
+        return this.investmentService.fourthLastInvestment(id)
+    }
 }

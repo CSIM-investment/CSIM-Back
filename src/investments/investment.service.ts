@@ -49,6 +49,30 @@ export class InvestmentService {
         })
     }
 
+    async fourthBiggestInvestment(userId: number): Promise<InvestmentEntity[]> {
+        return await this.investmentRepository.find({
+            where: [{ user: { id: userId } }],
+            order: {
+                baseCurrency: {
+                    name: 'ASC',
+                },
+            },
+            take: 4,
+        })
+    }
+
+    async fourthLastInvestment(userId: number): Promise<InvestmentEntity[]> {
+        return await this.investmentRepository.find({
+            where: [{ user: { id: userId } }],
+            order: {
+                creationDate: {
+                    direction: 'DESC',
+                },
+            },
+            take: 4,
+        })
+    }
+
     async soldUser(id: number): Promise<number> {
         let sold = 0
         const investments = await this.getInvestementsByUserId(id)

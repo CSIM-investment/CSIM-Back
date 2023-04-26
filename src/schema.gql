@@ -147,6 +147,8 @@ scalar DateTime
 type InvestmentEntity {
   baseCurrency: CryptoCurrencyMarket!
   creationDate: DateTime!
+  fourthBiggestInvestment: [InvestmentEntity!]!
+  fourthLastInvestment: [InvestmentEntity!]!
   id: ID!
   investments: [InvestmentEntity!]!
   quantity: Int!
