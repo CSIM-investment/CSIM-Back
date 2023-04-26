@@ -1,5 +1,5 @@
 import { InvestmentEntity } from '../../investments/entities/investment.entity'
-import { GainOrLooseByCryptoInterfaceInterface } from './GainByCryptoInterface.interface'
+import { GainOrLooseByCryptoInterface } from './GainByCryptoInterface.interface'
 import { CryptoCount } from './CryptoCount'
 
 export interface ReportInvestmentsDataInterface {
@@ -8,7 +8,7 @@ export interface ReportInvestmentsDataInterface {
 
     gainOfMonth: number
     looseOfMonth: number
-    gainOrLooseByCrypto: GainOrLooseByCryptoInterfaceInterface[]
+    gainOrLooseByCrypto: GainOrLooseByCryptoInterface[]
 
     startDate: Date
     endDate: Date

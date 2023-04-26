@@ -4,15 +4,18 @@ import {
     ISectionOptions,
     Packer,
     Paragraph,
+    Table,
+    TableCell,
+    TableRow,
     TextRun,
 } from 'docx'
-import * as dayjs from 'dayjs'
 import * as fs from 'fs'
 import * as tmp from 'tmp'
 import * as mammoth from 'mammoth'
 import * as pdf from 'html-pdf'
 import { ReportInvestmentsDataInterface } from '../interfaces/ReportInvestmentsData.interface'
-import { FileSyncObject } from '../interfaces/FileSyncObject'
+import { GainOrLooseByCryptoInterface } from '../interfaces/GainByCryptoInterface.interface'
+import { InvestmentEntity } from '../../investments/entities/investment.entity'
 
 export class InvestmentReportDocument {
     public title: string
@@ -29,13 +32,12 @@ export class InvestmentReportDocument {
         if (options !== undefined) {
             this.startDate = options.startDate
             this.endDate = options.endDate
-            this.title = `${options.startDate}-${options.endDate}-Crypto-Report`
+            this.title = `${options.startDate.toISOString()}-${options.endDate.toISOString()}-Crypto-Report`
             this.description = 'Generated report from csim-finance.fr'
             this.creator = 'CSIM-Finance'
             this.sections = []
 
             this.reportsInvestmentData = options
-            console.log(this.options)
         }
     }
 
@@ -55,6 +57,101 @@ export class InvestmentReportDocument {
     private getSimpleTextParagraph(text: string): Paragraph {
         return new Paragraph({
             children: [new TextRun(text)],
+        })
+    }
+
+    private getDetailedParagraphForGainOrLooseByCrypto(
+        gainOrLooseByCrypto: GainOrLooseByCryptoInterface[],
+    ): Paragraph[] {
+        const paragraphsToReturn = []
+        console.log(gainOrLooseByCrypto)
+        gainOrLooseByCrypto.forEach(
+            (gainOrLooseByCrypto: GainOrLooseByCryptoInterface) => {
+                let childrenToAppendToParagraph = ''
+                gainOrLooseByCrypto.investmentEntityBuy.forEach(
+                    (investmentEntityBuyed: InvestmentEntity) => {
+                        childrenToAppendToParagraph += `BUY -> ${
+                            investmentEntityBuyed.quantity
+                        } ${investmentEntityBuyed.quoteCurrency.symbol} à ${
+                            investmentEntityBuyed.quantity *
+                            investmentEntityBuyed.valueBaseCurrency
+                        }\n`
+                    },
+                )
+                childrenToAppendToParagraph += `SELL -> ${
+                    gainOrLooseByCrypto.investmentEntitySell instanceof
+                    InvestmentEntity
+                        ? `${gainOrLooseByCrypto.investmentEntitySell.quantity} ` +
+                          `${gainOrLooseByCrypto.investmentEntitySell.baseCurrency.symbol} ` +
+                          `pour ${
+                              gainOrLooseByCrypto.investmentEntitySell
+                                  .valueQuoteCurrency *
+                              gainOrLooseByCrypto.investmentEntitySell.quantity
+                          } €`
+                        : ''
+                }`
+                paragraphsToReturn.push(
+                    new Paragraph(childrenToAppendToParagraph),
+                )
+            },
+        )
+        return paragraphsToReturn
+    }
+
+    private generateTableBodyOfGainLoosesByCrypto(): TableRow[] {
+        const rowsToReturn: TableRow[] = []
+        console.log(this.reportsInvestmentData)
+        this.reportsInvestmentData.gainOrLooseByCrypto.forEach(
+            (value: GainOrLooseByCryptoInterface) => {
+                rowsToReturn.push(
+                    new TableRow({
+                        children: [
+                            new TableCell({
+                                children: [
+                                    new Paragraph(
+                                        value.crypto.symbol.toUpperCase(),
+                                    ),
+                                ],
+                            }),
+                            new TableCell({
+                                children:
+                                    this.getDetailedParagraphForGainOrLooseByCrypto(
+                                        value.gainOrLooseByCrypto,
+                                    ),
+                            }),
+                            new TableCell({
+                                children: [
+                                    new Paragraph(value.gains.toString()),
+                                ],
+                            }),
+                        ],
+                    }),
+                )
+            },
+        )
+        return rowsToReturn
+    }
+
+    private generateTableOfGainLoosesByCrypto(): Table {
+        let rows = [
+            new TableRow({
+                tableHeader: true,
+                children: [
+                    new TableCell({
+                        children: [new Paragraph('Crypto')],
+                    }),
+                    new TableCell({
+                        children: [new Paragraph('Investissements')],
+                    }),
+                    new TableCell({
+                        children: [new Paragraph('Gains/Pertes')],
+                    }),
+                ],
+            }),
+        ]
+        rows = rows.concat(this.generateTableBodyOfGainLoosesByCrypto())
+        return new Table({
+            rows: rows,
         })
     }
 
@@ -99,11 +196,19 @@ export class InvestmentReportDocument {
             },
             {
                 children: [
-                    this.getHeading1('Liste des investissements'),
+                    this.getHeading1('Gains/pertes globals'),
                     this.getSimpleTextParagraph(
-                        'Vous avez réalisé ${XX} transactions au cours du mois! ' +
-                            'Voici la liste des transactions que vous avez éffectuées',
+                        `Du ${this.startDate.toISOString()} au ${this.endDate.toISOString()}, ` +
+                            `vous avez ${
+                                this.reportsInvestmentData.gainOfMonth >= 0
+                                    ? 'gagné ' +
+                                      this.reportsInvestmentData.gainOfMonth
+                                    : 'perdu ' +
+                                      this.reportsInvestmentData.looseOfMonth
+                            }euro.`,
                     ),
+                    this.getHeading1('Gains/pertes détaillés'),
+                    this.generateTableOfGainLoosesByCrypto(),
                 ],
             },
         ]
@@ -120,8 +225,11 @@ export class InvestmentReportDocument {
         return await Packer.toBuffer(this.doc)
     }
 
-    public async to_pdf(): Promise<FileSyncObject> {
+    public async to_pdf(): Promise<Buffer> {
         const docxBuffer = await this.to_buffer()
+
+        // Write the buffer contents to a local file
+        fs.writeFileSync('./test.docx', docxBuffer)
 
         // Create a temporary file to store the Docx buffer
         const docxTempFile = tmp.fileSync()
@@ -131,10 +239,8 @@ export class InvestmentReportDocument {
         const result = await mammoth.convertToHtml({ path: docxTempFile.name })
         const html = result.value
 
-        // Convert the HTML to PDF and write it to a temporary file
-        const pdfTempFile = tmp.fileSync({ postfix: '.pdf' })
-        await new Promise((resolve, reject) => {
-            pdf.create(html).toFile(pdfTempFile.name, (err, res) => {
+        return await new Promise((resolve, reject) => {
+            pdf.create(html).toBuffer((err, res) => {
                 if (err) {
                     reject(err)
                 } else {
@@ -142,11 +248,5 @@ export class InvestmentReportDocument {
                 }
             })
         })
-
-        // Remove the temporary Docx file
-        fs.unlinkSync(docxTempFile.name)
-
-        // Return the file path of the PDF file
-        return pdfTempFile
     }
 }

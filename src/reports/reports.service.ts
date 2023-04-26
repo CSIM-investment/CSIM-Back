@@ -3,7 +3,7 @@ import { InvestmentReportDocument } from './documents/InvestmentReportDocument'
 import { InvestmentEntity } from '../investments/entities/investment.entity'
 import { InvestmentService } from '../investments/services/investment.service'
 import { ReportInvestmentsDataInterface } from './interfaces/ReportInvestmentsData.interface'
-import { GainOrLooseByCryptoInterfaceInterface } from './interfaces/GainByCryptoInterface.interface'
+import { GainOrLooseByCryptoInterface } from './interfaces/GainByCryptoInterface.interface'
 import { CryptoCount } from './interfaces/CryptoCount'
 import { Repository } from 'typeorm'
 import { CryptoCurrencyMarket } from '../crypto/entities/cryptocurrency.entity'
@@ -12,6 +12,7 @@ import { InvestmentsReportsEntity } from './entities/InvestmentsReports.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { InvestmentsReportsInput } from './dto/inputs/InvestmentsReports-input'
 import { UserEntity } from '../user/entities/user.entity'
+import * as fs from 'fs'
 
 @Injectable()
 export class ReportService {
@@ -120,8 +121,8 @@ export class ReportService {
         cryptoBuy: InvestmentEntity[],
         cryptoSelled: InvestmentEntity[],
         date: Date,
-    ): Promise<GainOrLooseByCryptoInterfaceInterface[]> {
-        const detailedGainOrLoose: GainOrLooseByCryptoInterfaceInterface[] = []
+    ): Promise<GainOrLooseByCryptoInterface[]> {
+        const detailedGainOrLoose: GainOrLooseByCryptoInterface[] = []
         const cryptoCurrencyMarket: CryptoCurrencyMarket =
             cryptoSelled.length > 0 ? cryptoSelled[0].quoteCurrency : null
 
@@ -222,8 +223,8 @@ export class ReportService {
     }
 
     private async generateGainOrLooseOfCrypto(
-        gainOrLooseOfCrypto: GainOrLooseByCryptoInterfaceInterface[],
-    ): Promise<GainOrLooseByCryptoInterfaceInterface> {
+        gainOrLooseOfCrypto: GainOrLooseByCryptoInterface[],
+    ): Promise<GainOrLooseByCryptoInterface> {
         if (gainOrLooseOfCrypto.length > 0) {
             let gains = 0.0
             let looses = 0.0
@@ -239,6 +240,7 @@ export class ReportService {
                 crypto: gainOrLooseOfCrypto[0].crypto,
                 gains: gains,
                 looses: looses,
+                gainOrLooseByCrypto: gainOrLooseOfCrypto,
                 type: 'investment selled',
                 investmentEntityBuy: investmentsBuy,
                 investmentEntitySell: investmentSelled,
@@ -254,8 +256,7 @@ export class ReportService {
         beginDate: Date,
         endDate: Date,
     ): Promise<ReportInvestmentsDataInterface> {
-        const gainOrLooseByCryptoList: GainOrLooseByCryptoInterfaceInterface[] =
-            []
+        const gainOrLooseByCryptoList: GainOrLooseByCryptoInterface[] = []
         const investmentsOfMonth: InvestmentEntity[] = []
         const numberOfCryptoOnEndDate: CryptoCount[] = []
         const numberOfCryptoOnStartDate: CryptoCount[] = []
@@ -273,7 +274,7 @@ export class ReportService {
                 await this.countAllCryptoBuyOrSellBySymbol(cryptoSelledOfSymbol)
 
             // Substract cryptoSelledOfSymbol by cryptoBuyOfSymbol
-            const gainOrLooseOfCrypto: GainOrLooseByCryptoInterfaceInterface[] =
+            const gainOrLooseOfCrypto: GainOrLooseByCryptoInterface[] =
                 await this.substractCryptoSelledUsingCryptoBuyBeforeDate(
                     cryptoBuyOfSymbol,
                     cryptoSelledOfSymbol,
@@ -332,6 +333,8 @@ export class ReportService {
                 end_date,
             )
 
+        console.log(gainOrLooseByCrypto)
+
         return {
             startDate: start_date,
             endDate: end_date,
@@ -365,9 +368,10 @@ export class ReportService {
             reportInvestmentData,
         )
         investmentReport.generate_investment_report_using_investments()
-        const pdfFile = await investmentReport.to_pdf()
+        const pdfFileBuffer = await investmentReport.to_pdf()
+
         const path = await this.firebaseService.uploadPdf(
-            pdfFile,
+            pdfFileBuffer,
             investmentReport.title,
         )
         const generatedInvestmentReport: InvestmentsReportsEntity =
