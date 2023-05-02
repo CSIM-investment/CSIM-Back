@@ -18,6 +18,7 @@ import * as fs from 'fs'
 export class ReportService {
     constructor(
         private readonly investmentService: InvestmentService,
+        @InjectRepository(InvestmentEntity)
         private investmentRepository: Repository<InvestmentEntity>,
         @InjectRepository(InvestmentsReportsEntity)
         private investmentReportRepository: Repository<InvestmentsReportsEntity>,
@@ -80,7 +81,9 @@ export class ReportService {
                 }
                 cryptoBuy[investment.quoteCurrency.symbol].push(investment)
             } else if (await this.isInvestmentSell(investment)) {
-                if (!cryptoBuy.hasOwnProperty(investment.baseCurrency.symbol)) {
+                if (
+                    !cryptoSelled.hasOwnProperty(investment.baseCurrency.symbol)
+                ) {
                     cryptoSelled[investment.baseCurrency.symbol] = []
                 }
                 cryptoSelled[investment.baseCurrency.symbol].push(investment)
@@ -115,6 +118,10 @@ export class ReportService {
             investmentEntity.valueBaseCurrency *
             (investmentEntity.quantity * percentage)
         return costToReturn
+    }
+
+    private deepCopy<T>(obj: T): T {
+        return JSON.parse(JSON.stringify(obj))
     }
 
     private async substractCryptoSelledUsingCryptoBuyBeforeDate(
@@ -154,13 +161,14 @@ export class ReportService {
                             costOfInvestmentBuyed[
                                 buyInvestmentEntity.baseCurrency.symbol
                             ]
-                        investmentsBuyedForThisSell.push(buyInvestmentEntity)
-                        console.log(investmentsBuyedForThisSell)
+                        investmentsBuyedForThisSell.push(
+                            this.deepCopy(buyInvestmentEntity),
+                        )
                         buyInvestmentEntity.quantity = 0
                     } else if (
                         costOfInvestmentSelled[
                             buyInvestmentEntity.baseCurrency.symbol
-                        ] == 0
+                        ] != 0
                     ) {
                         // get difference
                         const differenceBetweenCryptoValue =
@@ -199,11 +207,13 @@ export class ReportService {
                             this.investmentRepository.create(
                                 buyInvestmentEntity,
                             )
+                        investmentsBuyedForThisSell.push(
+                            this.deepCopy(buyInvestmentEntity),
+                        )
                         investmentToAddToSell.quantity =
                             costOfInvestmentBuyedToSubstract[
                                 buyInvestmentEntity.quoteCurrency.symbol
                             ]
-                        investmentsBuyedForThisSell.push(investmentToAddToSell)
                     }
                 }
             })
