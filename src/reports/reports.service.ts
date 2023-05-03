@@ -208,7 +208,7 @@ export class ReportService {
                                 buyInvestmentEntity,
                             )
                         investmentsBuyedForThisSell.push(
-                            this.deepCopy(buyInvestmentEntity),
+                            this.deepCopy(investmentToAddToSell),
                         )
                         investmentToAddToSell.quantity =
                             costOfInvestmentBuyedToSubstract[
