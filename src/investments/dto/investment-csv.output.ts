@@ -19,25 +19,38 @@ export class InvestmentCsvOutput {
     }
 
     isSell(): boolean {
-        return this['Type'] === 'EUR'
+        return this['Destination Currency'] === 'eur'
     }
 
     computeValueQuoteCurrency(): number {
         return this.isSell()
-            ? this['Destination Amount'] * this['Origin Amount']
-            : this['Origin Amount'] * this['Destination Amount']
+            ? this['Destination Amount'] / this['Origin Amount']
+            : 1
+    }
+
+    computeValueBaseCurrency(): number {
+        return this.isSell()
+            ? 1
+            : this['Destination Amount'] / this['Origin Amount']
+    }
+
+    computeValueQuantity(): number {
+        return this.isSell()
+            ? this['Origin Amount']
+            : this['Destination Amount']
     }
 
     toCreateInvestmentInput(): CreateInvestmentInput {
         return new CreateInvestmentInput({
-            quantity: this['Destination Amount'],
-            valueBaseCurrency: this['Origin Amount'],
+            quantity: this.computeValueQuantity(),
+            valueBaseCurrency: this.computeValueBaseCurrency(),
             valueQuoteCurrency: this.computeValueQuoteCurrency(),
-            quoteCurrencySymbol: this['Destination Currency'],
-            baseCurrencySymbol: this['Origin Currency'],
+            quoteCurrencySymbol: this['Destination Currency'].toLowerCase(),
+            baseCurrencySymbol: this['Origin Currency'].toLowerCase(),
             type: this['Type'],
             status: this['Status'],
             origin: this['Origin'],
+            dateOfInvestment: new Date(this['Date']).toISOString(),
         })
     }
 }

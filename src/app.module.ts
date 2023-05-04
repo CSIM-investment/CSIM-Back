@@ -10,6 +10,7 @@ import { EmailModule } from './email/email.module'
 import { DbModule } from './crypto/db/db.module'
 import { ArticleModule } from './articles/article.module'
 import { InvestmentModule } from './investments/investment.module'
+import { ReportsModule } from './reports/reports.module'
 
 type DatabaseType = 'mysql' | 'postgres'
 
@@ -43,6 +44,7 @@ type DatabaseType = 'mysql' | 'postgres'
         DbModule,
         ArticleModule,
         InvestmentModule,
+        ReportsModule,
     ],
 })
 export class AppModule {}

@@ -44,20 +44,26 @@ export class InvestmentEntity {
     @Field(() => Float)
     valueQuoteCurrency: number
 
+    @CreateDateColumn()
+    @Field(() => Date)
+    dateOfInvestment: Date
+
     @ManyToOne(() => User, (user: User) => user.investments)
     user: User
 
-    @Field(() => CryptoCurrencyMarket)
+    @Field(() => CryptoCurrencyMarket, { nullable: true })
     @ManyToOne(
         () => CryptoCurrencyMarket,
         ({ quoteInvestment }) => quoteInvestment,
+        { eager: true },
     )
     quoteCurrency: CryptoCurrencyMarket
 
-    @Field(() => CryptoCurrencyMarket)
+    @Field(() => CryptoCurrencyMarket, { nullable: true })
     @ManyToOne(
         () => CryptoCurrencyMarket,
         ({ baseInvestment }) => baseInvestment,
+        { eager: true },
     )
     baseCurrency: CryptoCurrencyMarket
 
