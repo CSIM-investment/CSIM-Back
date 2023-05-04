@@ -54,9 +54,17 @@ export class InvestmentService {
     }
 
     async getInvestementsByUserId(userId: number): Promise<InvestmentEntity[]> {
-        return await this.investmentRepository.find({
+        const investments : InvestmentEntity[] = await this.investmentRepository.find({
             where: { user: { id: userId } },
         })
+
+        
+        investments.forEach((investment: InvestmentEntity) => {
+            investment.valueBaseCurrency = investment.valueBaseCurrency * investment.quantity
+            investment.valueQuoteCurrency = investment.valueQuoteCurrency * investment.quantity
+        })
+
+        return investments
     }
 
     async getInvestementsByUserIdAndEndDateOfInvestment(
