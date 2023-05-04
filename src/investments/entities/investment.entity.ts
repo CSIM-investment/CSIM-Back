@@ -66,4 +66,8 @@ export class InvestmentEntity {
         { eager: true },
     )
     baseCurrency: CryptoCurrencyMarket
+
+    @Column({ type: 'float', nullable: true })
+    @Field(() => Float)
+    amount: number
 }

@@ -137,6 +137,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type InvestmentEntity {
+  amount: Float!
   baseCurrency: CryptoCurrencyMarket
   creationDate: DateTime!
   dateOfInvestment: DateTime!
@@ -245,6 +246,7 @@ type User {
   investmentsReports: [InvestmentsReportsEntity!]!
   lastName: String!
   role: UserRoles!
+  sold: UserSold!
   status: UserStatus!
 }
 
@@ -257,11 +259,11 @@ enum UserRoles {
 
 type UserSold {
   currentSold: Float!
-  lastCryptoCurrencies: [CryptoCurrencyMarket!]!
+  lastInvestments: [InvestmentEntity!]!
   lastSold: Float!
   newSold: Float!
   soldRatio: Float!
-  topCryptoCurrencies: [CryptoCurrencyMarket!]!
+  topInvestments: [InvestmentEntity!]!
 }
 
 enum UserStatus {
