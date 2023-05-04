@@ -24,14 +24,14 @@ export class InvestmentCsvOutput {
 
     computeValueQuoteCurrency(): number {
         return this.isSell()
-            ? this['Destination Amount'] * this['Origin Amount']
-            : this['Destination Amount']
+            ? this['Destination Amount'] / this['Origin Amount']
+            : 1
     }
 
     computeValueBaseCurrency(): number {
         return this.isSell()
-            ? this['Origin Amount']
-            : this['Destination Amount'] * this['Origin Amount']
+            ? 1
+            : this['Destination Amount'] / this['Origin Amount']
     }
 
     computeValueQuantity(): number {

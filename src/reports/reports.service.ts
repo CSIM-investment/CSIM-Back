@@ -200,20 +200,12 @@ export class ReportService {
                             costOfInvestmentBuyedToSubstract[
                                 buyInvestmentEntity.quoteCurrency.symbol
                             ]
-                        buyInvestmentEntity.quantity -= parseFloat(
-                            String(costOfInvestmentBuyedToSubstract),
-                        )
-                        const investmentToAddToSell: InvestmentEntity =
-                            this.investmentRepository.create(
-                                buyInvestmentEntity,
-                            )
+                        const investmentToAddToSell = this.deepCopy(buyInvestmentEntity)
+                        investmentToAddToSell.quantity = costOfInvestmentBuyedToSubstract[buyInvestmentEntity.quoteCurrency.symbol]
+                        buyInvestmentEntity.quantity -= investmentToAddToSell.quantity
                         investmentsBuyedForThisSell.push(
-                            this.deepCopy(investmentToAddToSell),
+                            investmentToAddToSell,
                         )
-                        investmentToAddToSell.quantity =
-                            costOfInvestmentBuyedToSubstract[
-                                buyInvestmentEntity.quoteCurrency.symbol
-                            ]
                     }
                 }
             })
@@ -343,8 +335,6 @@ export class ReportService {
                 start_date,
                 end_date,
             )
-
-        console.log(gainOrLooseByCrypto)
 
         return {
             startDate: start_date,

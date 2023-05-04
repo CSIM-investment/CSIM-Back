@@ -63,22 +63,23 @@ export class InvestmentReportDocument {
     private getDetailedParagraphForGainOrLooseByCrypto(
         gainOrLooseByCrypto: GainOrLooseByCryptoInterface[],
     ): Paragraph[] {
-        const paragraphsToReturn = []
+        let paragraphsToReturn = []
         console.log(gainOrLooseByCrypto)
         gainOrLooseByCrypto.forEach(
             (gainOrLooseByCrypto: GainOrLooseByCryptoInterface) => {
-                let childrenToAppendToParagraph = ''
+                let childrenToAppendToParagraph = []
                 gainOrLooseByCrypto.investmentEntityBuy.forEach(
                     (investmentEntityBuyed: InvestmentEntity) => {
-                        childrenToAppendToParagraph += `BUY -> ${
+                        console.log(investmentEntityBuyed)
+                        childrenToAppendToParagraph.push(new Paragraph(`BUY -> ${
                             investmentEntityBuyed.quantity
                         } ${investmentEntityBuyed.quoteCurrency.symbol} à ${
                             investmentEntityBuyed.quantity *
                             investmentEntityBuyed.valueBaseCurrency
-                        }\n`
+                        } ${investmentEntityBuyed.baseCurrency.symbol} \n`))
                     },
                 )
-                childrenToAppendToParagraph += `SELL -> ${
+                childrenToAppendToParagraph.push(new Paragraph(`SELL -> ${
                     gainOrLooseByCrypto.investmentEntitySell instanceof
                     InvestmentEntity
                         ? `${gainOrLooseByCrypto.investmentEntitySell.quantity} ` +
@@ -87,12 +88,10 @@ export class InvestmentReportDocument {
                               gainOrLooseByCrypto.investmentEntitySell
                                   .valueQuoteCurrency *
                               gainOrLooseByCrypto.investmentEntitySell.quantity
-                          } €`
+                          } € \n`
                         : ''
-                }`
-                paragraphsToReturn.push(
-                    new Paragraph(childrenToAppendToParagraph),
-                )
+                }`))
+                paragraphsToReturn = paragraphsToReturn.concat(childrenToAppendToParagraph)
             },
         )
         return paragraphsToReturn
