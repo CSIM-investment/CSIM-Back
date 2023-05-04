@@ -164,6 +164,7 @@ type InvestmentsReportsEntity {
   fromDate: DateTime!
   id: ID!
   mensualReport: Boolean!
+  name: String!
   reportUri: String!
   toDate: DateTime!
   user: User!

@@ -200,12 +200,15 @@ export class ReportService {
                             costOfInvestmentBuyedToSubstract[
                                 buyInvestmentEntity.quoteCurrency.symbol
                             ]
-                        const investmentToAddToSell = this.deepCopy(buyInvestmentEntity)
-                        investmentToAddToSell.quantity = costOfInvestmentBuyedToSubstract[buyInvestmentEntity.quoteCurrency.symbol]
-                        buyInvestmentEntity.quantity -= investmentToAddToSell.quantity
-                        investmentsBuyedForThisSell.push(
-                            investmentToAddToSell,
-                        )
+                        const investmentToAddToSell =
+                            this.deepCopy(buyInvestmentEntity)
+                        investmentToAddToSell.quantity =
+                            costOfInvestmentBuyedToSubstract[
+                                buyInvestmentEntity.quoteCurrency.symbol
+                            ]
+                        buyInvestmentEntity.quantity -=
+                            investmentToAddToSell.quantity
+                        investmentsBuyedForThisSell.push(investmentToAddToSell)
                     }
                 }
             })
@@ -379,6 +382,7 @@ export class ReportService {
             this.investmentReportRepository.create({
                 mensualReport: false,
                 reportUri: path,
+                name: investmentReport.title,
                 user: user,
                 toDate: options.toDate,
                 fromDate: options.fromDate,

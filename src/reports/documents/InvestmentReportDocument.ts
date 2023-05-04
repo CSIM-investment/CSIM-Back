@@ -71,27 +71,40 @@ export class InvestmentReportDocument {
                 gainOrLooseByCrypto.investmentEntityBuy.forEach(
                     (investmentEntityBuyed: InvestmentEntity) => {
                         console.log(investmentEntityBuyed)
-                        childrenToAppendToParagraph.push(new Paragraph(`BUY -> ${
-                            investmentEntityBuyed.quantity
-                        } ${investmentEntityBuyed.quoteCurrency.symbol} à ${
-                            investmentEntityBuyed.quantity *
-                            investmentEntityBuyed.valueBaseCurrency
-                        } ${investmentEntityBuyed.baseCurrency.symbol} \n`))
+                        childrenToAppendToParagraph.push(
+                            new Paragraph(
+                                `BUY -> ${investmentEntityBuyed.quantity} ${
+                                    investmentEntityBuyed.quoteCurrency.symbol
+                                } à ${
+                                    investmentEntityBuyed.quantity *
+                                    investmentEntityBuyed.valueBaseCurrency
+                                } ${
+                                    investmentEntityBuyed.baseCurrency.symbol
+                                } \n`,
+                            ),
+                        )
                     },
                 )
-                childrenToAppendToParagraph.push(new Paragraph(`SELL -> ${
-                    gainOrLooseByCrypto.investmentEntitySell instanceof
-                    InvestmentEntity
-                        ? `${gainOrLooseByCrypto.investmentEntitySell.quantity} ` +
-                          `${gainOrLooseByCrypto.investmentEntitySell.baseCurrency.symbol} ` +
-                          `pour ${
-                              gainOrLooseByCrypto.investmentEntitySell
-                                  .valueQuoteCurrency *
-                              gainOrLooseByCrypto.investmentEntitySell.quantity
-                          } € \n`
-                        : ''
-                }`))
-                paragraphsToReturn = paragraphsToReturn.concat(childrenToAppendToParagraph)
+                childrenToAppendToParagraph.push(
+                    new Paragraph(
+                        `SELL -> ${
+                            gainOrLooseByCrypto.investmentEntitySell instanceof
+                            InvestmentEntity
+                                ? `${gainOrLooseByCrypto.investmentEntitySell.quantity} ` +
+                                  `${gainOrLooseByCrypto.investmentEntitySell.baseCurrency.symbol} ` +
+                                  `pour ${
+                                      gainOrLooseByCrypto.investmentEntitySell
+                                          .valueQuoteCurrency *
+                                      gainOrLooseByCrypto.investmentEntitySell
+                                          .quantity
+                                  } € \n`
+                                : ''
+                        }`,
+                    ),
+                )
+                paragraphsToReturn = paragraphsToReturn.concat(
+                    childrenToAppendToParagraph,
+                )
             },
         )
         return paragraphsToReturn
@@ -226,9 +239,6 @@ export class InvestmentReportDocument {
 
     public async to_pdf(): Promise<Buffer> {
         const docxBuffer = await this.to_buffer()
-
-        // Write the buffer contents to a local file
-        fs.writeFileSync('./test.docx', docxBuffer)
 
         // Create a temporary file to store the Docx buffer
         const docxTempFile = tmp.fileSync()

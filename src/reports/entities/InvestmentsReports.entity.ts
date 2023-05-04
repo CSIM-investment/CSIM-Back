@@ -15,6 +15,10 @@ export class InvestmentsReportsEntity {
     @Field(() => ID)
     id: number
 
+    @Column({ type: 'text' })
+    @Field()
+    name: string
+
     @CreateDateColumn()
     @Field(() => Date)
     fromDate: Date
