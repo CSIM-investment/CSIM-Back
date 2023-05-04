@@ -51,7 +51,7 @@ export class InvestmentEntity {
     @ManyToOne(() => User, (user: User) => user.investments)
     user: User
 
-    @Field(() => CryptoCurrencyMarket)
+    @Field(() => CryptoCurrencyMarket, { nullable: true })
     @ManyToOne(
         () => CryptoCurrencyMarket,
         ({ quoteInvestment }) => quoteInvestment,
@@ -59,7 +59,7 @@ export class InvestmentEntity {
     )
     quoteCurrency: CryptoCurrencyMarket
 
-    @Field(() => CryptoCurrencyMarket)
+    @Field(() => CryptoCurrencyMarket, { nullable: true })
     @ManyToOne(
         () => CryptoCurrencyMarket,
         ({ baseInvestment }) => baseInvestment,

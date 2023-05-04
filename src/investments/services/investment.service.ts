@@ -57,6 +57,7 @@ export class InvestmentService {
         const investments: InvestmentEntity[] =
             await this.investmentRepository.find({
                 where: { user: { id: userId } },
+                relations: ['baseCurrency', 'quoteCurrency'],
             })
 
         investments.forEach((investment: InvestmentEntity) => {
