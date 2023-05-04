@@ -234,13 +234,17 @@ export class ReportService {
         if (gainOrLooseOfCrypto.length > 0) {
             let gains = 0.0
             let looses = 0.0
-            const investmentsBuy: InvestmentEntity[] = []
-            const investmentSelled: InvestmentEntity[] = []
+            let investmentsBuy: InvestmentEntity[] = []
+            let investmentSelled: InvestmentEntity[] = []
             gainOrLooseOfCrypto.forEach((value) => {
                 gains += value.gains
                 looses += value.looses
-                investmentsBuy.concat(value.investmentEntityBuy)
-                investmentSelled.concat(value.investmentEntitySell)
+                investmentsBuy = investmentsBuy.concat(
+                    value.investmentEntityBuy,
+                )
+                investmentSelled = investmentSelled.concat(
+                    value.investmentEntitySell,
+                )
             })
             return {
                 crypto: gainOrLooseOfCrypto[0].crypto,
