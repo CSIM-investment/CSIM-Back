@@ -138,16 +138,47 @@ scalar DateTime
 
 type InvestmentEntity {
   amount: Float!
-  baseCurrency: CryptoCurrencyMarket!
+  baseCurrency: CryptoCurrencyMarket
   creationDate: DateTime!
+  dateOfInvestment: DateTime!
   id: ID!
   origin: String!
   quantity: Float!
-  quoteCurrency: CryptoCurrencyMarket!
+  quoteCurrency: CryptoCurrencyMarket
   status: String!
   type: String!
   valueBaseCurrency: Float!
   valueQuoteCurrency: Float!
+}
+
+input InvestmentReportCreate {
+  fromDate: DateTime
+  toDate: DateTime
+}
+
+input InvestmentReportsOrderInput {
+  direction: OrderDirection
+  name: ArticleOrderBy
+}
+
+type InvestmentsReportsEntity {
+  fromDate: DateTime!
+  id: ID!
+  mensualReport: Boolean!
+  name: String!
+  reportUri: String!
+  toDate: DateTime!
+  user: User!
+}
+
+input InvestmentsReportsFilterInput {
+  pagination: PaginationInput
+  search: String
+}
+
+input InvestmentsReportsInput {
+  filterBy: InvestmentsReportsFilterInput = {}
+  orderBy: InvestmentReportsOrderInput = {}
 }
 
 type LoginResponse {
@@ -164,6 +195,7 @@ input LoginUserInput {
 type Mutation {
   confirmEmail(email: String!, emailCode: Float!): LoginResponse!
   createCryptoMarket: String!
+  createInvestmentReport(options: InvestmentReportCreate!): InvestmentsReportsEntity!
   importInvestments(link: String!): [InvestmentEntity!]!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   refreshTokens(refreshToken: String!): LoginResponse!
@@ -190,6 +222,8 @@ type Query {
   account: User!
   articles(options: ArticlesInput!): [Article!]!
   cryptos(options: CryptoSearchInput!): CryptoCurrencyMarketPaginatedResults!
+  reports(options: InvestmentsReportsInput!): [InvestmentsReportsEntity!]!
+  sold: Float!
 }
 
 input ToggleFavoriteInput {
@@ -209,6 +243,7 @@ type User {
   firstName: String!
   id: ID!
   investments: [InvestmentEntity!]!
+  investmentsReports: [InvestmentsReportsEntity!]!
   lastName: String!
   role: UserRoles!
   sold: UserSold!

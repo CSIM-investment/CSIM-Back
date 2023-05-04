@@ -90,9 +90,13 @@ export class InvestmentService {
     async soldUser(id: number): Promise<number> {
         let sold = 0
         const investments = await this.getInvestementsByUserId(id)
-        investments.forEach((item) => {
-            const price = item.quantity * item.valueBaseCurrency
-            sold += price
+        console.log(investments)
+        await investments.forEach((item) => {
+            console.log(sold)
+            if (item.baseCurrency.id === 'euro') {
+                const price = item.valueBaseCurrency
+                sold += price
+            }
         })
         return sold
     }
@@ -100,7 +104,7 @@ export class InvestmentService {
     async getMostRecentInvestments(
         userId: number,
     ): Promise<InvestmentEntity[]> {
-        return await this.investmentRepository
+        const investments = await this.investmentRepository
             .createQueryBuilder('investment')
             .leftJoinAndSelect('investment.quoteCurrency', 'quoteCurrency')
             .leftJoinAndSelect('investment.baseCurrency', 'baseCurrency')
@@ -108,6 +112,13 @@ export class InvestmentService {
             .orderBy('investment.creationDate', 'DESC')
             .take(4)
             .getMany()
+
+        investments.forEach((investment) => {
+            investment.valueBaseCurrency *= investment.quantity
+            investment.valueQuoteCurrency *= investment.quantity
+        })
+
+        return investments
     }
 
     async getTopInvestments(userId: number): Promise<InvestmentEntity[]> {
