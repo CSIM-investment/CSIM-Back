@@ -7,6 +7,7 @@ export class CreateInvestmentInput {
     type: string
     status: string
     origin: string
+    dateOfInvestment: string
 
     constructor(investment) {
         Object.assign(this, investment)

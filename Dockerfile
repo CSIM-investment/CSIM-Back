@@ -12,6 +12,8 @@ RUN npm install -g pnpm
 RUN npm install pg --save
 RUN pnpm install
 
+RUN export OPENSSL_CONF=/dev/null
+
 # Creates a "dist" folder with the production build
 RUN pnpm run build
 

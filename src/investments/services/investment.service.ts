@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CryptoCurrencyMarket } from 'src/crypto/entities/cryptocurrency.entity'
 import { User } from 'src/user/methods/user.methods'
-import { Repository } from 'typeorm'
+import { LessThan, Repository } from 'typeorm'
 import { InvestmentEntity } from '../entities/investment.entity'
 import { CreateInvestmentInput } from '../dto/createInvestments.input'
 
@@ -25,6 +25,7 @@ export class InvestmentService {
             quantity,
             valueBaseCurrency,
             valueQuoteCurrency,
+            dateOfInvestment,
             type,
             status,
             origin,
@@ -47,14 +48,42 @@ export class InvestmentService {
             quantity,
             valueBaseCurrency,
             valueQuoteCurrency,
+            dateOfInvestment,
         })
         return await this.investmentRepository.save(investment)
     }
 
     async getInvestementsByUserId(userId: number): Promise<InvestmentEntity[]> {
+        const investments: InvestmentEntity[] =
+            await this.investmentRepository.find({
+                where: { user: { id: userId } },
+                relations: ['baseCurrency', 'quoteCurrency'],
+            })
+
+        investments.forEach((investment: InvestmentEntity) => {
+            investment.valueBaseCurrency =
+                investment.valueBaseCurrency * investment.quantity
+            investment.valueQuoteCurrency =
+                investment.valueQuoteCurrency * investment.quantity
+        })
+
+        return investments
+    }
+
+    async getInvestementsByUserIdAndEndDateOfInvestment(
+        userId: number,
+        endDateOfInvestment: Date,
+    ): Promise<InvestmentEntity[]> {
         return await this.investmentRepository.find({
-            where: { user: { id: userId } },
-            relations: ['baseCurrency', 'quoteCurrency'],
+            where: {
+                user: {
+                    id: userId,
+                },
+                dateOfInvestment: LessThan(endDateOfInvestment),
+            },
+            order: {
+                dateOfInvestment: 'ASC',
+            },
         })
     }
 }
