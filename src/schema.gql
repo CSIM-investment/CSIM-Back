@@ -261,6 +261,7 @@ type UserSold {
   currentSold: Float!
   lastInvestments: [InvestmentEntity!]!
   lastSold: Float!
+  latestBigInvestments: [InvestmentEntity!]!
   newSold: Float!
   soldRatio: Float!
   topInvestments: [InvestmentEntity!]!

@@ -13,19 +13,35 @@ export class SoldResolver {
 
     @ResolveField(() => UserSold)
     async sold(@Parent() { id, sold: currentSold }: User): Promise<UserSold> {
-        const [newSold, lastSold, lastInvestments, topInvestments] =
-            await Promise.all([
-                this.investmentService.soldUser(id),
-                this.userService.getUserSold(id),
-                this.investmentService.getMostRecentInvestments(id),
-                this.investmentService.getTopInvestments(id),
-            ])
+        const [
+            newSold,
+            lastSold,
+            lastInvestments,
+            topInvestments,
+            latestBigInvestments,
+        ] = await Promise.all([
+            this.investmentService.soldUser(id),
+            this.userService.getUserSold(id),
+            this.investmentService.getMostRecentInvestments(id),
+            this.investmentService.getTopInvestments(id),
+            this.investmentService.getLatestBigInvestments(id),
+        ])
         const soldRatio = lastSold === 0 ? 0 : newSold / lastSold
+
+        await latestBigInvestments.forEach((latestBigInvestments) => {
+            latestBigInvestments.valueBaseCurrency =
+                latestBigInvestments.valueBaseCurrency *
+                latestBigInvestments.quantity
+            latestBigInvestments.amount =
+                latestBigInvestments.valueBaseCurrency *
+                latestBigInvestments.quantity
+        })
 
         const sold: UserSold = {
             newSold,
             lastSold,
             lastInvestments,
+            latestBigInvestments,
             soldRatio,
             currentSold,
             topInvestments,

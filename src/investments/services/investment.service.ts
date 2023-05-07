@@ -135,4 +135,29 @@ export class InvestmentService {
             .limit(4)
             .getMany()
     }
+
+    async getLatestBigInvestments(userId: number): Promise<InvestmentEntity[]> {
+        return await this.investmentRepository
+            .createQueryBuilder('investment')
+            .addSelect(
+                `CASE WHEN investment.type = 'eur' THEN investment.quantity * investment.valueBaseCurrency ELSE investment.quantity * investment.valueQuoteCurrency END`,
+                'amount',
+            )
+            .where({
+                user: {
+                    id: userId,
+                },
+                baseCurrency: {
+                    id: 'euro',
+                },
+            })
+            .leftJoinAndSelect('investment.quoteCurrency', 'quoteCurrency')
+            .leftJoinAndSelect('investment.baseCurrency', 'baseCurrency')
+            .orderBy(
+                '(investment.quantity * investment.valueBaseCurrency)',
+                'DESC',
+            )
+            .limit(5)
+            .getMany()
+    }
 }
