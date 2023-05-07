@@ -15,6 +15,9 @@ export class UserSold {
     @Field(() => [InvestmentEntity])
     topInvestments: InvestmentEntity[]
 
+    @Field(() => [InvestmentEntity])
+    latestBigInvestments: InvestmentEntity[]
+
     @Field(() => Float)
     soldRatio: number
 
