@@ -14,14 +14,20 @@ export class DbMutationResolver {
         private coinGeckoService: CoingeckoService,
     ) {}
 
-    @Cron('10 * * * * *')
+    @Cron('25 * * * * *')
     @Mutation(() => String)
     async createCryptoMarket(): Promise<string> {
-        this.coinGeckoService.getAllCoinsMarket().then((resp) => {
-            resp.forEach((elmnt) => {
-                this.cryptoService.createCryptoCurrencyMarket(elmnt)
+        this.coinGeckoService
+            .getAllCoinsMarket()
+            .then((resp) => {
+                resp.forEach((elmnt) => {
+                    this.cryptoService.createCryptoCurrencyMarket(elmnt)
+                })
             })
-        })
+            .catch((resp) => {
+                console.log('Maybe an error in response')
+                console.log(resp)
+            })
         this.cryptoService.createCryptoCurrencyMarket({
             name: 'euro',
             ath: 1,
