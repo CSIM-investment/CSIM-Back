@@ -19,7 +19,7 @@ export class GoogleNewsApiService {
     private getDateFromHoursAgo(hours: number): string {
         const dateWithApiFormat = dayjs()
             .subtract(hours, 'hours')
-            .format('YYYY-MM-DDTHH:mm:ss')
+            .format('YYYY-MM-DD')
         return dateWithApiFormat
     }
 
