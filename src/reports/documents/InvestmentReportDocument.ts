@@ -64,13 +64,13 @@ export class InvestmentReportDocument {
         gainOrLooseByCrypto: GainOrLooseByCryptoInterface[],
     ): Paragraph[] {
         let paragraphsToReturn = []
-        console.log(gainOrLooseByCrypto)
+        // console.log(gainOrLooseByCrypto)
         gainOrLooseByCrypto.forEach(
             (gainOrLooseByCrypto: GainOrLooseByCryptoInterface) => {
                 let childrenToAppendToParagraph = []
                 gainOrLooseByCrypto.investmentEntityBuy.forEach(
                     (investmentEntityBuyed: InvestmentEntity) => {
-                        console.log(investmentEntityBuyed)
+                        // console.log(investmentEntityBuyed)
                         childrenToAppendToParagraph.push(
                             new Paragraph(
                                 `BUY -> ${investmentEntityBuyed.quantity} ${
@@ -112,7 +112,7 @@ export class InvestmentReportDocument {
 
     private generateTableBodyOfGainLoosesByCrypto(): TableRow[] {
         const rowsToReturn: TableRow[] = []
-        console.log(this.reportsInvestmentData)
+        // console.log(this.reportsInvestmentData)
         this.reportsInvestmentData.gainOrLooseByCrypto.forEach(
             (value: GainOrLooseByCryptoInterface) => {
                 rowsToReturn.push(
