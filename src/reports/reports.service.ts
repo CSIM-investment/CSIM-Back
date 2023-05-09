@@ -138,7 +138,7 @@ export class ReportService {
                 this.calculCost(selledInvestmentEntity)
             const investmentsBuyedForThisSell: InvestmentEntity[] = []
             cryptoBuy.forEach((buyInvestmentEntity: InvestmentEntity) => {
-                if (buyInvestmentEntity.dateOfInvestment < date) {
+                if (buyInvestmentEntity.dateOfInvestment < date && buyInvestmentEntity.quantity != 0) {
                     const costOfInvestmentBuyed =
                         this.calculCost(buyInvestmentEntity)
                     if (
@@ -168,7 +168,15 @@ export class ReportService {
                     } else if (
                         costOfInvestmentSelled[
                             buyInvestmentEntity.baseCurrency.symbol
-                        ] != 0
+                        ] != 0 &&
+                        !isNaN(
+                            costOfInvestmentSelled[
+                                buyInvestmentEntity.baseCurrency.symbol
+                            ],
+                        ) &&
+                        costOfInvestmentSelled[
+                            buyInvestmentEntity.baseCurrency.symbol
+                        ].toString() != 'NaN'
                     ) {
                         // get difference
                         const differenceBetweenCryptoValue =
@@ -188,6 +196,9 @@ export class ReportService {
                                 buyInvestmentEntity,
                                 percentageOfCryptoBuy,
                             )
+
+                        console.log(costOfInvestmentBuyedToSubstract)
+
                         costOfInvestmentSelled[
                             buyInvestmentEntity.baseCurrency.symbol
                         ] -=
@@ -212,6 +223,9 @@ export class ReportService {
                     }
                 }
             })
+
+            // console.log(investmentsBuyedForThisSell)
+
             detailedGainOrLoose.push({
                 crypto: cryptoCurrencyMarket,
                 investmentEntityBuy: investmentsBuyedForThisSell,
