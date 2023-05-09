@@ -205,7 +205,7 @@ type Mutation {
   sendResetPasswordCode(email: String!): String!
   toggleFavoriteCrypto(input: ToggleFavoriteInput!): User!
   updateAccount(updateUserInput: UpdateUserInput!): User!
-  updateArticles: String!
+  updateArticles(hours: Int = 4): String!
 }
 
 enum OrderDirection {
